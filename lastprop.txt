@@ -1,0 +1,321 @@
+"lastprop"
+{
+    "base"          "base"
+    "title"         "Last Prop Standing"
+
+    "version"       "0.1.0"
+    "menusystem"    "1"
+    "maps"          "^ph_"
+
+    "author_name"   "Nerdism"
+    "author_email"  "nerdism.io@gmail.com"
+    "author_url"    "https://github.com/gluaws/"
+    "support_url"   "https://github.com/gluaws/lastprop/issues"
+    "download_url"  "https://github.com/gluaws/lastprop/releases"
+
+    "support"
+    {
+        "STEAM_0:1:15831428"    "[LPS Developer]"
+        "STEAM_0:1:82445262"    "[LPS Support]"
+    }
+
+    "settings"
+    {
+        1
+        {
+            "name"       "lps_pregame_time"
+            "text"       "Pregame time"
+            "help"       "Time to wait before starting game"
+            "type"       "Numeric"
+            "default"    "60"
+        }
+        2
+        {
+            "name"       "lps_pregame_deathmatch"
+            "text"       "Pregame death match"
+            "help"       "Rocket launcher death match before game starts or while waiting for players to join"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        3
+        {
+            "name"       "lps_round_limit"
+            "text"       "Round limit"
+            "help"       "Round limit"
+            "type"       "Numeric"
+            "default"    "5"
+        }
+        4
+        {
+            "name"       "lps_round_time"
+            "text"       "Round time"
+            "help"       "Round time"
+            "type"       "Numeric"
+            "default"    "300"
+        }
+        5
+        {
+            "name"       "lps_preround_time"
+            "text"       "Pre round time"
+            "help"       "This is the amount of time the hunters are blinded for and props to find a hiding spot"
+            "type"       "Numeric"
+            "default"    "60"
+        }
+        6
+        {
+            "name"       "lps_postround_time"
+            "text"       "Post round time"
+            "help"       "Post round time"
+            "type"       "Numeric"
+            "default"    "15"
+        }
+        7
+        {
+            "name"       "lps_postround_deathmatch"
+            "text"       "Post round death match"
+            "help"       "Give everyone rocket launchers to kill each other"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        8
+        {
+            "name"       "lps_death_linger_time"
+            "text"       "Death linger time"
+            "help"       "Amount of time to linger in the deathcam/freezecam"
+            "type"       "Numeric"
+            "default"    "5"
+        }
+        9
+        {
+            "name"       "lps_death_freezecam"
+            "text"       "Enables freeze cam"
+            "help"       "Enables freeze cam"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        10
+        {
+            "name"       "lps_team_switch_delay"
+            "text"       "Team switch delay"
+            "help"       "Delay for players to join a new team"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        11
+        {
+            "name"       "lps_team_force_balance"
+            "text"       "Force team balance"
+            "help"       "Force team balance"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        12
+        {
+            "name"       "lps_team_auto_balance"
+            "text"       "Auto balance teams"
+            "help"       "Auto balance teams"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        13
+        {
+            "name"       "lps_team_swap"
+            "text"       "Swap teams on each round"
+            "help"       "Swap teams on each round"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        14
+        {
+            "name"       "lps_falldamage"
+            "text"       "Enable fall damage"
+            "help"       "Enable fall damage"
+            "type"       "CheckBox"
+            "default"    "0"
+        }
+        15
+        {
+            "name"       "lps_falldamage_realistic"
+            "text"       "Enable realistic fall damage"
+            "help"       "Enable realistic fall damage"
+            "type"       "CheckBox"
+            "default"    "0"
+        }
+        16
+        {
+            "name"       "lps_lastman_enabled"
+            "text"       "Last prop enabled"
+            "help"       "Enable Last Prop Standing"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        17
+        {
+            "name"       "lps_lastman_round_time"
+            "text"       "Last prop round time"
+            "help"       "The time the last prop has to hide or kill all hunters before the round ends"
+            "type"       "Numeric"
+            "default"    "60"
+        }
+        18
+        {
+            "name"       "lps_lastman_swep"
+            "text"       "Last prop SWEP"
+            "help"       "The SWEP the last prop standing gets"
+            "type"       "Text"
+            "default"    "weapon_lastman"
+        }
+        19
+        {
+            "name"       "prop_maxhealth"
+            "text"       "Prop max health"
+            "help"       "Max health a prop can be"
+            "type"       "Numeric"
+            "default"    "250"
+        }
+        20
+        {
+            "name"       "lps_prop_autotaunt"
+            "text"       "Prop autotaunt"
+            "help"       "Enable auto taunting"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        21
+        {
+            "name"       "lps_prop_autotaunt_size"
+            "text"       "Prop autotaunt size"
+            "help"       "Prop volume/size to auto taunt, any props with less volume will auto taunt, protects big props from auto taunts"
+            "type"       "Numeric"
+            "default"    "1500"
+        }
+        22
+        {
+            "name"       "lps_prop_autotaunt_near_hunters"
+            "text"       "Prop disable autotaunt near hunters"
+            "help"       "If enabled you will not auto taunt if a hunter is nearby"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        23
+        {
+            "name"       "lps_prop_autotaunt_near_hunters_range"
+            "text"       "Prop disable autotaunt near hunters range"
+            "help"       "The range that is considered 'near by'"
+            "type"       "Numeric"
+            "default"    "500"
+        }
+        24
+        {
+            "name"       "lps_prop_autotaunt_time"
+            "text"       "Prop autotaunt time"
+            "help"       "Time to start auto taunting, this number is for when the round end timer hits this number"
+            "type"       "Numeric"
+            "default"    "90"
+        }
+        25
+        {
+            "name"       "lps_prop_autotaunt_rage"
+            "text"       "Prop autotaunt rage"
+            "help"       "Range of movement, if player moved [X] GMod units over [X] amount of time then don't auto taunt"
+            "type"       "Numeric"
+            "default"    "100"
+        }
+        26
+        {
+            "name"       "lps_prop_autotaunt_delay"
+            "text"       "Prop autotaunt delay"
+            "help"       "Delay between auto taunt checks"
+            "type"       "Numeric"
+            "default"    "15"
+        }
+        27
+        {
+            "name"       "lps_prop_disguise_delay"
+            "text"       "Prop disguise delay"
+            "help"       "Delay between disguise changes"
+            "type"       "Numeric"
+            "default"    "2"
+        }
+        28
+        {
+            "name"       "lps_prop_jetpack_jump"
+            "text"       "Prop jetpack jump"
+            "help"       "Jetpack jump for props"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        29
+        {
+            "name"       "lps_hunter_friendlyfire"
+            "text"       "Hunter friendly fire"
+            "help"       "Set to false to stop hunter on hunter violence"
+            "type"       "CheckBox"
+            "default"    "false"
+        }
+        30
+        {
+            "name"       "lps_hunter_damage_penalty"
+            "text"       "Hunter damage penalty"
+            "help"       "Health taken from hunter when damaging a non prop entity"
+            "type"       "Numeric"
+            "default"    "10"
+        }
+        31
+        {
+            "name"       "lps_hunter_steal_health"
+            "text"       "Hunter steal health"
+            "help"       "Takes 50% of damage dealt to prop and gives it to the hunter"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        32
+        {
+            "name"       "hunter_steal_maxhealth"
+            "text"       "Hunter steal max health"
+            "help"       "Max health a hunter can get from stealing health"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        33
+        {
+            "name"       "lps_hunter_kill_bonus_health"
+            "text"       "Hunter kill bonus health"
+            "help"       "Added health once hunter gets a kill"
+            "type"       "Numeric"
+            "default"    "10"
+        }
+        34
+        {
+            "name"      "lps_hunter_kill_bonus_nade"
+            "text"      "Hunter kill bonus grenade"
+            "help"      "Hunter will get a grenade once they kill a player"
+            "type"        "Numeric"
+            "default"    "1"
+        }
+        35
+        {
+            "name"       "lps_hunter_spawn_with_nade"
+            "text"       "Hunter spawn with grenade"
+            "help"       "Hunter will spawn with one grenade"
+            "type"       "CheckBox"
+            "default"    "0"
+        }
+        36
+        {
+            "name"       "lps_hunter_lastman_bonus_nade"
+            "text"       "Hunter last man grenade bonus"
+            "help"       "Hunter will get bonus grenade when there is a last prop"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        37
+        {
+            "name"       "lps_hunter_jetpack_jump"
+            "text"       "Hunter jetpack jump"
+            "help"       "Jetpack jump for props"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+    }
+}
