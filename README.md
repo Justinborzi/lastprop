@@ -5,7 +5,7 @@
 # Last Prop Standing
 Last Prop Standing is a twist on the popular game mode Prop Hunt. The main difference is that when there's only one prop left alive said prop will become very visible, loud and will get a gun. The hunters will have 60 seconds to catch the prop. The prop can choose to run and wait out the timer or hunt the hunters. This game mode was based off of the original Prop Hunt and Fretta code, but is now built from the ground up with a lot of improvements over the original code.
 
-## Neato Features Include:
+### Neato Features Include:
 * Rebuilt prop hunt mechanics from the ground up!
 * Improved HUD!
 * Custom key binding!
@@ -29,20 +29,19 @@ Last Prop Standing is a twist on the popular game mode Prop Hunt. The main diffe
 * Working hitboxes! (Maybe, need more play testing)
 * and many more!
 
-## Planed Features:
+### Planed Features:
 * Leveling! Spawn with more ammo, get more health when you become a prop!
 * Taunt Menu
 * Pointshop 2 Integration
 * ULX Support
 * Server Guard Support
 
-### [Download Devlopemnt Version:](https://github.com/gluaws/lastprop/archive/dev.zip)
-### [Download Stable Version:](https://github.com/gluaws/lastprop/releases/latest)
+### Releases:
+* **[Download Devlopemnt Version](https://github.com/gluaws/lastprop/archive/dev.zip)**
+* **[Download Stable Version](https://github.com/gluaws/lastprop/releases/latest)**
+* **Go [here](https://github.com/gluaws/lastprop/releases) to view all releases and changelogs.**
 
-#### All Releases:
-Go [here](https://github.com/gluaws/lastprop/releases) to view all releases and changelogs.
-
-#### Reporting an Issue:
+### Reporting an Issue:
 When reporting an issue please provide detailed information so we can find out what's going on. Provide your console logs and you game configuration. Issues opened with little to no information will be closed. All issues should be submitted [here](https://github.com/gluaws/lastprop/issues).
 
 ### Test Server:
