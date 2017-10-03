@@ -31,14 +31,13 @@ Last Prop Standing is a twist on the popular game mode Prop Hunt. The main diffe
 
 ## Planed Features:
 * Leveling! Spawn with more ammo, get more health when you become a prop!
+* Taunt Menu
 * Pointshop 2 Integration
 * ULX Support
 * Server Guard Support
 
-### [Download Current Release:](https://github.com/gluaws/lastprop/archive/master.zip)
-* Version: 0.1.0
-* Revision: 0
-* Type: Beta
+### [Download Devlopemnt Version:](https://github.com/gluaws/lastprop/archive/dev.zip)
+### [Download Stable Version:](https://github.com/gluaws/lastprop/releases/latest)
 
 #### All Releases:
 Go [here](https://github.com/gluaws/lastprop/releases) to view all releases and changelogs.
