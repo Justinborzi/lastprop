@@ -55,7 +55,7 @@ function PANEL:DrawFrame()
     loading:Dock(FILL)
     loading:SetContentAlignment(5)
 
-    http.Fetch('https://raw.githubusercontent.com/gluaws/lastprop/master/info.html',
+    http.Fetch('https://raw.githubusercontent.com/gluaws/lastprop/info/info.html',
     function(body, len, headers, code)
         if (code ~= 200) then
             loading:SetText('Error Loading Info...')

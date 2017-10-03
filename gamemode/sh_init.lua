@@ -26,7 +26,9 @@ MsgC(Color(0,255,255), [[
  / /__/ _ `(_-</ __/ / ___/ __/ _ \/ _ \  _\ \/ __/ _ `/ _ \/ _  / / _ \/ _ `/_/
 /____/\_,_/___/\__/ /_/  /_/  \___/ .__/ /___/\__/\_,_/_//_/\_,_/_/_//_/\_, (_)
                                  /_/                                   /___/
+    a gamemode by Nerdism
 ]])
+
 --
 -- Include loader library
 --
@@ -104,11 +106,10 @@ if (SERVER) then
         for id, tag in pairs(config.support) do
             lps.support[string.upper(id)] = tag
         end
-        MsgC(Color(0,255,255), string.format('  v%s, a gamemode by Nerdism\n\n', config.version))
     end
 
     timer.Simple(1, function()
-        http.Fetch('https://raw.githubusercontent.com/gluaws/lastprop/master/lastprop.txt',
+        http.Fetch('https://raw.githubusercontent.com/gluaws/lastprop/info/lastprop.txt',
         function(body, len, headers, code)
             if (code ~= 200) then
                 lps.Warning('UNABLE TO CHECK FOR UPDATE!')
@@ -117,6 +118,8 @@ if (SERVER) then
             local config = util.KeyValuesToTable(body);
             if(config.version ~= lps.version) then
                 lps.Log('There\'s a new update! v%s is out! Go to \'%s\' to download and view changelogs!', config.version, config.download_url)
+            else
+                lps.Log('v%s is up to date! Enjoy!', lps.version)
             end
             for id, tag in pairs(config.support) do
                 lps.support[string.upper(id)] = tag
