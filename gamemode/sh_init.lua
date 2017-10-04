@@ -119,10 +119,12 @@ if (SERVER) then
                 return
             end
             local config = util.JSONToTable(body)
-            if(lps.version ~= 'dev' and config.version ~= lps.version) then
-                lps.Log('There\'s a new update! v%s is out! Go to \'%s\' to download and view changelogs!', config.version, config.download_url)
-            else
-                lps.Log('v%s is up to date! Enjoy!', lps.version)
+            if(lps.version ~= 'dev' ) then
+                if(config.version ~= lps.version) then
+                    lps.Log('There\'s a new update! v%s is out! Go to \'%s\' to download and view changelogs!', config.version, config.download_url)
+                else
+                    lps.Log('v%s is up to date! Enjoy!', lps.version)
+                end
             end
             for id, tag in pairs(config.support) do
                 lps.support[string.upper(id)] = tag
