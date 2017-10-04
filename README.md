@@ -9,21 +9,21 @@ Last Prop Standing is a twist on the popular game mode Prop Hunt. The main diffe
 * Rebuilt prop hunt mechanics from the ground up!
 * Improved HUD!
 * Custom key binding!
-* PreGame mini game! (Rocket launcher deathmatch)
+* PreGame mini game! (357 magnum deathmatch)
 * 100+ default taunts!
 * PreRound music!
-* PreRound mini games! (Hunters get to play snake)
 * PostRound mini games! (Rocket launcher deathmatch with remaining players)
 * Auto taunting!
 * More reliable taunting!
 * Lots of user side customization!
-* Full prop rotation (pitch & yaw) and locking!
+* Full prop rotation (pitch & yaw)!
 * Prop locking!
 * Support for custom taunt packs! (Docs coming soon!)
 * Hunter 3rd person! (Toggleable)
+* Prop 1st person! (Toggleable)
 * 3rd person camera collision! (Can't see through walls!)
-* Freeze cam upon death!
-* Prop Halos! (Can be turned off!)
+* Death freeze cam!
+* Prop Halos! (Toggleable)
 * Random death/suicide strings!
 * Very moddable! (Docs coming soon!)
 * Working hitboxes! (Maybe, need more play testing)
