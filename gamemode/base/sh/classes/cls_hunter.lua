@@ -166,6 +166,10 @@ function CLASS:Cleanup(ply)
     if (ply:GetVar('canTaunt', false)) then
         ply:SetVar('canTaunt', false, true)
     end
+
+    if (ply:IsFrozen()) then
+        ply:Freeze(false)
+    end
 end
 
 function CLASS:PlayerDisconnected(ply)
@@ -176,8 +180,8 @@ function CLASS:Loadout(ply)
     if (GAMEMODE:InPreGame() and GAMEMODE:GetConfig('pregame_deathmatch')) then
         timer.Simple(0.1, function ()
             if (IsValid(ply) and ply:Alive()) then
-                ply:Give('weapon_rpg')
-                ply:GiveAmmo(20, 'RPG_Round', true)
+                ply:Give('weapon_357')
+                ply:GiveAmmo(255, '357', true)
             end
         end)
     end
@@ -255,13 +259,6 @@ function CLASS:OnRoundStart(ply, num)
 end
 
 function CLASS:OnLastMan(ply)
-    if (GAMEMODE:GetConfig('hunter_lastman_bonus_nade')) then
-        ply:GiveAmmo(1, 'SMG1_Grenade', true)
-    end
-end
-
-function CLASS:OnRoundLastMan(ply, lastMan)
-    if (lastMan:Team() ~= TEAM.PROPS) then return end
     if (GAMEMODE:GetConfig('hunter_lastman_bonus_nade')) then
         ply:GiveAmmo(1, 'SMG1_Grenade', true)
     end

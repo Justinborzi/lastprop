@@ -44,7 +44,7 @@ CLASS.killStrings   = {
 }
 
 CLASS.walkSpeed            = 250   --
-CLASS.crouchedWalkSpeed    = 0.4   --
+CLASS.crouchedWalkSpeed    = 0.2   --
 CLASS.runSpeed             = 350   --
 CLASS.duckSpeed            = 0.4   --
 CLASS.jumpPower            = 280   --
@@ -66,9 +66,9 @@ CLASS.fullRotation         = false -- Allow the player's model to rotate upwards
 ---------------------------------------------------------]]--
 
 function CLASS:RegisterBindings()
-     lps.bindings:Register('prop', 'tauntLong', KEY_1, INPUT.KEY, 'Taunt Long',  'When pressed you will taunt for 11 to 60 seconds.')
+     lps.bindings:Register('prop', 'tauntLong', KEY_3, INPUT.KEY, 'Taunt Long',  'When pressed you will taunt for 11 to 60 seconds.')
      lps.bindings:Register('prop', 'tauntMedium', KEY_2, INPUT.KEY, 'Taunt Medium',  'When pressed you will taunt for 6 to 10 seconds.')
-     lps.bindings:Register('prop', 'tauntShort', KEY_3, INPUT.KEY, 'Taunt Short',  'When pressed you will taunt for 0 to 5 seconds.')
+     lps.bindings:Register('prop', 'tauntShort', KEY_1, INPUT.KEY, 'Taunt Short',  'When pressed you will taunt for 0 to 5 seconds.')
      lps.bindings:Register('prop', 'taunt', KEY_T, INPUT.KEY, 'Taunt',  'When pressed you will random taunt.')
      lps.bindings:Register('prop', 'replace', KEY_LCONTROL, INPUT.KEY, 'Prop Replace',  'When pressed you will replace the prop you want to become.')
      lps.bindings:Register('prop', 'adjust', KEY_RALT, INPUT.KEY, 'Lock Adjust',  'When pressed you can adjust the angle your disguise is locked at by using the mouse wheel.')
@@ -330,8 +330,8 @@ function CLASS:Loadout(ply)
     if (GAMEMODE:InPreGame() and GAMEMODE:GetConfig('pregame_deathmatch')) then
         timer.Simple(0.1, function ()
             if (IsValid(ply) and ply:Alive()) then
-                ply:Give('weapon_rpg')
-                ply:GiveAmmo(20, 'RPG_Round', true)
+                ply:Give('weapon_357')
+                ply:GiveAmmo(255, '357', true)
             end
         end)
     end

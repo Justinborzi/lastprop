@@ -12,7 +12,7 @@ GM.TeamBased = true
 --[[---------------------------------------------------------
    Gamemode config
 ---------------------------------------------------------]]--
-local config = {
+GM.config = {
     ['pregame_time']              = 60,               -- Time to wait before starting game.
     ['pregame_deathmatch']        = true,             -- Rocket deathmatch before game starts or while waiting for players to join
 
@@ -59,7 +59,7 @@ local config = {
     ['hunter_jetpack_jump']       = true,             -- Jetpack jump for props
 }
 
-for var, value in pairs(config) do
+for var, value in pairs(GM.config) do
     if (type(value) == 'number') then
         value = tostring(value)
     elseif (type(value) == 'boolean') then
@@ -77,16 +77,16 @@ end
 function GM:GetConfig(name)
     if (ConVarExists('lps_' .. name)) then
         local conVar = GetConVar('lps_' .. name)
-        if (type(config[name]) == 'string') then
+        if (type(self.config[name]) == 'string') then
             return conVar:GetString()
-        elseif (type(config[name]) == 'number') then
+        elseif (type(self.config[name]) == 'number') then
             return conVar:GetInt()
-        elseif (type(config[name]) == 'boolean') then
+        elseif (type(self.config[name]) == 'boolean') then
             return conVar:GetBool()
         end
-    elseif(config[name])then
-        lps.Warning('ConVar lps_%s doesn\'t exist! Using defult: %s', name, config[name])
-        return config[name]
+    elseif(self.config[name])then
+        lps.Warning('ConVar lps_%s doesn\'t exist! Using defult: %s', name, self.config[name])
+        return self.config[name]
     else
         lps.Error('Config lps_%s doesn\'t exist!', name)
     end

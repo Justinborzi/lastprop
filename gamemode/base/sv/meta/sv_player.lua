@@ -223,7 +223,7 @@ function meta:IsStuck()
     local pos = self:GetPos()
     local t = {}
     if (self:IsDisguised()) then
-        local disguise = self:GetDisguiseEntity()
+        local disguise = self:GetDisguise()
         if (IsValid(disguise)) then
             t.filter = function(ent)
                 if (ent:GetClass() == 'disguise' and ent:GetOwner() == self) then return false end
