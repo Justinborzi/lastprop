@@ -11,7 +11,7 @@ LOG = LOG or {
 }
 
 local function canlog(flag)
-    local level = 11
+    local level = 13
     if (ConVarExists('lps_logs')) then
         level = GetConVar('lps_logs'):GetInt()
     end

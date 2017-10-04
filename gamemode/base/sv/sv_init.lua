@@ -1,3 +1,7 @@
+
+--[[---------------------------------------------------------
+   Include server
+---------------------------------------------------------]]--
 include('sv_util.lua')
 include('meta/sv_player.lua')
 include('sv_player.lua')
@@ -31,7 +35,7 @@ function GM:Think()
         --kickass new taunting system :D
         if (self.nextTauntThink > CurTime()) then continue end
 
-        local taunt, tauntCooldown = v:GetVar('lastTaunt', nil), v:GetVar('tauntCooldown', 0)
+        local taunt, tauntCooldown = v:GetVar('taunt', nil), v:GetVar('tauntCooldown', 0)
         if (not taunt or tauntCooldown == 0) then continue end
 
         local tauntSound = v:GetTaunt(taunt)
@@ -42,7 +46,7 @@ function GM:Think()
         local alive, isPlaying, inRound = v:Alive(), tauntSound[1]:IsPlaying(), self:InRound()
         if (isPlaying and (tauntCooldown < CurTime() or not alive or not inRound)) then
             tauntSound[1]:Stop()
-            v:SetVar('lastTaunt', nil)
+            v:SetVar('taunt', nil)
             v:SetVar('tauntCooldown', 0)
         elseif (not isPlaying and tauntCooldown > CurTime() and alive and inRound) then
             tauntSound[1]:Play()

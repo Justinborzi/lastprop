@@ -3,11 +3,11 @@
 --   Name: GM:RegisterBindings()
 ---------------------------------------------------------]]--
 function GM:RegisterBindings()
-    lps.bindings:Register('global', 'localChat', KEY_Z, INPUT.KEY, 'Local Voice Toggle', 'When key is pressed only your team will be able to hear you.')
+    lps.bindings:Register('global', 'localChat', KEY_Z, INPUT.KEY, 'Local Voice', 'When key is pressed only your team will be able to hear you.')
     lps.bindings:Register('global', 'teamChat', KEY_C, INPUT.KEY, 'Team Chat', 'When key is pressed your voice will emit from you, not globally.')
-    lps.bindings:Register('global', 'tpvDistance', KEY_LALT, INPUT.KEY, 'View Distance Adjust', 'When key is pressed you can adjust your view distance in thirdperson using the scroll wheel.')
-    lps.bindings:Register('global', 'tpv', KEY_CAPSLOCK, INPUT.KEY, 'Toggle 3rd Person', 'Toggles Thirdperson View.')
-    lps.bindings:Register('global', 'tpvoffset', KEY_PAD_ENTER, INPUT.KEY, 'Toggle 3rd Person Offset', 'Toggles Thirdperson Offset.')
+    lps.bindings:Register('global', 'tpvDistance', KEY_LALT, INPUT.KEY, 'View Adjust', 'When key is pressed you can adjust your view distance in thirdperson using the scroll wheel.')
+    lps.bindings:Register('global', 'tpv', KEY_CAPSLOCK, INPUT.KEY, '3rd Person', 'Toggles Thirdperson View.')
+    lps.bindings:Register('global', 'tpvoffset', KEY_B, INPUT.KEY, '3rd Person Offset', 'Toggles Thirdperson Offset.')
 end
 
 --[[---------------------------------------------------------
@@ -24,19 +24,25 @@ function GM:KeyDown(key, keycode, char, keytype, busy, cursor)
 
     local tpv = lps.bindings:GetKey('global', 'tpv')
     if (key == tpv.key and keytype == tpv.type and not busy and not cursor) then
-        if (GetConVar('lps_tpv'):GetBool()) then
-            RunConsoleCommand('lps_tpv', '0')
+        local teamID = LocalPlayer():Team()
+        local convar = (teamID == TEAM.PROPS and 'lps_tpvp') or (teamID == TEAM.HUNTERS and 'lps_tpvh')
+        if (GetConVar(convar):GetBool()) then
+            RunConsoleCommand(convar, '0')
         else
-            RunConsoleCommand('lps_tpv', '1')
+            RunConsoleCommand(convar, '1')
         end
     end
 
     local tpvoffset = lps.bindings:GetKey('global', 'tpvoffset')
     if (key == tpvoffset.key and keytype == tpvoffset.type and not busy and not cursor) then
-        if (GetConVar('lps_tpv'):GetBool() and GetConVar('lps_tpv_offset_on'):GetBool()) then
-            RunConsoleCommand('lps_tpv_offset_on', '0')
-        elseif (GetConVar('lps_tpv'):GetBool() and not GetConVar('lps_tpv_offset_on'):GetBool()) then
-            RunConsoleCommand('lps_tpv_offset_on', '1')
+        local teamID = LocalPlayer():Team()
+        local convar = (teamID == TEAM.PROPS and 'lps_tpvp') or (teamID == TEAM.HUNTERS and 'lps_tpvh')
+        if (GetConVar(convar):GetBool()) then
+            if (GetConVar('lps_tpv_offset_on'):GetBool()) then
+                RunConsoleCommand('lps_tpv_offset_on', '0')
+            else
+                RunConsoleCommand('lps_tpv_offset_on', '1')
+            end
         end
     end
 

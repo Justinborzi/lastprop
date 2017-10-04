@@ -52,7 +52,8 @@ function meta:PlayTaunt(pack, type, min, max)
         taunt.name ~= self:GetVar('lastTaunt', nil) and taunt.length >= min and taunt.length <= max
 
     self:SetVar('tauntCooldown', (CurTime() + taunt.length + 0.5))
-    self:SetVar('lastTaunt', taunt)
+    self:SetVar('lastTaunt', taunt.name)
+    self:SetVar('taunt', taunt)
 
     hook.Call('PlayerTaunt', GAMEMODE, self, taunt, min, max)
 end
@@ -61,8 +62,7 @@ end
 --   Name: meta:StopTaunt()
 ---------------------------------------------------------]]--
 function meta:StopTaunt()
-
-    local taunt, tauntCooldown = self:GetVar('lastTaunt', nil), self:GetVar('tauntCooldown', 0)
+    local taunt, tauntCooldown = self:GetVar('taunt', nil), self:GetVar('tauntCooldown', 0)
     if (not taunt or tauntCooldown == 0) then return end
 
     local tauntSound = self:GetTaunt(taunt)
@@ -70,7 +70,7 @@ function meta:StopTaunt()
         tauntSound[1]:Stop()
     end
 
-    self:SetVar('lastTaunt', nil)
+    self:SetVar('taunt', nil)
     self:SetVar('tauntCooldown', 0)
 end
 

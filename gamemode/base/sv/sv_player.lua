@@ -31,7 +31,7 @@ function GM:PlayerInitialSpawn(ply)
         self:AutoTeam(ply)
     else
         ply:SetTeam(ply:GetVar('team', TEAM.UNASSIGNED))
-        lps.net.Start(nil, 'Initialize', {lps.banned, lps.support})
+        lps.net.Start(nil, 'Initialize', {lps.banned, lps.support, lps.version})
         if ply:GetVar('disconnected', false) then
             hook.Call('PlayerReconnected', self, ply)
             ply:SetVar('disconnected', false)
@@ -112,6 +112,9 @@ function GM:DoPlayerDeath(ply, attacker, dmgInfo)
     ply:SetVar('killer', attacker)
 
     ply:ClassCall('OnDeath', attacker, dmgInfo)
+
+    ply:StripAmmo()
+    ply:StripWeapons()
 
     if (self:InRound()) then
         ply:AddDeaths(1)

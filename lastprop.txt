@@ -3,7 +3,7 @@
     "base"          "base"
     "title"         "Last Prop Standing"
 
-    "version"       "0.1.0"
+    "version"       "dev"
     "menusystem"    "1"
     "maps"          "^ph_"
 
@@ -159,21 +159,13 @@
         }
         18
         {
-            "name"       "lps_lastman_swep"
-            "text"       "Last prop SWEP"
-            "help"       "The SWEP the last prop standing gets"
-            "type"       "Text"
-            "default"    "weapon_lastman"
-        }
-        19
-        {
-            "name"       "prop_maxhealth"
+            "name"       "lps_prop_maxhealth"
             "text"       "Prop max health"
             "help"       "Max health a prop can be"
             "type"       "Numeric"
             "default"    "250"
         }
-        20
+        19
         {
             "name"       "lps_prop_autotaunt"
             "text"       "Prop autotaunt"
@@ -181,7 +173,7 @@
             "type"       "CheckBox"
             "default"    "1"
         }
-        21
+        20
         {
             "name"       "lps_prop_autotaunt_size"
             "text"       "Prop autotaunt size"
@@ -189,7 +181,7 @@
             "type"       "Numeric"
             "default"    "1500"
         }
-        22
+        21
         {
             "name"       "lps_prop_autotaunt_near_hunters"
             "text"       "Prop disable autotaunt near hunters"
@@ -197,7 +189,7 @@
             "type"       "CheckBox"
             "default"    "1"
         }
-        23
+        22
         {
             "name"       "lps_prop_autotaunt_near_hunters_range"
             "text"       "Prop disable autotaunt near hunters range"
@@ -205,7 +197,7 @@
             "type"       "Numeric"
             "default"    "500"
         }
-        24
+        23
         {
             "name"       "lps_prop_autotaunt_time"
             "text"       "Prop autotaunt time"
@@ -213,7 +205,7 @@
             "type"       "Numeric"
             "default"    "90"
         }
-        25
+        24
         {
             "name"       "lps_prop_autotaunt_rage"
             "text"       "Prop autotaunt rage"
@@ -221,7 +213,7 @@
             "type"       "Numeric"
             "default"    "100"
         }
-        26
+        25
         {
             "name"       "lps_prop_autotaunt_delay"
             "text"       "Prop autotaunt delay"
@@ -229,7 +221,7 @@
             "type"       "Numeric"
             "default"    "15"
         }
-        27
+        26
         {
             "name"       "lps_prop_disguise_delay"
             "text"       "Prop disguise delay"
@@ -237,7 +229,7 @@
             "type"       "Numeric"
             "default"    "2"
         }
-        28
+        27
         {
             "name"       "lps_prop_jetpack_jump"
             "text"       "Prop jetpack jump"
@@ -245,7 +237,7 @@
             "type"       "CheckBox"
             "default"    "1"
         }
-        29
+        28
         {
             "name"       "lps_hunter_friendlyfire"
             "text"       "Hunter friendly fire"
@@ -253,7 +245,7 @@
             "type"       "CheckBox"
             "default"    "false"
         }
-        30
+        29
         {
             "name"       "lps_hunter_damage_penalty"
             "text"       "Hunter damage penalty"
@@ -261,7 +253,7 @@
             "type"       "Numeric"
             "default"    "10"
         }
-        31
+        30
         {
             "name"       "lps_hunter_steal_health"
             "text"       "Hunter steal health"
@@ -269,15 +261,15 @@
             "type"       "CheckBox"
             "default"    "1"
         }
-        32
+        31
         {
-            "name"       "hunter_steal_maxhealth"
+            "name"       "lps_hunter_steal_maxhealth"
             "text"       "Hunter steal max health"
             "help"       "Max health a hunter can get from stealing health"
             "type"       "CheckBox"
             "default"    "1"
         }
-        33
+        32
         {
             "name"       "lps_hunter_kill_bonus_health"
             "text"       "Hunter kill bonus health"
@@ -285,7 +277,7 @@
             "type"       "Numeric"
             "default"    "10"
         }
-        34
+        33
         {
             "name"      "lps_hunter_kill_bonus_nade"
             "text"      "Hunter kill bonus grenade"
@@ -293,15 +285,7 @@
             "type"        "Numeric"
             "default"    "1"
         }
-        35
-        {
-            "name"       "lps_hunter_spawn_with_nade"
-            "text"       "Hunter spawn with grenade"
-            "help"       "Hunter will spawn with one grenade"
-            "type"       "CheckBox"
-            "default"    "0"
-        }
-        36
+        34
         {
             "name"       "lps_hunter_lastman_bonus_nade"
             "text"       "Hunter last man grenade bonus"
@@ -309,7 +293,7 @@
             "type"       "CheckBox"
             "default"    "1"
         }
-        37
+        35
         {
             "name"       "lps_hunter_jetpack_jump"
             "text"       "Hunter jetpack jump"

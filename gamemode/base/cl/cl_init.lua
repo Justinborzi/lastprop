@@ -1,3 +1,7 @@
+
+--[[---------------------------------------------------------
+   Include client
+---------------------------------------------------------]]--
 include('cl_util.lua')
 include('cl_fonts.lua')
 include('vgui/vgui_derma.lua')
@@ -18,12 +22,15 @@ include('cl_input.lua')
 ---------------------------------------------------------]]--
 CreateClientConVar('lps_specmode', '6', true, true)         -- Spectator mode
 CreateClientConVar('lps_tauntpack', 'default', true, true)  -- Taunt pack
-CreateClientConVar('lps_noglow', '0', true, true)           -- Taunt pack
+CreateClientConVar('lps_noglow', '0', true, true)           -- Disable glow
+CreateClientConVar('lps_defaultswep', 'weapon_smg1', true, true) -- Set default hunter SWEP
+CreateClientConVar('lps_lastmanswep', 'weapon_lastman', true, true) -- Set lastman SWEP
 
 --[[---------------------------------------------------------
 --   3rd person view
 ---------------------------------------------------------]]--
-CreateClientConVar('lps_tpv', '0', true, true)          -- 3rd person view (Bool: 0 or 1)
+CreateClientConVar('lps_tpvp', '1', true, true)         -- 3rd person view props (Bool: 0 or 1)
+CreateClientConVar('lps_tpvh', '0', true, true)         -- 3rd person view hunters (Bool: 0 or 1)
 CreateClientConVar('lps_tpv_dist', '50', true, true)    -- 3rd person distance (Int: 0 to 100)
 CreateClientConVar('lps_tpv_offset', '15', true, true)  -- 3rd person offset (Int: 0 to 15)
 CreateClientConVar('lps_tpv_offset_on', '0', true, true)--
@@ -48,10 +55,11 @@ CreateClientConVar('lps_xhair_l', '10', true, true)   -- xhiar length (Int: 0 to
 --   concommand: lps_reset
 ---------------------------------------------------------]]--
 concommand.Add('lps_reset', function(ply, cmd, args, arg_str)
-    for var, data in pairs({
+    for var, value in pairs({
         specmode = 6,
         tauntpack = 'default',
         noglow = 0,
+        defaultswep = 'weapon_smg1',
         tpv = 0,
         tpv_dist = 50,
         tpv_offset = 15,
@@ -65,7 +73,7 @@ concommand.Add('lps_reset', function(ply, cmd, args, arg_str)
         xhair_a = 255,
         xhair_l = 10,
     }) do
-        RunConsoleCommand('lps_' .. var, data)
+        RunConsoleCommand('lps_' .. var, value)
     end
 end)
 
@@ -90,6 +98,7 @@ end
 lps.net.Hook('Initialize', function(data)
     lps.banned = data[1]
     lps.support = data[2]
+    lps.version = data[3]
 end)
 
 --[[---------------------------------------------------------

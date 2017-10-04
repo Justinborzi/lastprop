@@ -53,9 +53,8 @@ function GM:IsValidSpectatorTarget(ply, ent)
     if (not IsValid(ent)) then return false end
     if (ent == ply) then return false end
     if (not table.HasValue(self:GetValidSpectatorEntityNames(ply), ent:GetClass())) then return false end
-    if (ent:IsPlayer() and not ent:Alive()) then return false end
-    if (ent:IsPlayer() and ent:IsObserver()) then return false end
-    if (ply:Team() ~= TEAM.SPECTATORS and ent:IsPlayer() and ply:Team() ~= ent:Team()) then return false end
+    if (ent:IsPlayer() and (not ent:Alive() or ent:IsObserver())) then return false end
+    if (not ply:IsSpectator() and ply:Team() ~= ent:Team()) then return false end
     return true
 end
 

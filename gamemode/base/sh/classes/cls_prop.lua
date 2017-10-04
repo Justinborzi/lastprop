@@ -202,77 +202,43 @@ function CLASS:CreateMove(ply, cmd)
 end
 
 function CLASS:ShouldDrawLocalPlayer(ply)
-    return GetConVar('lps_tpv'):GetBool()
+    return GetConVar('lps_tpvp'):GetBool()
 end
 
 function CLASS:CalcView(ply, origin, angles, fov)
     if (not IsValid(ply)) then return end
-    if (ply:IsDisguised()) then
 
-        local dist = math.Clamp(GetConVar('lps_tpv_dist'):GetInt(), 0, 100)
-        local hull = ply:GetVar('disguiseHull', {hullxy_max = 16, hullxy_min = 16, hullz = 72, duckz = (72 / 2)})
-        local view = {}
-        view.angles         = angles
-        view.origin         = ply:GetPos()
-        view.fov            = fov
+    local tpv = GetConVar('lps_tpvp'):GetBool()
+    local view = {}
+    local dist = math.Clamp(GetConVar('lps_tpv_dist'):GetInt(), 0, 100)
+    local offset = GetConVar('lps_tpv_offset_on'):GetBool() and math.Clamp(GetConVar('lps_tpv_offset'):GetInt(), 0, 15) or 0
 
-        if (not IsValid(ply:GetActiveWeapon())) then
-            if ply:GetVar('cameraNoClip', false) then
-                view.origin = view.origin + Vector(0, 0, hull.hullz) + ((angles):Forward() * -dist)
-            else
-                local trData = {
-                    start  = view.origin + Vector(0, 0, hull.hullz),
-                    endpos = view.origin + Vector(0, 0, hull.hullz) + ((angles):Forward() * -dist),
-                    filter = function(ent)
-                        if (ent:GetClass() == 'disguise') or (ent:IsPlayer()) then return false end
-                        return true
-                    end,
-                    mins    = Vector(-4, -4, -4),
-                    maxs    = Vector(4, 4, 4)
-               }
-                local tr    = util.TraceHull(trData)
-                view.origin = tr.HitPos
-            end
-            return view
-        else
-            view.origin  = view.origin + Vector(0, 0, hull.hullz)
-            return view
-        end
-    elseif (GetConVar('lps_tpv'):GetBool()) then
-        local view = {}
-        view.angles = angles
-        view.origin = origin
-        view.fov    = fov
+    view.angles  = angles
+    view.origin  = ply:IsDisguised() and (ply:GetPos() + Vector(0, 0, ply:GetVar('disguiseHull', {hullz = 72}).hullz)) or origin
+    view.fov     = fov
 
-        local offset = 0
-        if (GetConVar('lps_tpv_offset_on'):GetBool()) then
-            offset = math.Clamp(GetConVar('lps_tpv_offset'):GetInt(), 0, 15)
-        end
-
-        local dist = math.Clamp(GetConVar('lps_tpv_dist'):GetInt(), 80, 150)
-        local targetOrigin = origin + ((angles + Angle(offset, offset, 0)):Forward() * -dist)
-
-        local trData = {
-            start   = origin,
-            endpos  = targetOrigin,
-            filter  = player.GetAll(),
-            mins    = Vector(-4, -4, -4),
-            maxs    = Vector(4, 4, 4)
-        }
-
-        local tr    = util.TraceHull(trData)
-        view.origin = tr.HitPos
-        view.drawviewer = true
-
+    if (IsValid(ply:GetActiveWeapon()) and not tpv) or (not tpv) then
         return view
     end
+
+    local trData = {
+        start  = view.origin,
+        endpos = view.origin + ((angles + Angle(offset, offset, 0)):Forward() * -dist),
+        filter = function(ent)
+            if (table.HasValue({'disguise', 'player'}, ent:GetClass())) then return false end
+            return true
+        end,
+        mins    = Vector(-4, -4, -4),
+        maxs    = Vector(4, 4, 4),
+    }
+
+    view.origin = util.TraceHull(trData).HitPos
+
+    return view
 end
 
 function CLASS:CalcViewModelView(ply, weapon, vm, old_eyepos, old_eyeang, eyepos, eyeang)
-    if (ply:IsDisguised()) then
-        local hull = ply:GetVar('disguiseHull', {hullxy_max = 16, hullxy_min = 16, hullz = 72, duckz = (72 / 2)})
-        return ply:GetPos() + Vector(0, 0, hull.hullz), eyeang
-    end
+    return ply:IsDisguised() and (ply:GetPos() + Vector(0, 0, ply:GetVar('disguiseHull', {hullz = 72}).hullz)) or eyepos, eyeang
 end
 
 --[[---------------------------------------------------------
@@ -420,18 +386,30 @@ function CLASS:OnLastMan(ply)
 
     ply:StopTaunt()
 
-    ply:Give(GAMEMODE:GetConfig('lastman_swep') or 'weapon_lastman')
+    local sweps = GAMEMODE:GetLoadout(ply, TEAM.PROPS)
+    local swep = ply:GetInfo( 'lps_lastmanswep' )
+    if (not sweps[swep]) then
+        swep = table.Random(table.GetKeys(sweps))
+    end
+
+    local weapon = ply:Give(swep, true)
+    if (sweps[swep].primary) then
+        ply:GiveAmmo(sweps[swep].primary[2], sweps[swep].primary[1], true)
+    end
+    if (sweps[swep].secondary) then
+        ply:GiveAmmo(sweps[swep].secondary[2], sweps[swep].secondary[1], true)
+    end
+
     ply:SetVar('trail', util.SpriteTrail(ply, 0, Color(255, 255, 255), false, 15, 1, 1.5, 0.125, 'trails/rainbow.vmt'), true)
+
     ply:PlayTaunt(ply:GetInfo('lps_tauntpack') or 'default', 'lastman')
 end
 
 function CLASS:OnRoundEnd(ply, teamID, num)
     self:Cleanup(ply)
 
-    if (ply:Alive()) then
-        ply:StripWeapons()
-        ply:StripAmmo()
-    end
+    ply:StripAmmo()
+    ply:StripWeapons()
 
     if (GAMEMODE:GetConfig('postround_deathmatch')) then
         timer.Simple(2.5, function ()

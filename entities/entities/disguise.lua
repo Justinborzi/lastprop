@@ -121,10 +121,9 @@ else
             return
         end
         if (ply == localPlayer) then
-            if (not IsValid(ply:GetActiveWeapon())) then
-                if (GetConVar('lps_tpv_dist'):GetInt() > 30) then
-                    self:DrawModel()
-                end
+            local tpv, dist = GetConVar('lps_tpvp'):GetBool(), GetConVar('lps_tpv_dist'):GetInt()
+            if (tpv and dist > 30) then
+                self:DrawModel()
             end
         else
             self:DrawModel()

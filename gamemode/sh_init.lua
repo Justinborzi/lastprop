@@ -106,29 +106,32 @@ if (SERVER) then
         for id, tag in pairs(config.support) do
             lps.support[string.upper(id)] = tag
         end
+        if (config.version == 'dev') then
+            lps.Warning('Using a development version of the gamemode! You might experience bugs!')
+        else
+            timer.Simple(1, function()
+                http.Fetch('https://raw.githubusercontent.com/gluaws/lastprop/info/lastprop.txt',
+                function(body, len, headers, code)
+                    if (code ~= 200) then
+                        lps.Warning('UNABLE TO CHECK FOR UPDATE!')
+                        return
+                    end
+                    local config = util.KeyValuesToTable(body);
+                    if(config.version ~= lps.version) then
+                        lps.Log('There\'s a new update! v%s is out! Go to \'%s\' to download and view changelogs!', config.version, config.download_url)
+                    else
+                        lps.Log('v%s is up to date! Enjoy!', lps.version)
+                    end
+                    for id, tag in pairs(config.support) do
+                        lps.support[string.upper(id)] = tag
+                    end
+                end,
+                function(error)
+                    lps.Warning('UNABLE TO CHECK FOR UPDATE!')
+                end)
+            end)
+        end
     end
-
-    timer.Simple(1, function()
-        http.Fetch('https://raw.githubusercontent.com/gluaws/lastprop/info/lastprop.txt',
-        function(body, len, headers, code)
-            if (code ~= 200) then
-                lps.Warning('UNABLE TO CHECK FOR UPDATE!')
-                return
-            end
-            local config = util.KeyValuesToTable(body);
-            if(config.version ~= lps.version) then
-                lps.Log('There\'s a new update! v%s is out! Go to \'%s\' to download and view changelogs!', config.version, config.download_url)
-            else
-                lps.Log('v%s is up to date! Enjoy!', lps.version)
-            end
-            for id, tag in pairs(config.support) do
-                lps.support[string.upper(id)] = tag
-            end
-        end,
-        function(error)
-            lps.Warning('UNABLE TO CHECK FOR UPDATE!')
-        end)
-    end)
 end
 
 --

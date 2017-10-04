@@ -82,7 +82,7 @@ end
 --   Name: lps.load:ParseInclude()
 --   Desc: Includes folder with states according to file name (sh_, vgui_, cl_, sv_), server and client.
 ---------------------------------------------------------]]--
-function lps.load:ParseInclude(folder, base)
+function lps.load:ParseInclude(folder)
     local files, folders = find(format('%s/*', folder) , 'LUA')
     for _, lua in pairs(find(format('%s/sh_*.lua', folder), 'LUA')) do
         local lua = format('%s/%s', folder, lua)

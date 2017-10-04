@@ -4,7 +4,7 @@
 ---------------------------------------------------------]]--
 function GM:PreDrawHalos()
     if (GetConVar('lps_noglow'):GetBool()) then return end
-    
+
     local localPlayer = LocalPlayer()
     if (not IsValid(localPlayer)) then return end
     localPlayer:ClassCall('PreDrawHalos')
@@ -62,7 +62,7 @@ end
 --   Name: GM:AddHUDItem()
 ---------------------------------------------------------]]--
 function GM:AddHUDItem(item, pos, parent)
-    if (IsValid(self.hud)) then 
+    if (IsValid(self.hud)) then
         self.hud:AddItem(item, pos, parent)
     end
 end
@@ -73,7 +73,9 @@ end
 function GM:HUDPaint()
     self.BaseClass:HUDPaint()
 
-    draw.DrawText('This game is in beta, expect bugs. If you see them report them.', 'LPS16', 20, ScrH() - 25, util.Rainbow(), TEXT_ALIGN_LEFT)
+    if (lps and lps.version and lps.version == 'dev') then
+        draw.DrawText('This gamemode is a development version, please report any bugs you see!', 'LPS16', 20, ScrH() - 25, util.Rainbow(), TEXT_ALIGN_LEFT)
+    end
 
     local localPlayer = LocalPlayer()
     if (not IsValid(localPlayer)) then return end

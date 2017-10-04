@@ -7,7 +7,7 @@ if (SERVER) then
         volume = 1.0,
         level = 90,
         pitch = 100,
-        sound = 'weapons/lastman/reload.wav'
+        sound = 'weapons/lastman/reload.mp3'
     })
 
     sound.Add({
@@ -16,7 +16,7 @@ if (SERVER) then
         volume = 1.0,
         level = 90,
         pitch = 100,
-        sound = 'weapons/lastman/shoot.wav'
+        sound = 'weapons/lastman/shoot.mp3'
     })
 
     sound.Add({
@@ -25,7 +25,7 @@ if (SERVER) then
         volume = 1.0,
         level = 90,
         pitch = 100,
-        sound = 'weapons/lastman/deploy.wav'
+        sound = 'weapons/lastman/deploy.mp3'
     })
 end
 

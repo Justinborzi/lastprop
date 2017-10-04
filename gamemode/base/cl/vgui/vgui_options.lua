@@ -146,21 +146,41 @@ end
 ---------------------------------------------------------]]--
 function PANEL:DrawFrame()
     local settings = {
-        {
+        taunt = {
             name = 'Taunt Settings',
             settings = {
                 {
                     convar = 'lps_tauntpack',
                     type = 'list',
                     name = 'Taunt Pack',
-                    info = '',
                     func = function()
                         return lps.taunts.packs
                     end
                 },
             }
         },
-        {
+        loadout = {
+            name = 'Loadout Settings',
+            settings = {
+                {
+                    convar = 'lps_defaultswep',
+                    type = 'list',
+                    name = 'Hunter Default Weapon',
+                    func = function()
+                        return table.GetKeys(GAMEMODE:GetLoadout(LocalPlayer(), TEAM.HUNTERS))
+                    end
+                },
+                {
+                    convar = 'lps_lastmanswep',
+                    type = 'list',
+                    name = 'Last Prop Weapon',
+                    func = function()
+                        return table.GetKeys(GAMEMODE:GetLoadout(LocalPlayer(), TEAM.PROPS))
+                    end
+                },
+            }
+        },
+        volume = {
             name = 'Volume Settings',
             settings = {
                 {
@@ -186,13 +206,18 @@ function PANEL:DrawFrame()
                 },
             }
         },
-        {
+        tpv = {
             name = '3rd Person Settings',
             settings = {
                 {
-                    convar = 'lps_tpv',
+                    convar = 'lps_tpvh',
                     type = 'bool',
-                    name = 'Enabled',
+                    name = 'Hunter 3rd Person Enabled',
+                },
+                {
+                    convar = 'lps_tpvp',
+                    type = 'bool',
+                    name = 'Prop 3rd Person Enabled',
                 },
                 {
                     convar = 'lps_tpv_dist',
@@ -216,7 +241,7 @@ function PANEL:DrawFrame()
                 },
             }
         },
-        {
+        xhair = {
             name = 'Crosshair Settings',
             settings = {
                 {
@@ -233,7 +258,7 @@ function PANEL:DrawFrame()
                 },
             }
         },
-        {
+        misc = {
             name = 'Misc Settings',
             settings = {
                 {
@@ -244,6 +269,8 @@ function PANEL:DrawFrame()
             }
         },
     }
+
+    settings = table.Merge(settings, hook.Call('GetGameOptions', GAMEMODE, settings))
 
     local bottom = vgui.Create('DPanel', self)
     bottom:SetTall(38)
@@ -377,6 +404,12 @@ end
 
 vgui.Register('LPSOptionsMenu', PANEL, 'LPSFrame')
 
+--[[---------------------------------------------------------
+--   Name: GM:PlayingSoundsThink()
+---------------------------------------------------------]]--
+function GM:GetGameOptions(options)
+    return options
+end
 
 --[[---------------------------------------------------------
 --   concommand: lps_show_options

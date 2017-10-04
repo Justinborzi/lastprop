@@ -105,7 +105,7 @@ function CLASS:OnKeyDown(ply, key, keycode, char, keytype, busy, cursor)
 end
 
 function CLASS:ShouldDrawLocalPlayer(ply)
-    return GetConVar('lps_tpv'):GetBool()
+    return GetConVar('lps_tpvh'):GetBool()
 end
 
 function CLASS:CalcView(ply, origin, angles, fov)
@@ -120,29 +120,22 @@ function CLASS:CalcView(ply, origin, angles, fov)
         return view
     end
 
-    if (GetConVar('lps_tpv'):GetBool()) then
+    if (GetConVar('lps_tpvh'):GetBool()) then
         view.angles = angles
         view.origin = origin
         view.fov    = fov
 
-        local offset = 0
-        if (GetConVar('lps_tpv_offset_on'):GetBool()) then
-            offset = math.Clamp(GetConVar('lps_tpv_offset'):GetInt(), 0, 15)
-        end
         local dist = math.Clamp(GetConVar('lps_tpv_dist'):GetInt(), 80, 150)
-        local targetOrigin = origin + ((angles + Angle(offset, offset, 0)):Forward() * -dist)
-
+        local offset = GetConVar('lps_tpv_offset_on'):GetBool() and math.Clamp(GetConVar('lps_tpv_offset'):GetInt(), 0, 15) or 0
         local trData = {
             start   = origin,
-            endpos  = targetOrigin,
+            endpos  = origin + ((angles + Angle(offset, offset, 0)):Forward() * -dist),
             filter  = player.GetAll(),
             mins    = Vector(-4, -4, -4),
             maxs    = Vector(4, 4, 4)
         }
 
-        local tr    = util.TraceHull(trData)
-        view.origin = tr.HitPos
-        view.drawviewer = true
+        view.origin = util.TraceHull(trData).HitPos
 
         return view
     end
@@ -238,28 +231,26 @@ function CLASS:OnRoundStart(ply, num)
     ply:SetVar('blinded', false, true)
     ply:Freeze(false)
 
-    ply:Give('weapon_crowbar', true)
-
-    ply:Give('weapon_shotgun', true)
-    ply:GiveAmmo(64, 'Buckshot', true)
-
-    ply:Give('weapon_smg1', true)
-    ply:GiveAmmo(255, 'SMG1', true)
-
-    if (GAMEMODE:GetConfig('hunter_spawn_with_nade')) then
-        ply:GiveAmmo(1, 'SMG1_Grenade', true)
+    for wep, ammo in pairs(GAMEMODE:GetLoadout(ply, TEAM.HUNTERS)) do
+        ply:Give(wep, true)
+        if (ammo.primary) then
+            ply:GiveAmmo(ammo.primary[2], ammo.primary[1], true)
+        end
+        if (ammo.secondary) then
+            ply:GiveAmmo(ammo.secondary[2], ammo.secondary[1], true)
+        end
     end
 
-    ply:Give('weapon_crossbow', true)
-    ply:GiveAmmo(64, 'XBowBolt', true)
-
-    if ply:HasWeapon('weapon_smg1') then
+    local defult = ply:GetInfo('lps_defaultswep')
+    if ply:HasWeapon(defult) then
+        ply:SelectWeapon(defult)
+    elseif ply:HasWeapon('weapon_smg1') then
         ply:SelectWeapon('weapon_smg1')
     end
 end
 
 function CLASS:OnLastMan(ply)
-    if (GAMEMODE:GetConfig('hunter_lastman_bonus_nade')) then
+    if (GAMEMODE:GetConfig('hunter_lastman_bonus_nade') and ply:GetAmmoCount('SMG1_Grenade') < 1) then
         ply:GiveAmmo(1, 'SMG1_Grenade', true)
     end
 end
