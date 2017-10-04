@@ -1,6 +1,7 @@
 include('sv_util.lua')
 include('meta/sv_player.lua')
 include('sv_player.lua')
+include('sv_entity.lua')
 include('sv_round.lua')
 include('sv_spectator.lua')
 include('sv_team.lua')
