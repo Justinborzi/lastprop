@@ -100,10 +100,10 @@ function PANEL:CreateScores()
             end
 
             if (IsValid(panel.player)) then
-                if (v:IsAdmin() or v:IsSuperAdmin()) then
-                    panel.info:SetColor(Color(47, 119, 88))
-                elseif (lps.support[panel.player:SteamID()]) then
+                if (lps.support[panel.player:SteamID()]) then
                     panel.info:SetColor(util.Rainbow())
+                elseif (v:IsAdmin() or v:IsSuperAdmin()) then
+                    panel.info:SetColor(Color(47, 119, 88))
                 end
             else
                 panel:Remove()
@@ -125,10 +125,10 @@ function PANEL:CreateScores()
 
         panel.info = vgui.Create('DLabel', panel)
         panel.info:SetColor(Color(0,0,0))
-        if (v:IsAdmin() or v:IsSuperAdmin()) then
-            panel.info:SetText('[Admin]')
-        elseif (lps.support[v:SteamID()]) then
+        if (lps.support[v:SteamID()]) then
             panel.info:SetText(lps.support[v:SteamID()])
+        elseif (v:IsAdmin() or v:IsSuperAdmin()) then
+            panel.info:SetText('[Admin]')
         else
             panel.info:SetText('')
         end
