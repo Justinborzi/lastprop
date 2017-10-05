@@ -203,6 +203,13 @@ function PANEL:Init()
     self.center:SetPos(cx/2, cy/2)
     self.center.Paint = function() end
 
+    self.spectators = vgui.Create('DLabel', self.center)
+    self.spectators:SetTall(30)
+    self.spectators:Dock(BOTTOM)
+    self.spectators:SetContentAlignment(5)
+    self.spectators:SetColor(Color(255,255,255))
+    self.spectators:SetText(string.format('Spectators: %s', util.SpectatorNames()))
+
     self.propScore = vgui.Create('LPSTeamScore', self.center)
     self.propScore:SetWide(cx/2 - 5)
     self.propScore:Dock(LEFT)

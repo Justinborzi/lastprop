@@ -335,10 +335,13 @@ end
 function GM:PlayerCanHearPlayersVoice(listener, speaker)
 
     -- Generic Checks
-    if (not IsValid(speaker) or not IsValid(listener)) then return false end
+    if (not IsValid(speaker) or not IsValid(listener)) then return end
 
     -- Team Chat
     if (speaker:GetVar('teamChat', false) and speaker:Team() ~= listener:Team()) then return false end
+
+    -- Admins
+    if (speaker:IsAdmin() or speaker:IsSuperAdmin()) then return true end
 
     -- Muted players
     if (listener:GetVar('muted', {})[speaker:UniqueID()]) then
@@ -374,7 +377,13 @@ end
 function GM:PlayerCanSeePlayersChat( text, teamOnly, listener, speaker )
 
     -- Generic Checks
-    if (not IsValid(speaker) or not IsValid(listener)) then return false end
+    if (not IsValid(speaker) or not IsValid(listener)) then return end
+
+    --Team Chat
+    if (teamOnly and listener:Team() ~= speaker:Team()) then return false end
+
+    -- Admins
+    if (speaker:IsAdmin() or speaker:IsSuperAdmin()) then return true end
 
     -- Muted players
     if (listener:GetVar('muted', {})[speaker:UniqueID()]) then return false end
@@ -389,9 +398,6 @@ function GM:PlayerCanSeePlayersChat( text, teamOnly, listener, speaker )
 
     -- Dead people can't talk
     if (not speaker:Alive() and listener:Alive()) then return false end
-
-    --Team Chat
-    if (teamOnly and listener:Team() ~= speaker:Team()) then return false end
 
     -- Class hooks
     local canSeeChat, canChat = listener:ClassCall('CanSeeChat', speaker), speaker:ClassCall('CanChat', listener)

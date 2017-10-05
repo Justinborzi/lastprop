@@ -78,4 +78,15 @@ if (CLIENT) then
     end)
 end
 
-
+--[[---------------------------------------------------------
+--   Name: util.SpectatorNames()
+---------------------------------------------------------]]--
+function util.SpectatorNames()
+    local names = {}
+    for _, v in pairs(player.GetAll()) do
+        if (v:IsSpectator()) then
+            table.insert(names, v:Nick())
+        end
+    end
+    return table.concat(names, ', ')
+end
