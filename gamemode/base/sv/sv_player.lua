@@ -37,6 +37,10 @@ function GM:PlayerInitialSpawn(ply)
             ply:SetVar('disconnected', false)
         end
     end
+
+    if (not ply:ClassCall('CanSpawn')) then
+        ply:KillSilent()
+    end
 end
 
 --[[---------------------------------------------------------
@@ -412,11 +416,16 @@ end
 --   Name: GM:PlayerSay()
 ---------------------------------------------------------]]--
 function GM:PlayerSay(ply, text, teamChat)
-    if table.HasValue({'stuck', '!stuck', '/stuck', 'unstick', '!unstick', '/unstick'}, string.lower(text)) then
+    if table.HasValue({'stuck', '!stuck', '/stuck', 'unstuck', '!unstuck', '/unstuck', 'unstick', '!unstick', '/unstick'}, string.lower(text)) then
         if (ply:IsStuck()) then
-            ply:UnStick()
+            util.Notify(ply, '[STUCK] Attempting to unstick you!')
+            if(ply:UnStick()) then
+                util.Notify(ply, '[STUCK] You should be unstuck!')
+            else
+                util.Notify(ply, '[STUCK] Unable to find a suitable spot!')
+            end
         else
-            util.Notify(ply, 'You\'re not stuck!')
+            util.Notify(ply, '[STUCK] You\'re not stuck!')
         end
         return ''
     end

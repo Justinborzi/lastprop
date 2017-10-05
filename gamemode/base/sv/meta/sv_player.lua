@@ -302,7 +302,7 @@ function meta:UnStick()
                 if (not FindPassableSpace( right, -searchScale)) then --Left
                         if (not FindPassableSpace( up, searchScale)) then -- up
                             if (not FindPassableSpace( up, -searchScale)) then -- down
-                                if (not FindPassableSpace( forward, -searchScale)) then    -- back
+                                if (not FindPassableSpace( forward, -searchScale)) then -- back
                                 return false
                             end
                         end

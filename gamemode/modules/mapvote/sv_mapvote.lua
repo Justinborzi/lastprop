@@ -25,14 +25,14 @@ function MapVote:Start(voteTime)
 
     self:Init() -- init server MapVote
 
-    MapVote.voteTime = voteTime and voteTime or self.config.voteTime
+    self.voteTime = voteTime and voteTime or self.config.voteTime
 
     net.Start("MapVote_Start")
-    net.WriteUInt(MapVote.voteTime, 16)
-    net.WriteTable(MapVote.maps)
+    net.WriteUInt(self.voteTime, 16)
+    net.WriteTable(self.maps)
     net.Broadcast()
 
-    timer.Create("MapVoteWinnerCheck", MapVote.voteTime, 1, function()
+    timer.Create("MapVoteWinnerCheck", self.voteTime, 1, function()
         MapVote.active = false
 
         local voteResults = {}
@@ -86,7 +86,7 @@ function MapVote:Stop()
     net.Start("MapVote_Stop")
     net.Broadcast()
     timer.Stop("MapVoteWinnerCheck")
-    PrintMessage(HUD_PRINTTALK, "The mapvote was cancled by an admin")
+    PrintMessage(HUD_PRINTTALK, "The mapvote was canceled by an admin")
     self.runs = false
 end
 
@@ -172,10 +172,6 @@ function MapVote:GetRandomMaps()
         if i >= max then break end
         local mapstr = map:sub(1, -5)
 
-        -- using this to get only maps which have no mapicons (need this when I create mapicons :D)
-        --local a = file.Exists("maps/thumb/" .. mapstr .. ".png", "GAME")
-        --local b = file.Exists("maps/" .. mapstr .. ".png", "GAME")
-
         local notExistsInRevoteBanList = not self.revoteBanList[mapstr]
         local notExclude = not self:IsExlude(mapstr)
 
@@ -218,11 +214,20 @@ function MapVote:IsExlude(map)
     return false
 end
 
-hook.Add("Initialize", "InitializeMapvote", function()
+hook.Add("PlayerInitialSpawn", "MapvotePlayerInitialSpawn", function(ply)
+    if (timer.Exists('MapVoteWinnerCheck')) then
+        net.Start("MapVote_Start")
+        net.WriteUInt(MapVote.voteTime, 16)
+        net.WriteTable(MapVote.maps)
+        net.Send(ply)
+    end
+end )
+
+hook.Add("Initialize", "MapvoteInitialize", function()
     MapVote:InitConfig()
     MapVote:LoadRevoteBanList()
 end )
 
-hook.Add("OnEndGame", "StartMapvote", function()
+hook.Add("OnEndGame", "MapvoteStart", function()
     MapVote:Start()
 end )

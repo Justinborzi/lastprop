@@ -266,8 +266,8 @@
             "name"       "lps_hunter_steal_maxhealth"
             "text"       "Hunter steal max health"
             "help"       "Max health a hunter can get from stealing health"
-            "type"       "CheckBox"
-            "default"    "1"
+            "type"       "Numeric"
+            "default"    "200"
         }
         32
         {

@@ -286,7 +286,8 @@ function CLASS:OnCausedDamage(ply, ent, dmgInfo)
     if (not IsValid(ent) or (ent == ply) or not GAMEMODE:InRound()) then return end
 
     if (GAMEMODE:GetConfig('hunter_steal_health') and ((ent:GetClass() == 'disguise') or (ent:IsPlayer() and ent:Team() == TEAM.PROPS))) then
-        local health = math.Round(math.Clamp(ply:Health() + math.Clamp(dmgInfo:GetDamage()/2, 1, 100), 1, GAMEMODE:GetConfig('hunter_steal_maxhealth')))
+        local damage = math.Round(dmgInfo:GetDamage()/2)
+        local health = math.Clamp(ply:Health() + damage, ply:Health(), GAMEMODE:GetConfig('hunter_steal_maxhealth'))
         if (health > ply:GetMaxHealth()) then
             ply:SetMaxHealth(health)
         end

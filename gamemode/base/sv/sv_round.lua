@@ -152,6 +152,7 @@ hook.Add('PostPlayerDeath', 'GAMEMODE:CheckRoundEnd', function() timer.Simple(0.
 function GM:OnRoundLastMan(ply)
     if (ply:Team() == TEAM.PROPS) then
         util.AllSpectate(ply)
+        self:SetRoundTime(self:GetConfig('lastman_round_time') or 60)
     end
 end
 
@@ -168,7 +169,6 @@ function GM:RoundLastMan(ply)
     util.ClassCallAll('OnRoundLastMan', ply)
     lps.net.Start(nil, 'OnRoundLastMan', {ply})
 
-    self:SetRoundTime(self:GetConfig('lastman_round_time') or 60)
     lps.Info('%s is the last man standing for team %s!', ply:Nick(), team.GetName(ply:Team()))
 end
 -------------------------------

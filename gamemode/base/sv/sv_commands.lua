@@ -17,11 +17,16 @@ concommand.Add('playermute', function(pl, cmd, args) hook.Call('MutePlayer', GAM
 --[[---------------------------------------------------------
 --   concommand: stuck
 ---------------------------------------------------------]]--
-concommand.Add('stuck', function(pl, cmd, args)
+concommand.Add('stuck', function(ply, cmd, args)
     if (ply:IsStuck()) then
-        ply:UnStick()
+        util.Notify(ply, '[STUCK] Attempting to unstick you!')
+        if(ply:UnStick()) then
+            util.Notify(ply, '[STUCK] You should be unstuck!')
+        else
+            util.Notify(ply, '[STUCK] Unable to find a suitable spot!')
+        end
     else
-        util.Notify(ply, 'You\'re not stuck!')
+        util.Notify(ply, '[STUCK] You\'re not stuck!')
     end
 end)
 
