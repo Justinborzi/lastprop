@@ -27,11 +27,11 @@ Last Prop Standing is a twist on the popular game mode Prop Hunt. The main diffe
 * Random death/suicide strings!
 * Very moddable! (Docs coming soon!)
 * Working hitboxes! (Maybe, need more play testing)
+* Taunt Menu
 * and many more!
 
 ### Planed Features:
 * Leveling! Spawn with more ammo, get more health when you become a prop!
-* Taunt Menu
 * Pointshop 2 Integration
 * ULX Support
 * Server Guard Support
