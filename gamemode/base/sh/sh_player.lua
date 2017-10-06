@@ -60,7 +60,7 @@ end
 --            the player is allowed to noclip, false to block
 ---------------------------------------------------------]]--
 function GM:PlayerNoClip(ply, on)
-    if (ply:IsObserver() or ply:IsSpectator()) then return false end
+    if (ply:IsObserver() or ply:IsSpec()) then return false end
     -- Allow noclip if we're in single player or have cheats enabled
     if (game.SinglePlayer() or GetConVar('sv_cheats'):GetBool()) then return true end
     -- Don't if it's not.

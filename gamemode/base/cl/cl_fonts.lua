@@ -50,6 +50,6 @@ surface.CreateFont('LPS14', {
 surface.CreateFont('LPS12', {
     font = 'Roboto',
     weight = 800,
-    size = 14,
+    size = 12,
     antialias = true
 })

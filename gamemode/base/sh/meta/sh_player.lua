@@ -9,10 +9,17 @@ function meta:IsObserver()
 end
 
 --[[---------------------------------------------------------
---   Name: meta:IsSpectator()
+--   Name: meta:IsSpec()
 ---------------------------------------------------------]]--
-function meta:IsSpectator()
+function meta:IsSpec()
     return table.HasValue({TEAM.SPECTATORS, TEAM.UNASSIGNED, TEAM.CONNECTING}, self:Team())
+end
+
+--[[---------------------------------------------------------
+--   Name: meta:IsLastMan()
+---------------------------------------------------------]]--
+function meta:IsLastMan()
+    return GetGlobalInt('RoundLastManID' .. self:Team()) == self:UserID()
 end
 
 --[[---------------------------------------------------------

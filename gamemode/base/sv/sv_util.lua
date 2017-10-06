@@ -5,7 +5,7 @@ util = util or {}
 ---------------------------------------------------------]]--
 function util.ClassCallAll(name, ...)
     for _, v in pairs(player.GetAll()) do
-        if (not v:IsSpectator()) then
+        if (not v:IsSpec()) then
             v:ClassCall(name, ...)
         end
     end
@@ -25,7 +25,7 @@ end
 ---------------------------------------------------------]]--
 function util.KillAll()
     for _, v in pairs(player.GetAll()) do
-        if (not v:IsSpectator() and v:Alive()) then
+        if (not v:IsSpec() and v:Alive()) then
             v:KillSilent()
         end
     end
@@ -36,7 +36,7 @@ end
 ---------------------------------------------------------]]--
 function util.SpawnAll()
     for _, v in pairs(player.GetAll()) do
-        if (not v:IsSpectator() and not v:Alive()) then
+        if (not v:IsSpec() and not v:Alive()) then
             v:Spawn()
         end
     end
@@ -47,7 +47,7 @@ end
 ---------------------------------------------------------]]--
 function util.ForceSpawnAll()
     for _, v in pairs(player.GetAll()) do
-        if (not v:IsSpectator()) then
+        if (not v:IsSpec()) then
             v:Spawn()
         end
     end
@@ -58,7 +58,7 @@ end
 ---------------------------------------------------------]]--
 function util.StripAll()
     for _, v in pairs(player.GetAll()) do
-        if (not v:IsSpectator()) then
+        if (not v:IsSpec()) then
             v:StripWeapons()
             v:StripAmmo()
         end
@@ -94,7 +94,7 @@ end
 ---------------------------------------------------------]]--
 function util.FreezeAll(bool)
     for _, v in pairs(player.GetAll()) do
-        if (not v:IsSpectator()) then
+        if (not v:IsSpec()) then
             v:Freeze(bool)
         end
     end

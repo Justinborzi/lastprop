@@ -136,7 +136,7 @@ function CLASS:OnKeyDown(ply, key, keycode, char, keytype, busy, cursor)
 
     local function DoTaunt(min, max)
         if (ply:GetVar('canTaunt', false)) then
-            RunConsoleCommand('taunt', min, max)
+            RunConsoleCommand('randomtaunt', min, max)
         else
             util.Notify(ply, 'You can\'t taunt right now!')
         end
@@ -402,7 +402,7 @@ function CLASS:OnLastMan(ply)
 
     ply:SetVar('trail', util.SpriteTrail(ply, 0, Color(255, 255, 255), false, 15, 1, 1.5, 0.125, 'trails/rainbow.vmt'), true)
 
-    ply:PlayTaunt(ply:GetInfo('lps_tauntpack') or 'default', 'lastman')
+    ply:RandomTaunt()
 end
 
 function CLASS:OnRoundEnd(ply, teamID, num)

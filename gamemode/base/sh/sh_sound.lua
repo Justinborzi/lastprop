@@ -67,6 +67,11 @@ end)
 ---------------------------------------------------------]]--
 function GM:RegisterTaunt(pack, type, taunt)
 
+    if (not taunt.length or taunt.length < 1 ) then
+        lps.Warning('%s Does not have a length set! This taunt will be skipped!')
+        return
+    end
+
     if (not table.HasValue(lps.taunts.packs, pack)) then table.insert(lps.taunts.packs, pack) end
 
     if (not lps.taunts.sounds[pack]) then lps.taunts.sounds[pack] = {} end

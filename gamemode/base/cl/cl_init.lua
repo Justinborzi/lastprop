@@ -105,7 +105,7 @@ end)
 --   Name: GM:InitPostEntity()
 ---------------------------------------------------------]]--
 function GM:InitPostEntity()
-    if (hook.Call('ShouldShowTeam', self) and LocalPlayer():IsSpectator()) then
+    if (hook.Call('ShouldShowTeam', self) and LocalPlayer():IsSpec()) then
         self:ShowTeam()
     end
 end

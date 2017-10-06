@@ -208,6 +208,7 @@ function PANEL:Init()
     self.spectators:Dock(BOTTOM)
     self.spectators:SetContentAlignment(5)
     self.spectators:SetColor(Color(255,255,255))
+    self.spectators:SetFont('LPS14')
     self.spectators:SetText(string.format('Spectators: %s', util.SpectatorNames()))
 
     self.propScore = vgui.Create('LPSTeamScore', self.center)

@@ -27,19 +27,14 @@ function GM:PlayerInitialSpawn(ply)
         self:Resume()
     end
 
-    if (ply:IsBot()) then
-        self:AutoTeam(ply)
-    else
-        ply:SetTeam(ply:GetVar('team', TEAM.UNASSIGNED))
-        lps.net.Start(nil, 'Initialize', {lps.banned, lps.support, lps.version})
+    self:PlayerSetTeam(ply, ply:IsBot() and team.BestAutoJoinTeam() or ply:GetVar('team', TEAM.UNASSIGNED))
+
+    if (not ply:IsBot()) then
+        lps.net.Start(ply, 'Initialize', {lps.banned, lps.support, lps.version})
         if ply:GetVar('disconnected', false) then
             hook.Call('PlayerReconnected', self, ply)
             ply:SetVar('disconnected', false)
         end
-    end
-
-    if (not ply:ClassCall('CanSpawn')) then
-        ply:KillSilent()
     end
 end
 
@@ -48,7 +43,11 @@ end
 ---------------------------------------------------------]]--
 function GM:PlayerSpawn(ply)
 
-    if (ply:IsSpectator()) then
+    if (ply:ClassCall('CanSpawn') == false) then
+        ply:KillSilent()
+        self:BecomeObserver(ply)
+        return
+    elseif (ply:IsSpec()) then
         self:PlayerSpawnAsSpectator(ply)
         return
     end
@@ -61,11 +60,7 @@ function GM:PlayerSpawn(ply)
         return
     end
 
-    if (class.playerModel ~= nil) then
-        local mdl = player_manager.TranslatePlayerModel(type(class.playerModel) == 'table' and table.Random(class.playerModel) or class.playerModel)
-        util.PrecacheModel(mdl)
-        ply:SetModel(mdl)
-    end
+    hook.Call( "PlayerSetModel", GAMEMODE, ply )
 
     ply:SetupHands()
 
@@ -90,6 +85,48 @@ function GM:PlayerSpawn(ply)
 
     ply:ClassCall('OnSpawn')
 
+end
+
+--[[---------------------------------------------------------
+	Name: gamemode:PlayerSetModel( )
+	Desc: Set the player's model
+-----------------------------------------------------------]]
+function GM:PlayerSetModel( ply )
+        local models = {
+        'male01',
+        'male02',
+        'male03',
+        'male04',
+        'male05',
+        'male06',
+        'male07',
+        'male08',
+        'male09',
+        'male10',
+        'female01',
+        'female02',
+        'female03',
+        'female04',
+        'female05',
+        'female06',
+        'female07',
+        'female08',
+        'female09',
+        'female10',
+    }
+
+    local class = ply:Class()
+    if (class and class.playerModel) then
+        if (type(class.playerModel) == 'table') then
+            models = class.playerModel
+        else
+            models = {class.playerModel}
+        end
+    end
+
+    local mdl = player_manager.TranslatePlayerModel(table.Random(models))
+    util.PrecacheModel(mdl)
+    ply:SetModel(mdl)
 end
 
 --[[---------------------------------------------------------
@@ -218,7 +255,7 @@ end
 --   Name: GM:CanPlayerSuicide()
 ---------------------------------------------------------]]--
 function GM:CanPlayerSuicide(ply)
-    if (ply:IsSpectator()) then
+    if (ply:IsSpec()) then
         return false
     end
     return true
@@ -228,7 +265,7 @@ end
 --   Name: GM:PlayerSwitchFlashlight()
 ---------------------------------------------------------]]--
 function GM:PlayerSwitchFlashlight(ply, on)
-    if (ply:IsSpectator()) then
+    if (ply:IsSpec()) then
         return not on
     end
     return ply:GetVar('allowFlashlight', false)
@@ -239,7 +276,7 @@ end
 ---------------------------------------------------------]]--
 function GM:PlayerUse(ply, ent)
     -- Prevent dead or spectating players from being able to use stuff.
-    if (not ply:Alive() or ply:IsSpectator()) then
+    if (not ply:Alive() or ply:IsSpec()) then
         return false
     elseif (table.HasValue({'func_door', 'prop_door_rotating', 'func_door_rotating'}, ent:GetClass())) then
         if ((ply:GetVar('lastDoor', 0) + .75) >= CurTime()) then
@@ -288,7 +325,7 @@ end
 --   Name: GM:PlayerCanPickupWeapon()
 ---------------------------------------------------------]]--
 function GM:PlayerCanPickupWeapon(ply, weapon)
-    if (ply:IsSpectator()) then
+    if (ply:IsSpec()) then
         return false
     end
 
@@ -303,7 +340,7 @@ end
 --   Name: GM:AllowPlayerPickup()
 ---------------------------------------------------------]]--
 function GM:AllowPlayerPickup(ply, ent)
-    if (ply:IsSpectator()) then
+    if (ply:IsSpec()) then
         return false
     end
 
@@ -356,7 +393,7 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
     if (not self:InRound()) then return true end
 
     -- Spectators can't talk to players
-    if (speaker:IsSpectator() and not listener:IsSpectator()) then
+    if (speaker:IsSpec() and not listener:IsSpec()) then
         return false
     end
 
@@ -396,7 +433,7 @@ function GM:PlayerCanSeePlayersChat( text, teamOnly, listener, speaker )
     if (not self:InRound()) then return true end
 
     -- Spectators can't talk to players
-    if (speaker:IsSpectator() and not listener:IsSpectator()) then
+    if (speaker:IsSpec() and not listener:IsSpec()) then
         return false
     end
 

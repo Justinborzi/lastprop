@@ -7,11 +7,7 @@
 ---------------------------------------------------------]]--
 function GM:OnPreRoundStart(num)
     self:CleanMap()
-    if (num == 1) then
-        util.ForceSpawnAll()
-    else
-        util.SpawnAll()
-    end
+    util.ForceSpawnAll()
     self:PlaySound(table.Random(lps.sounds.music), SOUND.MUSIC, hook.Call('GetPreRoundTime', self, num))
 end
 
@@ -35,13 +31,13 @@ function GM:PreRoundStart(num)
     self:InPreRound(true)
     self:Round(num)
 
-    hook.Call('OnPreRoundStart', self, num)
-    util.ClassCallAll('OnPreRoundStart', num)
-    lps.net.Start(nil, 'OnPreRoundStart', {num})
-
     local time = hook.Call('GetPreRoundTime', self, num)
     self:RoundStartTime(CurTime() + time)
     timer.Simple(time, function() GAMEMODE:RoundStart(num) end)
+
+    hook.Call('OnPreRoundStart', self, num)
+    util.ClassCallAll('OnPreRoundStart', num)
+    lps.net.Start(nil, 'OnPreRoundStart', {num})
 
     lps.Info('Pre round #%s started, round starts in %ss!', num, time)
 end
@@ -72,14 +68,14 @@ function GM:RoundStart(num)
     self:InPreRound(false)
     self:InRound(true)
 
-    hook.Call('OnRoundStart', self, num)
-    util.ClassCallAll('OnRoundStart', num)
-    lps.net.Start(nil, 'OnRoundStart', {num})
-
     local time = hook.Call('GetRoundTime', self, num)
     self:RoundEndTime(CurTime() + time)
     timer.Create('RoundEndTimer', time, 0, function() GAMEMODE:RoundEnd(ROUND.TIMER) end)
     timer.Create('CheckRoundEnd', 1, 0, function() GAMEMODE:CheckRoundEnd() end)
+
+    hook.Call('OnRoundStart', self, num)
+    util.ClassCallAll('OnRoundStart', num)
+    lps.net.Start(nil, 'OnRoundStart', {num})
 
     lps.Info('Round #%s started, round ends in %ss!', num, time)
 end
@@ -153,6 +149,7 @@ function GM:OnRoundLastMan(ply)
     if (ply:Team() == TEAM.PROPS) then
         util.AllSpectate(ply)
         self:SetRoundTime(self:GetConfig('lastman_round_time') or 60)
+        util.Notify(nil, string.format('%s is the last props standing!', ply:Nick()))
     end
 end
 
@@ -164,8 +161,8 @@ function GM:RoundLastMan(ply)
     self:LastMan(ply:Team(), ply)
 
     hook.Call('OnRoundLastMan', self, ply)
-
     ply:ClassCall('OnLastMan')
+
     util.ClassCallAll('OnRoundLastMan', ply)
     lps.net.Start(nil, 'OnRoundLastMan', {ply})
 
@@ -181,8 +178,12 @@ end
 function GM:OnRoundEnd(teamID, num)
     if (teamID == ROUND.TIMER) then
         team.AddScore(TEAM.PROPS, 1)
+        util.Notify(nil, 'Round Over! ', team.GetColor(TEAM.PROPS), team.GetName(TEAM.PROPS), NOTIFY.DEFAULT, ' Won!')
     elseif (teamID ~= ROUND.DRAW) then
+        util.Notify(nil, 'Round Over! ', team.GetColor(teamID), team.GetName(teamID), NOTIFY.DEFAULT, ' Won!')
         team.AddScore(teamID, 1)
+    else
+        util.Notify(nil, 'Round Over! Nobody Won!')
     end
 end
 
@@ -214,10 +215,6 @@ function GM:RoundEnd(teamID)
     self:InPostRound(true)
     self:RoundWinner(teamID)
 
-    hook.Call('OnRoundEnd', self, teamID, num)
-    util.ClassCallAll('OnRoundEnd', teamID, num)
-    lps.net.Start(nil, 'OnRoundEnd', {teamID, num})
-
     if (teamID == ROUND.TIMER or teamID == ROUND.DRAW) then
         lps.Info('Round #%s ended! Nobody won... (%s)', num, teamID == ROUND.TIMER and 'ROUND.TIMER' or 'ROUND.DRAW')
     else
@@ -230,6 +227,11 @@ function GM:RoundEnd(teamID)
     local time = hook.Call('GetPostRoundTime', self, teamID, num)
     self:NextRoundTime(CurTime() + time)
     timer.Simple(time, function() GAMEMODE:NextRound() end)
+
+    hook.Call('OnRoundEnd', self, teamID, num)
+    util.ClassCallAll('OnRoundEnd', teamID, num)
+    lps.net.Start(nil, 'OnRoundEnd', {teamID, num})
+
     lps.Info('Post round started! New round starts in %ss!', time)
 end
 
@@ -244,6 +246,7 @@ function GM:OnNextRound(num)
     util.SetVarAll('lastMan', false, true)
     if (self:GetConfig('team_swap')) then
         util.SwitchTeams(TEAM.PROPS, TEAM.HUNTERS)
+        util.Notify(nil, 'Teams Swapped!')
     end
 end
 

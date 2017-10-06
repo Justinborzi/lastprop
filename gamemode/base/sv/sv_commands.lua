@@ -95,13 +95,17 @@ end)
 --   concommand: taunt
 ---------------------------------------------------------]]--
 concommand.Add('taunt', function(ply, cmd, args)
-    if(ply:Alive() and ply:GetVar('canTaunt', false)) then
-        if (ply:Team() == TEAM.PROPS) then
-            ply:PlayTaunt(ply:GetInfo('lps_tauntpack') or 'default', 'prop', tonumber(args[1]), tonumber(args[2]))
-        end
-        if (ply:Team() == TEAM.HUNTERS) then
-            ply:PlayTaunt(ply:GetInfo('lps_tauntpack') or 'default', 'hunter', tonumber(args[1]), tonumber(args[2]))
-        end
+    if(ply:GetVar('canTaunt', false)) then
+        ply:PlayTaunt(args[1])
+    end
+end)
+
+--[[---------------------------------------------------------
+--   concommand: randomtaunt
+---------------------------------------------------------]]--
+concommand.Add('randomtaunt', function(ply, cmd, args)
+    if(ply:GetVar('canTaunt', false)) then
+        ply:RandomTaunt(tonumber(args[1]), tonumber(args[2]))
     end
 end)
 

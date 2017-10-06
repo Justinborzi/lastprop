@@ -97,7 +97,7 @@ function CLASS:OnKeyDown(ply, key, keycode, char, keytype, busy, cursor)
     local taunt = lps.bindings:GetKey('hunter', 'taunt')
     if (key == taunt.key and keytype == taunt.type) then
         if (ply:GetVar('canTaunt', false)) then
-            RunConsoleCommand('taunt')
+            RunConsoleCommand('randomtaunt')
         else
             util.Notify(ply, 'You can\'t taunt right now!')
         end
@@ -195,18 +195,25 @@ function CLASS:CanSpawn(ply)
 end
 
 function CLASS:OnSpawn(ply)
-    if (GAMEMODE:InPreRound() and not ply:GetVar('blinded', false)) then
-        ply:SetVar('blinded', true, true)
-        ply:Freeze(true)
+    if (GAMEMODE:InPreRound()) then
+        if (not ply:GetVar('blinded', false)) then
+            ply:SetVar('blinded', true, true)
+        end
+
+        if (not ply:IsFrozen()) then
+            ply:Freeze(true)
+        end
     end
 end
 
 function CLASS:OnKill(ply, victim, inflictor)
-    if (victim:IsPlayer() and victim:Team() == TEAM.PROPS and GAMEMODE:GetConfig('hunter_kill_bonus_nade') > 0) then
-        ply:GiveAmmo(GAMEMODE:GetConfig('hunter_kill_bonus_nade'), 'SMG1_Grenade', true)
-    end
+    if (not ply:Alive()) then return end
     if (GAMEMODE:GetConfig('hunter_kill_bonus_health') > 0 and not GAMEMODE:GetConfig('hunter_steal_health')) then
         ply:SetHealth(math.Clamp(ply:Health() + GAMEMODE:GetConfig('hunter_kill_bonus_health'), 10, ply:GetMaxHealth()))
+    end
+    if (victim:IsPlayer() and victim:Team() == TEAM.PROPS and GAMEMODE:GetConfig('hunter_kill_bonus_nade') > 0) then
+        ply:GiveAmmo(GAMEMODE:GetConfig('hunter_kill_bonus_nade'), 'SMG1_Grenade', true)
+        util.Notify(ply, string.format('You caught %s, you get a free SMG Grenade!', victim:Nick()))
     end
 end
 
@@ -227,9 +234,17 @@ function CLASS:OnPreRoundStart(ply, num)
 end
 
 function CLASS:OnRoundStart(ply, num)
-    ply:SetVar('canTaunt', true, true)
-    ply:SetVar('blinded', false, true)
-    ply:Freeze(false)
+    if (not ply:GetVar('canTaunt', false)) then
+        ply:SetVar('canTaunt', true, true)
+    end
+
+    if (ply:GetVar('blinded', false)) then
+        ply:SetVar('blinded', false, true)
+    end
+
+    if (ply:IsFrozen()) then
+        ply:Freeze(false)
+    end
 
     for wep, ammo in pairs(GAMEMODE:GetLoadout(ply, TEAM.HUNTERS)) do
         ply:Give(wep, true)
@@ -252,6 +267,7 @@ end
 function CLASS:OnLastMan(ply)
     if (GAMEMODE:GetConfig('hunter_lastman_bonus_nade') and ply:GetAmmoCount('SMG1_Grenade') < 1) then
         ply:GiveAmmo(1, 'SMG1_Grenade', true)
+        util.Notify(ply, 'You\'re the last man standing! You get a free SMG Grenade!')
     end
 end
 

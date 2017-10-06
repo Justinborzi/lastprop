@@ -12,6 +12,36 @@ function meta:GetTaunt(taunt)
 end
 
 --[[---------------------------------------------------------
+--   Name: meta:GetTauntType()
+---------------------------------------------------------]]--
+function meta:GetTauntType()
+    if (self:Team() == TEAM.PROPS) then
+        if (self:IsLastMan()) then
+            return 'lastman'
+        else
+            return 'prop'
+        end
+    elseif (self:Team() == TEAM.HUNTERS) then
+        return 'hunter'
+    end
+end
+
+--[[---------------------------------------------------------
+--   Name: meta:GetTauntPack()
+---------------------------------------------------------]]--
+function meta:GetTauntPack()
+    local pack = self:GetInfo('lps_tauntpack')
+    if (not pack) or
+       (not lps.taunts.sounds[pack]) or
+       (table.Count(lps.taunts.sounds[pack]) == 0) or
+       (not lps.taunts.sounds[pack][type]) or
+       (lps.taunts.info[pack][type].count == 0) then
+        return 'default'
+    end
+    return pack
+end
+
+--[[---------------------------------------------------------
 --   Name: meta:CreateTaunt()
 ---------------------------------------------------------]]--
 function meta:CreateTaunt(taunt)
@@ -24,38 +54,58 @@ function meta:CreateTaunt(taunt)
     return self.taunts[taunt.name]
 end
 
+
 --[[---------------------------------------------------------
 --   Name: meta:PlayTaunt()
 ---------------------------------------------------------]]--
-function meta:PlayTaunt(pack, type, min, max)
+function meta:RandomTaunt(min, max)
+
+    if (self:IsSpec() or not self:Alive()) then return end
 
     if ((self:GetVar('tauntCooldown', 0)) > CurTime()) then
         util.Notify(self, string.format('You have to wait %s before you can taunt again.', string.ToMinutesSeconds(self:GetVar('tauntCooldown', 0) - CurTime())))
         return
     end
 
-    if (not pack) or
-       (not lps.taunts.sounds[pack]) or
-       (table.Count(lps.taunts.sounds[pack]) == 0) or
-       (not lps.taunts.sounds[pack][type]) or
-       (lps.taunts.info[pack][type].count == 0) then
-        pack = 'default'
-    end
+    local tauntType, tauntPack = self:GetTauntType(), self:GetTauntPack()
+    if (not tauntType or not tauntPack) then return end
 
-    min = math.Clamp(min or 0, lps.taunts.info[pack][type].min, lps.taunts.info[pack][type].max)
-    max = math.Clamp(max or 500, min, lps.taunts.info[pack][type].max)
+    min = math.Clamp(min or 0, lps.taunts.info[tauntPack][tauntType].min, lps.taunts.info[tauntPack][tauntType].max)
+    max = math.Clamp(max or 500, min, lps.taunts.info[tauntPack][tauntType].max)
 
     local taunt
     repeat
-        taunt = table.Random(lps.taunts.sounds[pack][type])
+        taunt = table.Random(lps.taunts.sounds[tauntPack][tauntType])
     until
         taunt.name ~= self:GetVar('lastTaunt', nil) and taunt.length >= min and taunt.length <= max
 
-    self:SetVar('tauntCooldown', (CurTime() + taunt.length + 0.5))
-    self:SetVar('lastTaunt', taunt.name)
-    self:SetVar('taunt', taunt)
+    self:PlayTaunt(taunt.name)
+end
 
-    hook.Call('PlayerTaunt', GAMEMODE, self, taunt, min, max)
+
+--[[---------------------------------------------------------
+--   Name: meta:PlayTaunt()
+---------------------------------------------------------]]--
+function meta:PlayTaunt(name)
+
+    if (self:IsSpec() or not self:Alive()) then return end
+
+    if ((self:GetVar('tauntCooldown', 0)) > CurTime()) then
+        util.Notify(self, string.format('You have to wait %s before you can taunt again.', string.ToMinutesSeconds(self:GetVar('tauntCooldown', 0) - CurTime())))
+        return
+    end
+
+    local tauntType, tauntPack = self:GetTauntType(), self:GetTauntPack()
+    if (not tauntType or not tauntPack) then return end
+
+    if (lps.taunts.sounds[tauntPack][tauntType][name]) then
+        self:SetVar('tauntCooldown', (CurTime() + lps.taunts.sounds[tauntPack][tauntType][name].length + 0.5))
+        self:SetVar('lastTaunt', name)
+        self:SetVar('taunt', lps.taunts.sounds[tauntPack][tauntType][name])
+        hook.Call('PlayerTaunt', GAMEMODE, self, lps.taunts.sounds[tauntPack][tauntType][name])
+    else
+        util.Notify(self, string.format('Unable to find taunt [%s][%s][%s]!', tauntPack, tauntType, name))
+    end
 end
 
 --[[---------------------------------------------------------

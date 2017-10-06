@@ -17,7 +17,7 @@ end
 ---------------------------------------------------------]]--
 function GM:GetValidSpectatorModes(ply)
     -- Note: Override this and return valid modes per player/team
-    if (team.NumPlayers(ply:Team()) > 1 and not ply:IsSpectator() ) then
+    if (team.NumPlayers(ply:Team()) > 1 and not ply:IsSpec() ) then
         return {OBS_MODE_CHASE, OBS_MODE_IN_EYE, OBS_MODE_ROAMING}
     else
         return {OBS_MODE_ROAMING}
@@ -54,7 +54,7 @@ function GM:IsValidSpectatorTarget(ply, ent)
     if (ent == ply) then return false end
     if (not table.HasValue(self:GetValidSpectatorEntityNames(ply), ent:GetClass())) then return false end
     if (ent:IsPlayer() and (not ent:Alive() or ent:IsObserver())) then return false end
-    if (not ply:IsSpectator() and ply:Team() ~= ent:Team()) then return false end
+    if (not ply:IsSpec() and ply:Team() ~= ent:Team()) then return false end
     return true
 end
 

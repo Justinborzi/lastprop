@@ -11,18 +11,18 @@ end
 
 NOTIFY = {
     DEFAULT = 1,
-    RED = 2,
-    WHITE = 3,
-    GREEN = 4,
-    YELLOW = 5,
+    RED     = 2,
+    WHITE   = 3,
+    GREEN   = 4,
+    YELLOW  = 5,
 }
 
 local Colors = {
-    [NOTIFY.DEFAULT]    = Color(230, 230, 230),
-    [NOTIFY.RED]         = Color(211, 78, 71),
-    [NOTIFY.WHITE]         = Color(230, 230, 230),
-    [NOTIFY.GREEN]        = Color(55, 163, 68),
-    [NOTIFY.YELLOW]        = Color(255, 230, 0)
+    [NOTIFY.DEFAULT] = Color(230, 230, 230),
+    [NOTIFY.RED]     = Color(211, 78, 71),
+    [NOTIFY.WHITE]   = Color(230, 230, 230),
+    [NOTIFY.GREEN]   = Color(55, 163, 68),
+    [NOTIFY.YELLOW]  = Color(255, 230, 0),
 }
 
 --[[---------------------------------------------------------
@@ -39,12 +39,12 @@ function util.Notify(ply, ...)
             end
         elseif (type(v) == 'string') then
             text = text .. v
-        else
+        elseif (not IsColor(v)) then
             table.remove(v)
         end
     end
 
-    if type(arguments[1]) ~= 'number' then
+    if type(arguments[1]) ~= 'number' or not IsColor(arguments[1])then
         table.insert(arguments, 1, NOTIFY.DEFAULT)
     end
 
@@ -72,6 +72,8 @@ if (CLIENT) then
                 arguments[#arguments + 1] = Colors[v]
             elseif (type(v) == 'string') then
                 arguments[#arguments + 1] = v
+            elseif (type(v) == 'table') then
+                arguments[#arguments + 1] = Color(v.r, v.g, v.b, v.a)
             end
         end
         chat.AddText(unpack(arguments))
@@ -84,7 +86,7 @@ end
 function util.SpectatorNames()
     local names = {}
     for _, v in pairs(player.GetAll()) do
-        if (v:IsSpectator()) then
+        if (v:IsSpec()) then
             table.insert(names, v:Nick())
         end
     end
