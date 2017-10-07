@@ -134,7 +134,7 @@ function MapVote:InitConfig()
         voteTime = 20,
         mapsToVote = 10,
         mapRevoteBanRounds = 4,
-        mapPrefixes = {"cs_", "ph_", "ttt_", "mu_",},
+        mapPrefixes = {"lps_", "cs_", "ph_", "ttt_", "mu_", "gm_", "rp_"},
         mapExcludes = {}
     }
     self.config = defaultConfig
