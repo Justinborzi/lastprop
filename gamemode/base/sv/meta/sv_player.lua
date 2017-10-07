@@ -12,36 +12,6 @@ function meta:GetTaunt(taunt)
 end
 
 --[[---------------------------------------------------------
---   Name: meta:GetTauntType()
----------------------------------------------------------]]--
-function meta:GetTauntType()
-    if (self:Team() == TEAM.PROPS) then
-        if (self:IsLastMan()) then
-            return 'lastman'
-        else
-            return 'prop'
-        end
-    elseif (self:Team() == TEAM.HUNTERS) then
-        return 'hunter'
-    end
-end
-
---[[---------------------------------------------------------
---   Name: meta:GetTauntPack()
----------------------------------------------------------]]--
-function meta:GetTauntPack()
-    local pack = self:GetInfo('lps_tauntpack')
-    if (not pack) or
-       (not lps.taunts.sounds[pack]) or
-       (table.Count(lps.taunts.sounds[pack]) == 0) or
-       (not lps.taunts.sounds[pack][type]) or
-       (lps.taunts.info[pack][type].count == 0) then
-        return 'default'
-    end
-    return pack
-end
-
---[[---------------------------------------------------------
 --   Name: meta:CreateTaunt()
 ---------------------------------------------------------]]--
 function meta:CreateTaunt(taunt)
@@ -149,6 +119,8 @@ function meta:Disguise(ent)
         self:SetVar('model', self:GetModel(), true)
         self:SetVar('collisionGroup', self:GetCollisionGroup(), true)
     end
+
+    self:Flashlight(false)
 
     local validEnt = IsValid(ent)
     local disguise = self:GetDisguise()

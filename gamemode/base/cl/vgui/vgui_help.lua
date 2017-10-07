@@ -186,6 +186,9 @@ end)
 ---------------------------------------------------------]]--
 local hint
 function GM:OnSpawnMenuOpen()
+    local localPlayer = LocalPlayer()
+    if (not IsValid(localPlayer) or localPlayer:IsSpec()) then return end
+
     if (IsValid(hint)) then
         hint:Remove()
     end

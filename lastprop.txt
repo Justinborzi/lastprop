@@ -5,7 +5,8 @@
 
     "version"       "dev"
     "menusystem"    "1"
-    "maps"          "^ph_"
+    "maps"          "^lps_"
+    "workshopid"    "1150837716"
 
     "author_name"   "Nerdism"
     "author_email"  "nerdism.io@gmail.com"

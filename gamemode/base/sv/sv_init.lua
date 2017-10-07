@@ -10,12 +10,14 @@ include('sv_round.lua')
 include('sv_spectator.lua')
 include('sv_team.lua')
 include('sv_commands.lua')
+include('sv_sql.lua')
 
 --[[---------------------------------------------------------
 --   Name: GM:Initialize()
 ---------------------------------------------------------]]--
 function GM:Initialize()
     self:InPreGame(true)
+    self:DBInitialize()
     if (self:GetConfig('team_auto_balance')) then
         timer.Create('CheckTeamBalance', 15, 0, function() GAMEMODE:CheckTeamBalance() end)
     end

@@ -58,7 +58,7 @@ lps.load:Files('libraries', lps.state.client, {
 -- Server Libraries
 --
 lps.load:Files('libraries', lps.state.server, {
-    'sv_database.lua',
+    'sv_sql.lua',
 })
 
 if (SERVER) then
@@ -73,32 +73,8 @@ if (SERVER) then
     resource.AddWorkshop('1150433884')
 
     --
-    -- Load banned props
+    -- Check version
     --
-    local path = string.format('%s/%s', lps.paths.data, 'banned_props.txt')
-    if (file.Exists(path, 'DATA')) then
-        lps.banned = util.JSONToTable(file.Read(path))
-    else
-        lps.banned = {
-            'models/props/cs_assault/dollar.mdl',
-            'models/props/cs_assault/money.mdl',
-            'models/props/cs_office/snowman_arm.mdl',
-            'models/props_junk/garbage_metalcan002a.mdl',
-            'models/props/cs_office/computer_mouse.mdl',
-            'models/props/cs_office/projector_remote.mdl',
-            'models/props/cs_office/fire_extinguisher.mdl',
-            'models/props_lab/huladoll.mdl',
-            'models/weapons/w_357.mdl',
-            'models/props_c17/tools_wrench01a.mdl',
-            'models/props_c17/signpole001.mdl',
-            'models/props_lab/clipboard.mdl',
-            'models/props_c17/chair02a.mdl',
-            'models/props/cs_office/computer_caseb_p2a.mdl',
-            'models/props_trainstation/payphone_reciever001a.mdl'
-        }
-        file.Write(path, util.TableToJSON(lps.banned))
-    end
-
     local path = string.format('%s/%s', lps.paths.mod, 'lastprop.txt')
     if (file.Exists(path, 'MOD')) then
         local config = util.KeyValuesToTable(file.Read(path, 'MOD'));

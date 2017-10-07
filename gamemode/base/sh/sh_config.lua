@@ -1,7 +1,47 @@
+--[[---------------------------------------------------------------------------------------------
+       ___  ____  _  ___ ______  _______  __________  ________ __________  __________   ____
+      / _ \/ __ \/ |/ ( )_  __/ / __/ _ \/  _/_  __/ /_  __/ // /  _/ __/ / __/  _/ /  / __/
+     / // / /_/ /    /|/ / /   / _// // // /  / /     / / / _  // /_\ \  / _/_/ // /__/ _/
+    /____/\____/_/|_/   /_/   /___/____/___/ /_/     /_/ /_//_/___/___/ /_/ /___/____/___/
+
+    Visit https://github.com/gluaws/lastprop/wiki to see how to configure this gamemode!
+
+---------------------------------------------------------------------------------------------]]--
+
+if (SERVER) then
+    --[[---------------------------------------------------------
+       Load banned props
+    ---------------------------------------------------------]]--
+    local path = string.format('%s/%s', lps.paths.data, 'banned_props.txt')
+    if (file.Exists(path, 'DATA')) then
+        lps.banned = util.JSONToTable(file.Read(path))
+    else
+        lps.banned = {
+            'models/props/cs_assault/dollar.mdl',
+            'models/props/cs_assault/money.mdl',
+            'models/props/cs_office/snowman_arm.mdl',
+            'models/props_junk/garbage_metalcan002a.mdl',
+            'models/props/cs_office/computer_mouse.mdl',
+            'models/props/cs_office/projector_remote.mdl',
+            'models/props/cs_office/fire_extinguisher.mdl',
+            'models/props_lab/huladoll.mdl',
+            'models/weapons/w_357.mdl',
+            'models/props_c17/tools_wrench01a.mdl',
+            'models/props_c17/signpole001.mdl',
+            'models/props_lab/clipboard.mdl',
+            'models/props_c17/chair02a.mdl',
+            'models/props/cs_office/computer_caseb_p2a.mdl',
+            'models/props_trainstation/payphone_reciever001a.mdl'
+        }
+        file.Write(path, util.TableToJSON(lps.banned))
+    end
+end
+
+
 --[[---------------------------------------------------------
    Define player teams
 ---------------------------------------------------------]]--
-TEAM = {
+TEAM = TEAM or {
     CONNECTING =    TEAM_CONNECTING,
     UNASSIGNED =    TEAM_UNASSIGNED,
     SPECTATORS =    TEAM_SPECTATOR,
@@ -9,7 +49,7 @@ TEAM = {
     HUNTERS    =    2,
 }
 
-TEAM_DATA = {
+TEAM_DATA = TEAM_DATA or {
     CONNECTING =    {id = TEAM_CONNECTING, name = 'Connecting'},
     UNASSIGNED =    {id = TEAM_UNASSIGNED, name = 'Unassigned', color = Color(200, 200, 200), class = 'spectator', spawns = {'info_player_start',  'gmod_player_start', 'info_player_teamspawn', 'ins_spawnpoint', 'aoc_spawnpoint', 'dys_spawn_point', 'info_player_coop', 'info_player_deathmatch'}},
     SPECTATORS =    {id = TEAM_SPECTATOR,  name = 'Spectators', color = Color(200, 200, 200), class = 'spectator', spawns = {'info_player_start',  'gmod_player_start', 'info_player_teamspawn', 'ins_spawnpoint', 'aoc_spawnpoint', 'dys_spawn_point', 'info_player_coop', 'info_player_deathmatch'}},
@@ -21,7 +61,7 @@ TEAM_DATA = {
 --[[---------------------------------------------------------
    Gamemode config
 ---------------------------------------------------------]]--
-GM.config = {
+GM.config = GM.config or {
     ['pregame_time']              = 60,               -- Time to wait before starting game.
     ['pregame_deathmatch']        = true,             -- Rocket deathmatch before game starts or while waiting for players to join
 
@@ -102,7 +142,7 @@ end
 --[[---------------------------------------------------------
    Gamemode Loadouts
 ---------------------------------------------------------]]--
-GM.loadouts = {
+GM.loadouts = GM.loadouts or {
     [TEAM.PROPS] = {
         weapon_lastman = {},
     },
@@ -175,7 +215,7 @@ hook.Add('InitPostEntity', 'DefaultSounds', function()
             {name = 't_dontrun', label = 'Don\'t run', file = 'lps/taunts/hunter/t_dontrun.mp3', length = 2},
             {name = 't_gonnakill', label = 'Gonna kill', file = 'lps/taunts/hunter/t_gonnakill.mp3', length = 3},
             {name = 't_goodbye', label = 'Goodbye', file = 'lps/taunts/hunter/t_goodbye.mp3', length = 2},
-            {name = 't_how', label = 'How', file = 'lps/taunts/hunter/t_how.mp3', length = 7},
+            {name = 't_how', label = 'How do we kill them', file = 'lps/taunts/hunter/t_how.mp3', length = 7},
             {name = 't_iwillfindyou', label = 'I will find you', file = 'lps/taunts/hunter/t_iwillfindyou.mp3', length = 3},
             {name = 't_i_see_you', label = 'I see you', file = 'lps/taunts/hunter/t_i_see_you.mp3', length = 6},
             {name = 't_jawstheme', label = 'Jaws theme', file = 'lps/taunts/hunter/t_jawstheme.mp3', length = 11},

@@ -7,112 +7,115 @@
 
 lps = lps or {};
 
-local QueueTable = {};
-local Module = 'sqlite';
-local Connected = false;
 local type = type;
 local tostring = tostring;
 local table = table;
-local MODULE_NOT_EXIST = '[mysql] The %s module does not exist!\n';
-local QUERY_CLASS = {};
-QUERY_CLASS.__index = QUERY_CLASS;
+local moduleNotExist = 'The %s module does not exist!\n';
 
-lps.sql = lps.sql or {};
+local QUERY = {};
+QUERY.__index = QUERY;
 
-function QUERY_CLASS:New(tableName, queryType)
-    local newObject = setmetatable({}, QUERY_CLASS);
-        newObject.queryType = queryType;
-        newObject.tableName = tableName;
-        newObject.selectList = {};
-        newObject.insertList = {};
-        newObject.updateList = {};
-        newObject.createList = {};
-        newObject.whereList = {};
-        newObject.orderByList = {};
+lps.sql = lps.sql or {
+    queueTable =  {},
+    module = 'sqlite',
+    connected = false,
+    prefix = ''
+};
+
+function QUERY:New(tableName, queryType)
+    local newObject = setmetatable({}, QUERY);
+    newObject.queryType = queryType;
+    newObject.tableName = tableName;
+    newObject.selectList = {};
+    newObject.insertList = {};
+    newObject.updateList = {};
+    newObject.createList = {};
+    newObject.whereList = {};
+    newObject.orderByList = {};
     return newObject;
 end;
 
-function QUERY_CLASS:Escape(text)
+function QUERY:Escape(text)
     return lps.sql:Escape(tostring(text));
 end;
 
-function QUERY_CLASS:ForTable(tableName)
+function QUERY:ForTable(tableName)
     self.tableName = tableName;
 end;
 
-function QUERY_CLASS:Where(key, value)
+function QUERY:Where(key, value)
     self:WhereEqual(key, value);
 end;
 
-function QUERY_CLASS:WhereEqual(key, value)
+function QUERY:WhereEqual(key, value)
     self.whereList[#self.whereList + 1] = '`' .. key .. '` = \'' .. self:Escape(value) .. '\'';
 end;
 
-function QUERY_CLASS:WhereNotEqual(key, value)
+function QUERY:WhereNotEqual(key, value)
     self.whereList[#self.whereList + 1] = '`' .. key .. '` != \'' .. self:Escape(value) .. '\'';
 end;
 
-function QUERY_CLASS:WhereLike(key, value)
+function QUERY:WhereLike(key, value)
     self.whereList[#self.whereList + 1] = '`' .. key .. '` LIKE \'' .. self:Escape(value) .. '\'';
 end;
 
-function QUERY_CLASS:WhereNotLike(key, value)
+function QUERY:WhereNotLike(key, value)
     self.whereList[#self.whereList + 1] = '`' .. key .. '` NOT LIKE \'' .. self:Escape(value) .. '\'';
 end;
 
-function QUERY_CLASS:WhereGT(key, value)
+function QUERY:WhereGT(key, value)
     self.whereList[#self.whereList + 1] = '`' .. key .. '` > \'' .. self:Escape(value) .. '\'';
 end;
 
-function QUERY_CLASS:WhereLT(key, value)
+function QUERY:WhereLT(key, value)
     self.whereList[#self.whereList + 1] = '`' .. key .. '` < \'' .. self:Escape(value) .. '\'';
 end;
 
-function QUERY_CLASS:WhereGTE(key, value)
+function QUERY:WhereGTE(key, value)
     self.whereList[#self.whereList + 1] = '`' .. key .. '` >= \'' .. self:Escape(value) .. '\'';
 end;
 
-function QUERY_CLASS:WhereLTE(key, value)
+function QUERY:WhereLTE(key, value)
     self.whereList[#self.whereList + 1] = '`' .. key .. '` <= \'' .. self:Escape(value) .. '\'';
 end;
 
-function QUERY_CLASS:OrderByDesc(key)
+function QUERY:OrderByDesc(key)
     self.orderByList[#self.orderByList + 1] = '`' .. key .. '` DESC';
 end;
 
-function QUERY_CLASS:OrderByAsc(key)
+function QUERY:OrderByAsc(key)
     self.orderByList[#self.orderByList + 1] = '`' .. key .. '` ASC';
 end;
 
-function QUERY_CLASS:Callback(queryCallback)
+function QUERY:Callback(queryCallback)
     self.callback = queryCallback;
 end;
 
-function QUERY_CLASS:Select(fieldName)
+function QUERY:Select(fieldName)
     self.selectList[#self.selectList + 1] = '`' .. fieldName .. '`';
 end;
 
-function QUERY_CLASS:Insert(key, value)
+function QUERY:Insert(key, value)
     self.insertList[#self.insertList + 1] = {'`' .. key .. '`', '\'' .. self:Escape(value) .. '\''};
 end;
 
-function QUERY_CLASS:Update(key, value)
+function QUERY:Update(key, value)
     self.updateList[#self.updateList + 1] = {'`' .. key .. '`', '\'' .. self:Escape(value) .. '\''};
 end;
 
-function QUERY_CLASS:Create(key, value)
+function QUERY:Create(key, value)
     self.createList[#self.createList + 1] = {'`' .. key .. '`', value};
 end;
 
-function QUERY_CLASS:PrimaryKey(key)
+function QUERY:PrimaryKey(key)
     self.primaryKey = '`' .. key .. '`';
 end;
 
-function QUERY_CLASS:Limit(value)
+function QUERY:Limit(value)
     self.limit = value;
 end;
 
-function QUERY_CLASS:Offset(value)
+function QUERY:Offset(value)
     self.offset = value;
 end;
 
@@ -128,7 +131,7 @@ local function BuildSelectQuery(queryObj)
     if (type(queryObj.tableName) == 'string') then
         queryString[#queryString + 1] = ' FROM `' .. queryObj.tableName .. '` ';
     else
-        ErrorNoHalt('[mysql] No table name specified!\n');
+        hook.Call('DBError', GAMEMODE, 'No table name specified!\n');
         return;
     end;
 
@@ -158,7 +161,7 @@ local function BuildInsertQuery(queryObj)
     if (type(queryObj.tableName) == 'string') then
         queryString[#queryString + 1] = ' `' .. queryObj.tableName .. '`';
     else
-        ErrorNoHalt('[mysql] No table name specified!\n');
+        hook.Call('DBError', GAMEMODE, 'No table name specified!\n');
         return;
     end;
 
@@ -183,7 +186,7 @@ local function BuildUpdateQuery(queryObj)
     if (type(queryObj.tableName) == 'string') then
         queryString[#queryString + 1] = ' `' .. queryObj.tableName .. '`';
     else
-        ErrorNoHalt('[mysql] No table name specified!\n');
+        hook.Call('DBError', GAMEMODE, 'No table name specified!\n');
         return;
     end;
 
@@ -218,7 +221,7 @@ local function BuildDeleteQuery(queryObj)
     if (type(queryObj.tableName) == 'string') then
         queryString[#queryString + 1] = ' `' .. queryObj.tableName .. '`';
     else
-        ErrorNoHalt('[mysql] No table name specified!\n');
+        hook.Call('DBError', GAMEMODE, 'No table name specified!\n');
         return;
     end;
 
@@ -241,7 +244,7 @@ local function BuildDropQuery(queryObj)
     if (type(queryObj.tableName) == 'string') then
         queryString[#queryString + 1] = ' `' .. queryObj.tableName .. '`';
     else
-        ErrorNoHalt('[mysql] No table name specified!\n');
+        hook.Call('DBError', GAMEMODE, 'No table name specified!\n');
         return;
     end;
 
@@ -254,7 +257,7 @@ local function BuildTruncateQuery(queryObj)
     if (type(queryObj.tableName) == 'string') then
         queryString[#queryString + 1] = ' `' .. queryObj.tableName .. '`';
     else
-        ErrorNoHalt('[mysql] No table name specified!\n');
+        hook.Call('DBError', GAMEMODE, 'No table name specified!\n');
         return;
     end;
 
@@ -267,7 +270,7 @@ local function BuildCreateQuery(queryObj)
     if (type(queryObj.tableName) == 'string') then
         queryString[#queryString + 1] = ' `' .. queryObj.tableName .. '`';
     else
-        ErrorNoHalt('[mysql] No table name specified!\n');
+        hook.Call('DBError', GAMEMODE, 'No table name specified!\n');
         return;
     end;
 
@@ -277,7 +280,7 @@ local function BuildCreateQuery(queryObj)
         local createList = {};
 
         for i = 1, #queryObj.createList do
-            if (Module == 'sqlite') then
+            if (lps.sql.module == 'sqlite') then
                 createList[#createList + 1] = queryObj.createList[i][1] .. ' ' .. string.gsub(string.gsub(string.gsub(queryObj.createList[i][2], 'AUTO_INCREMENT', ''), 'AUTOINCREMENT', ''), 'INT ', 'INTEGER ');
             else
                 createList[#createList + 1] = queryObj.createList[i][1] .. ' ' .. queryObj.createList[i][2];
@@ -297,7 +300,7 @@ local function BuildCreateQuery(queryObj)
     return table.concat(queryString);
 end;
 
-function QUERY_CLASS:Execute(bQueueQuery)
+function QUERY:Execute(bQueueQuery)
     local queryString = nil;
     local queryType = string.lower(self.queryType);
 
@@ -331,31 +334,31 @@ end;
 --]]
 
 function lps.sql:Select(tableName)
-    return QUERY_CLASS:New(tableName, 'SELECT');
+    return QUERY:New(self.prefix .. tableName, 'SELECT');
 end;
 
 function lps.sql:Insert(tableName)
-    return QUERY_CLASS:New(tableName, 'INSERT');
+    return QUERY:New(self.prefix .. tableName, 'INSERT');
 end;
 
 function lps.sql:Update(tableName)
-    return QUERY_CLASS:New(tableName, 'UPDATE');
+    return QUERY:New(self.prefix .. tableName, 'UPDATE');
 end;
 
 function lps.sql:Delete(tableName)
-    return QUERY_CLASS:New(tableName, 'DELETE');
+    return QUERY:New(self.prefix .. tableName, 'DELETE');
 end;
 
 function lps.sql:Drop(tableName)
-    return QUERY_CLASS:New(tableName, 'DROP');
+    return QUERY:New(self.prefix .. tableName, 'DROP');
 end;
 
 function lps.sql:Truncate(tableName)
-    return QUERY_CLASS:New(tableName, 'TRUNCATE');
+    return QUERY:New(self.prefix .. tableName, 'TRUNCATE');
 end;
 
 function lps.sql:Create(tableName)
-    return QUERY_CLASS:New(tableName, 'CREATE');
+    return QUERY:New(self.prefix .. tableName, 'CREATE');
 end;
 
 -- A function to connect to the MySQL database.
@@ -364,7 +367,7 @@ function lps.sql:Connect(host, username, password, database, port, socket, flags
         port = 3306;
     end;
 
-    if (Module == 'tmysql4') then
+    if (self.module == 'tmysql4') then
         if (type(tmysql) != 'table') then
             require('tmysql4');
         end;
@@ -380,9 +383,9 @@ function lps.sql:Connect(host, username, password, database, port, socket, flags
                 self:OnConnected();
             end;
         else
-            ErrorNoHalt(string.format(MODULE_NOT_EXIST, Module));
+            hook.Call('DBError', GAMEMODE, string.format(moduleNotExist, module));
         end;
-    elseif (Module == 'mysqloo') then
+    elseif (self.module == 'mysqloo') then
         if (type(mysqloo) != 'table') then
             require('mysqloo');
         end;
@@ -406,20 +409,20 @@ function lps.sql:Connect(host, username, password, database, port, socket, flags
 
             self.connection:connect();
         else
-            ErrorNoHalt(string.format(MODULE_NOT_EXIST, Module));
+            hook.Call('DBError', GAMEMODE, string.format(moduleNotExist, module));
         end;
-    elseif (Module == 'sqlite') then
+    elseif (self.module == 'sqlite') then
         lps.sql:OnConnected();
     end;
 end;
 
 -- A function to query the MySQL database.
 function lps.sql:RawQuery(query, callback, flags,  ...)
-    if (!self.connection and Module != 'sqlite') then
+    if (!self.connection and module != 'sqlite') then
         self:Queue(query);
     end;
 
-    if (Module == 'tmysql4') then
+    if (self.module == 'tmysql4') then
         local queryFlag = flags or QUERY_FLAG_ASSOC;
 
         self.connection:Query(query, function(result)
@@ -430,14 +433,14 @@ function lps.sql:RawQuery(query, callback, flags,  ...)
                     local bStatus, value = pcall(callback, result[1]['data'], queryStatus, result[1]['lastid']);
 
                     if (!bStatus) then
-                        ErrorNoHalt(string.format('[mysql] MySQL Callback Error!\n%s\n', value));
+                        hook.Call('DBError', GAMEMODE, string.format('SQL Callback Error!\n%s\n', value));
                     end;
                 end;
             else
-                ErrorNoHalt(string.format('[mysql] MySQL Query Error!\nQuery: %s\n%s\n', query, result[1]['error']));
+                hook.Call('DBError', GAMEMODE, string.format('SQL Query Error!\nQuery: %s\n%s\n', query, result[1]['error']));
             end;
         end, queryFlag,  ...);
-    elseif (Module == 'mysqloo') then
+    elseif (self.module == 'mysqloo') then
         local queryObj = self.connection:query(query);
 
         queryObj:setOption(mysqloo.OPTION_NAMED_FIELDS);
@@ -447,48 +450,48 @@ function lps.sql:RawQuery(query, callback, flags,  ...)
                 local bStatus, value = pcall(callback, result, true, queryObj:lastInsert());
 
                 if (!bStatus) then
-                    ErrorNoHalt(string.format('[mysql] MySQL Callback Error!\n%s\n', value));
+                    hook.Call('DBError', GAMEMODE, string.format('SQL Callback Error!\n%s\n', value));
                 end;
             end;
         end;
 
         queryObj.onError = function(queryObj, errorText)
-            ErrorNoHalt(string.format('[mysql] MySQL Query Error!\nQuery: %s\n%s\n', query, errorText));
+            hook.Call('DBError', GAMEMODE, string.format('SQL Query Error!\nQuery: %s\n%s\n', query, errorText));
         end;
 
         queryObj:start();
-    elseif (Module == 'sqlite') then
+    elseif (self.module == 'sqlite') then
         local result = sql.Query(query);
 
         if (result == false) then
-            ErrorNoHalt(string.format('[mysql] SQL Query Error!\nQuery: %s\n%s\n', query, sql.LastError()));
+            hook.Call('DBError', GAMEMODE, string.format('SQL Query Error!\nQuery: %s\n%s\n', query, sql.LastError()));
         else
             if (callback) then
                 local bStatus, value = pcall(callback, result);
 
                 if (!bStatus) then
-                    ErrorNoHalt(string.format('[mysql] SQL Callback Error!\n%s\n', value));
+                    hook.Call('DBError', GAMEMODE, string.format('SQL Callback Error!\n%s\n', value));
                 end;
             end;
         end;
     else
-        ErrorNoHalt(string.format('[mysql] Unsupported module \'%s\'!\n', Module));
+        hook.Call('DBError', GAMEMODE, string.format('Unsupported module \'%s\'!\n', self.module));
     end;
 end;
 
 -- A function to add a query to the queue.
 function lps.sql:Queue(queryString, callback)
     if (type(queryString) == 'string') then
-        QueueTable[#QueueTable + 1] = {queryString, callback};
+        self.queueTable[#self.queueTable + 1] = {queryString, callback};
     end;
 end;
 
 -- A function to escape a string for MySQL.
 function lps.sql:Escape(text)
     if (self.connection) then
-        if (Module == 'tmysql4') then
+        if (self.module == 'tmysql4') then
             return self.connection:Escape(text);
-        elseif (Module == 'mysqloo') then
+        elseif (self.module == 'mysqloo') then
             return self.connection:escape(text);
         end;
     else
@@ -499,18 +502,18 @@ end;
 -- A function to disconnect from the MySQL database.
 function lps.sql:Disconnect()
     if (self.connection) then
-        if (Module == 'tmysql4') then
+        if (self.module == 'tmysql4') then
             return self.connection:Disconnect();
         end;
     end;
 
-    Connected = false;
+    self.connected = false;
 end;
 
 function lps.sql:Think()
-    if (#QueueTable > 0) then
-        if (type(QueueTable[1]) == 'table') then
-            local queueObj = QueueTable[1];
+    if (#self.queueTable > 0) then
+        if (type(self.queueTable[1]) == 'table') then
+            local queueObj = self.queueTable[1];
             local queryString = queueObj[1];
             local callback = queueObj[2];
 
@@ -518,33 +521,36 @@ function lps.sql:Think()
                 self:RawQuery(queryString, callback);
             end;
 
-            table.remove(QueueTable, 1);
+            table.remove(self.queueTable, 1);
         end;
     end;
 end;
 
+
 -- A function to set the module that should be used.
-function lps.sql:SetModule(moduleName)
-    Module = moduleName;
+function lps.sql:SetPrefix(prefix)
+    self.prefix = prefix;
+end;
+
+-- A function to set the module that should be used.
+function lps.sql:SetModule(module)
+    self.module = module;
 end;
 
 -- Called when the database connects successfully.
 function lps.sql:OnConnected()
-    MsgC(Color(25, 235, 25), '[mysql] Connected to the database!\n');
-
-    Connected = true;
+    self.connected = true;
     hook.Call('DBConnected', GAMEMODE);
 end;
 
 -- Called when the database connection fails.
 function lps.sql:OnConnectionFailed(errorText)
-    ErrorNoHalt('[mysql] Unable to connect to the database!\n' .. errorText .. '\n');
     hook.Call('DBFailed', GAMEMODE, errorText);
 end;
 
 -- A function to check whether or not the module is connected to a database.
 function lps.sql:IsConnected()
-    return Connected;
+    return self.connected;
 end;
 
 return mysql;

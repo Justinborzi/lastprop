@@ -229,13 +229,13 @@ function PANEL:DrawFrame()
                 {
                     convar = 'lps_tpv_offset_on',
                     type = 'int',
-                    name = 'Offset Enabled',
+                    name = 'Shoulder View Enabled',
                     type = 'bool',
                 },
                 {
                     convar = 'lps_tpv_offset',
                     type = 'int',
-                    name = 'Offset',
+                    name = 'Shoulder Offset',
                     max = 15,
                     min = 0
                 },

@@ -5,9 +5,10 @@
 function GM:RegisterBindings()
     lps.bindings:Register('global', 'localChat', KEY_Z, INPUT.KEY, 'Local Voice', 'When key is pressed only your team will be able to hear you.')
     lps.bindings:Register('global', 'teamChat', KEY_C, INPUT.KEY, 'Team Chat', 'When key is pressed your voice will emit from you, not globally.')
+    lps.bindings:Register('global', 'tpv', KEY_CAPSLOCK, INPUT.KEY, '3rd Person', 'Toggles thirdperson view.')
     lps.bindings:Register('global', 'tpvDistance', KEY_LALT, INPUT.KEY, 'View Adjust', 'When key is pressed you can adjust your view distance in thirdperson using the scroll wheel.')
-    lps.bindings:Register('global', 'tpv', KEY_CAPSLOCK, INPUT.KEY, '3rd Person', 'Toggles Thirdperson View.')
-    lps.bindings:Register('global', 'tpvoffset', KEY_B, INPUT.KEY, '3rd Person Offset', 'Toggles Thirdperson Offset.')
+    lps.bindings:Register('global', 'tpvOffset', KEY_B, INPUT.KEY, 'Shoulder View', 'Toggles thirdperson shoulder view.')
+    lps.bindings:Register('global', 'tauntMenu', KEY_Y, INPUT.KEY, 'Taunt Menu', 'Show the taunt menu.')
 end
 
 --[[---------------------------------------------------------
@@ -21,10 +22,12 @@ end
 --   Name: GM:KeyDown()
 ---------------------------------------------------------]]--
 function GM:KeyDown(key, keycode, char, keytype, busy, cursor)
+    local localPlayer = LocalPlayer()
+    if (not IsValid(localPlayer) or localPlayer:IsSpec()) then return end
 
     local tpv = lps.bindings:GetKey('global', 'tpv')
     if (key == tpv.key and keytype == tpv.type and not busy and not cursor) then
-        local teamID = LocalPlayer():Team()
+        local teamID = localPlayer:Team()
         local convar = (teamID == TEAM.PROPS and 'lps_tpvp') or (teamID == TEAM.HUNTERS and 'lps_tpvh')
         if (GetConVar(convar):GetBool()) then
             RunConsoleCommand(convar, '0')
@@ -33,9 +36,9 @@ function GM:KeyDown(key, keycode, char, keytype, busy, cursor)
         end
     end
 
-    local tpvoffset = lps.bindings:GetKey('global', 'tpvoffset')
-    if (key == tpvoffset.key and keytype == tpvoffset.type and not busy and not cursor) then
-        local teamID = LocalPlayer():Team()
+    local tpvOffset = lps.bindings:GetKey('global', 'tpvOffset')
+    if (key == tpvOffset.key and keytype == tpvOffset.type and not busy and not cursor) then
+        local teamID = localPlayer:Team()
         local convar = (teamID == TEAM.PROPS and 'lps_tpvp') or (teamID == TEAM.HUNTERS and 'lps_tpvh')
         if (GetConVar(convar):GetBool()) then
             if (GetConVar('lps_tpv_offset_on'):GetBool()) then
@@ -44,6 +47,11 @@ function GM:KeyDown(key, keycode, char, keytype, busy, cursor)
                 RunConsoleCommand('lps_tpv_offset_on', '1')
             end
         end
+    end
+
+    local tauntMenu = lps.bindings:GetKey('global', 'tauntMenu')
+    if (key == tauntMenu.key and keytype == tauntMenu.type and not busy and localPlayer:GetVar('canTaunt', false)) then
+        self:TauntMenu()
     end
 
     local localChat = lps.bindings:GetKey('global', 'localChat')
@@ -58,16 +66,15 @@ function GM:KeyDown(key, keycode, char, keytype, busy, cursor)
         RunConsoleCommand('+voicerecord')
     end
 
-    local localPlayer = LocalPlayer()
-    if (IsValid(localPlayer)) then
-        localPlayer:ClassCall('OnKeyDown', key, keycode, char, keytype, busy, cursor)
-    end
+    localPlayer:ClassCall('OnKeyDown', key, keycode, char, keytype, busy, cursor)
 end
 
 --[[---------------------------------------------------------
 --   Name: GM:KeyUp()
 ---------------------------------------------------------]]--
 function GM:KeyUp(key, keycode, char, keytype, busy, cursor)
+    local localPlayer = LocalPlayer()
+    if (not IsValid(localPlayer) or localPlayer:IsSpec()) then return end
 
     local localChat = lps.bindings:GetKey('global', 'localChat')
     if(key == localChat.key and keytype == localChat.type) then
@@ -81,10 +88,7 @@ function GM:KeyUp(key, keycode, char, keytype, busy, cursor)
         RunConsoleCommand('-teamchat')
     end
 
-    local localPlayer = LocalPlayer()
-    if (IsValid(localPlayer)) then
-        localPlayer:ClassCall('OnKeyUp', key, keycode, char, keytype, busy, cursor)
-    end
+    localPlayer:ClassCall('OnKeyUp', key, keycode, char, keytype, busy, cursor)
 end
 
 
@@ -93,9 +97,7 @@ end
 ---------------------------------------------------------]]--
 function GM:InputMouseApply(cmd, x, y, angle)
     local localPlayer = LocalPlayer()
-    local cls_cmd, cls_x, cls_y, cls_angle
-    if (IsValid(localPlayer)) then
-        cls_cmd, cls_x, cls_y, cls_angle = localPlayer:ClassCall('InputMouseApply', cmd, x, y, angle)
-    end
+    if (not IsValid(localPlayer) or localPlayer:IsSpec()) then return end
+    local cls_cmd, cls_x, cls_y, cls_angle = localPlayer:ClassCall('InputMouseApply', cmd, x, y, angle)
     return cls_cmd or cmd, cls_x or x, cls_y or y, cls_angle or angle
 end

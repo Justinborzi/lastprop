@@ -148,19 +148,19 @@ end
 --[[---------------------------------------------------------
 --   Name: GM:DoPlayerDeath()
 ---------------------------------------------------------]]--
-function GM:DoPlayerDeath(ply, attacker, dmgInfo)
-    ply:SetVar('deathTime', CurTime())
-    ply:SetVar('killer', attacker)
+function GM:DoPlayerDeath(victim, attacker, dmgInfo)
+    victim:SetVar('deathTime', CurTime())
+    victim:SetVar('killer', attacker)
 
-    ply:ClassCall('OnDeath', attacker, dmgInfo)
+    victim:ClassCall('OnDeath', attacker, dmgInfo)
 
-    ply:StripAmmo()
-    ply:StripWeapons()
+    victim:StripAmmo()
+    victim:StripWeapons()
 
     if (self:InRound()) then
-        ply:AddDeaths(1)
+        victim:AddDeaths(1)
         if (attacker:IsValid() and attacker:IsPlayer()) then
-            if (attacker == ply) then
+            if (attacker == victim) then
                 attacker:AddFrags(-1)
             else
                 attacker:AddFrags(1)
@@ -173,8 +173,8 @@ end
 --[[---------------------------------------------------------
 --   Name: GM:PlayerDeath()
 ---------------------------------------------------------]]--
-function GM:PlayerDeath(ply, inflictor, attacker)
-    if (IsValid(attacker) && attacker:GetClass() == 'trigger_hurt') then attacker = ply end
+function GM:PlayerDeath(victim, inflictor, attacker)
+    if (IsValid(attacker) && attacker:GetClass() == 'trigger_hurt') then attacker = victim end
 
     if (IsValid(attacker) && attacker:IsVehicle() && IsValid(attacker:GetDriver())) then
         attacker = attacker:GetDriver()
@@ -189,23 +189,23 @@ function GM:PlayerDeath(ply, inflictor, attacker)
         if (!IsValid(inflictor)) then inflictor = attacker end
     end
 
-    lps.net.Start(nil, 'PlayerDeath', {ply, inflictor, attacker})
+    lps.net.Start(nil, 'PlayerDeath', {victim, inflictor, attacker})
 
     if (IsValid(attacker) and attacker:IsPlayer()) then
-        attacker:ClassCall('OnKill', ply, inflictor)
+        attacker:ClassCall('OnKill', victim, inflictor)
     end
 
-    if (attacker == ply) then
+    if (attacker == victim) then
         lps.Log('%s suicided!', attacker:Nick())
         return
     end
 
     if (attacker:IsPlayer()) then
-        lps.Log('%s killed %s using %s', attacker:Nick(), ply:Nick(), inflictor:GetClass())
+        lps.Log('%s killed %s using %s', attacker:Nick(), victim:Nick(), inflictor:GetClass())
         return
     end
 
-    lps.Log('%s was killed by %s', ply:Nick(), attacker:GetClass())
+    lps.Log('%s was killed by %s', victim:Nick(), attacker:GetClass())
 end
 
 --[[---------------------------------------------------------
@@ -265,10 +265,9 @@ end
 --   Name: GM:PlayerSwitchFlashlight()
 ---------------------------------------------------------]]--
 function GM:PlayerSwitchFlashlight(ply, on)
-    if (ply:IsSpec()) then
+    if (ply:IsSpec() or ply:IsDisguised() or (ply:GetVar('allowFlashlight', false) == false)) then
         return not on
     end
-    return ply:GetVar('allowFlashlight', false)
 end
 
 --[[---------------------------------------------------------
@@ -304,7 +303,9 @@ function GM:GetFallDamage(ply, fallSpeed)
     if (not self:GetConfig('falldamage')) then
         return 0
     elseif (self:GetConfig('falldamage_realistic')) then
-        return fallSpeed / 8
+        if fallSpeed > 530 then
+            return math.ceil((fallSpeed - 530) / 278 * 50)
+        end
     else
         return 10
     end
