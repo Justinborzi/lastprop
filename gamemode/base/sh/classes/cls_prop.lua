@@ -400,6 +400,10 @@ function CLASS:OnLastMan(ply)
         ply:GiveAmmo(sweps[swep].secondary[2], sweps[swep].secondary[1], true)
     end
 
+    if ply:HasWeapon(swep) then
+        ply:SelectWeapon(swep)
+    end
+
     ply:SetVar('trail', util.SpriteTrail(ply, 0, Color(255, 255, 255), false, 15, 1, 1.5, 0.125, 'trails/rainbow.vmt'), true)
 
     ply:RandomTaunt()
