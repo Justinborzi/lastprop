@@ -2,6 +2,7 @@
 --   Name: GM:PlayerDeath()
 ---------------------------------------------------------]]--
 function GM:PlayerDeath(ply, inflictor, attacker)
+    if (GetConVar('lps_hidehud'):GetBool()) then return end
 
     if (not self.notify or not IsValid(self.notify)) then
         self:CreateGameNotify()

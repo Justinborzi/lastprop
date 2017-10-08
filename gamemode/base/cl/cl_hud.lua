@@ -73,13 +73,8 @@ end
 function GM:HUDPaint()
     self.BaseClass:HUDPaint()
 
-    if (lps and lps.version and lps.version == 'dev') then
-        draw.DrawText('This gamemode is a development version, please report any bugs you see!', 'LPS16', 20, ScrH() - 25, util.Rainbow(), TEXT_ALIGN_LEFT)
-    end
-
     local localPlayer = LocalPlayer()
     if (not IsValid(localPlayer)) then return end
-    localPlayer:ClassCall('HUDPaint')
 
     if (IsValid(localPlayer:GetActiveWeapon())) then
         local tr = localPlayer:GetEyeTrace()
@@ -98,13 +93,21 @@ function GM:HUDPaint()
         surface.DrawLine(pos.x, pos.y - 1, pos.x, pos.y + 1)
     end
 
+
+    if (lps and lps.version and lps.version == 'dev' and not GetConVar('lps_hidehud'):GetBool()) then
+        draw.DrawText('This gamemode is a development version, please report any bugs you see!', 'LPS16', 20, ScrH() - 25, util.Rainbow(), TEXT_ALIGN_LEFT)
+    end
+
+    localPlayer:ClassCall('HUDPaint')
+
     if (not hook.Call('HUDShouldUpdate', self, localPlayer)) then return end
-
     if (IsValid(self.hud)) then self.hud:Remove() end
-    self.hud = vgui.Create('DHudLayout')
-
-    hook.Call('HUDUpdate', self, localPlayer, self.hud)
+    if (not GetConVar('lps_hidehud'):GetBool()) then
+        self.hud = vgui.Create('DHudLayout')
+        hook.Call('HUDUpdate', self, localPlayer, self.hud)
+    end
     hook.Call('HUDOnUpdate', self, localPlayer)
+
 end
 
 --[[---------------------------------------------------------
@@ -113,3 +116,18 @@ end
 function GM:HUDShouldUpdate()
     return false
 end
+
+--[[---------------------------------------------------------
+--   hook: HUDShouldUpdate:HideHud
+---------------------------------------------------------]]--
+local hidehud = GetConVar('lps_hidehud'):GetBool()
+hook.Add('HUDShouldUpdate', 'HUDShouldUpdate:HideHud', function(ply)
+    if (hidehud ~= GetConVar('lps_hidehud'):GetBool()) then return true end
+end)
+
+--[[---------------------------------------------------------
+--   hook: HUDOnUpdate:HideHud
+---------------------------------------------------------]]--
+hook.Add('HUDOnUpdate', 'HUDOnUpdate:HideHud', function(ply)
+    hidehud = GetConVar('lps_hidehud'):GetBool()
+end)
