@@ -283,14 +283,14 @@
             "name"      "lps_hunter_kill_bonus_nade"
             "text"      "Hunter kill bonus grenade"
             "help"      "Hunter will get a grenade once they kill a player"
-            "type"        "Numeric"
-            "default"    "1"
+            "type"      "Numeric"
+            "default"   "1"
         }
         34
         {
             "name"       "lps_hunter_lastman_bonus_nade"
             "text"       "Hunter last man grenade bonus"
-            "help"       "Hunter will get bonus grenade when there is a last prop"
+            "help"       "Hunter will get bonus grenade when they become the last man"
             "type"       "CheckBox"
             "default"    "1"
         }
