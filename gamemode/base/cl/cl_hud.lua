@@ -120,7 +120,7 @@ end
 --[[---------------------------------------------------------
 --   hook: HUDShouldUpdate:HideHud
 ---------------------------------------------------------]]--
-local hidehud = GetConVar('lps_hidehud'):GetBool()
+local hidehud = false
 hook.Add('HUDShouldUpdate', 'HUDShouldUpdate:HideHud', function(ply)
     if (hidehud ~= GetConVar('lps_hidehud'):GetBool()) then return true end
 end)
