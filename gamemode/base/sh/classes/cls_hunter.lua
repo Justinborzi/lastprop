@@ -178,6 +178,29 @@ function CLASS:Loadout(ply)
             end
         end)
     end
+
+    if (GAMEMODE:InRound()) then
+        timer.Simple(0.1, function ()
+            if (IsValid(ply) and ply:Alive()) then
+                for wep, ammo in pairs(GAMEMODE:GetLoadout(ply, TEAM.HUNTERS)) do
+                    ply:Give(wep, true)
+                    if (ammo.primary) then
+                        ply:GiveAmmo(ammo.primary[2], ammo.primary[1], true)
+                    end
+                    if (ammo.secondary) then
+                        ply:GiveAmmo(ammo.secondary[2], ammo.secondary[1], true)
+                    end
+                end
+
+                local defult = ply:GetInfo('lps_defaultswep')
+                if ply:HasWeapon(defult) then
+                    ply:SelectWeapon(defult)
+                elseif ply:HasWeapon('weapon_smg1') then
+                    ply:SelectWeapon('weapon_smg1')
+                end
+            end
+        end)
+    end
 end
 
 function CLASS:Think(ply)
@@ -244,23 +267,6 @@ function CLASS:OnRoundStart(ply, num)
 
     if (ply:IsFrozen()) then
         ply:Freeze(false)
-    end
-
-    for wep, ammo in pairs(GAMEMODE:GetLoadout(ply, TEAM.HUNTERS)) do
-        ply:Give(wep, true)
-        if (ammo.primary) then
-            ply:GiveAmmo(ammo.primary[2], ammo.primary[1], true)
-        end
-        if (ammo.secondary) then
-            ply:GiveAmmo(ammo.secondary[2], ammo.secondary[1], true)
-        end
-    end
-
-    local defult = ply:GetInfo('lps_defaultswep')
-    if ply:HasWeapon(defult) then
-        ply:SelectWeapon(defult)
-    elseif ply:HasWeapon('weapon_smg1') then
-        ply:SelectWeapon('weapon_smg1')
     end
 end
 

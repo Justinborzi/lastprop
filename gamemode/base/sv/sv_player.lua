@@ -64,8 +64,6 @@ function GM:PlayerSpawn(ply)
 
     ply:SetupHands()
 
-    ply:ClassCall('Loadout')
-
     if (class.duckSpeed) then ply:SetDuckSpeed(class.duckSpeed) end
     if (class.walkSpeed) then ply:SetWalkSpeed(class.walkSpeed) end
     if (class.runSpeed) then ply:SetRunSpeed(class.runSpeed) end
@@ -85,6 +83,11 @@ function GM:PlayerSpawn(ply)
 
     ply:ClassCall('OnSpawn')
 
+    hook.Call('PlayerLoadout', self, ply)
+end
+
+function GM:PlayerLoadout( ply )
+	ply:ClassCall('Loadout')
 end
 
 --[[---------------------------------------------------------
