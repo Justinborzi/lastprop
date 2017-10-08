@@ -159,7 +159,7 @@ concommand.Add('banprop', function(ply, cmd, args)
     if (ply:IsAdmin() or ply:IsSuperAdmin()) then
         local tr = ply:GetEyeTrace()
         if (not IsValid(tr.Entity)) then return end
-        if (table.HasValue({'prop_physics', 'prop_physics_multiplayer', 'disguise'}, tr.Entity:GetClass())) then
+        if (table.HasValue({'prop_physics', 'prop_physics_multiplayer', 'lps_disguise'}, tr.Entity:GetClass())) then
             local model = tr.Entity:GetModel()
             if (table.HasValue(lps.banned, model)) then
                 util.Notify(ply, 'That prop is already banned.')

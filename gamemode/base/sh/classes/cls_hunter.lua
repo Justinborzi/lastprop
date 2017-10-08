@@ -66,7 +66,7 @@ function CLASS:PreDrawHalos(ply)
             if (IsValid(disguise)) then
                 halo.Add({disguise}, util.Rainbow(0.3), 2, 2, 2, true, true)
             end
-        elseif(tr.Entity:IsValidDisguise() or tr.Entity:GetClass() == 'disguise') then
+        elseif(tr.Entity:IsValidDisguise() or tr.Entity:GetClass() == 'lps_disguise') then
             halo.Add({tr.Entity}, util.Rainbow(0.3), 2, 2, 2, true, true)
         end
     end
@@ -301,7 +301,7 @@ end
 function CLASS:OnCausedDamage(ply, ent, dmgInfo)
     if (not IsValid(ent) or (ent == ply) or not GAMEMODE:InRound()) then return end
 
-    if (GAMEMODE:GetConfig('hunter_steal_health') and ((ent:GetClass() == 'disguise') or (ent:IsPlayer() and ent:Team() == TEAM.PROPS))) then
+    if (GAMEMODE:GetConfig('hunter_steal_health') and ((ent:GetClass() == 'lps_disguise') or (ent:IsPlayer() and ent:Team() == TEAM.PROPS))) then
         local damage = math.Round(dmgInfo:GetDamage()/2)
         local health = math.Clamp(ply:Health() + damage, ply:Health(), GAMEMODE:GetConfig('hunter_steal_maxhealth'))
         if (health > ply:GetMaxHealth()) then

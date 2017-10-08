@@ -12,7 +12,7 @@ end
 --   Name: meta:IsDisguise()
 ---------------------------------------------------------]]--
 function meta:IsDisguise()
-    return tobool(self:GetClass() == 'disguise')
+    return tobool(self:GetClass() == 'lps_disguise')
 end
 
 --[[---------------------------------------------------------

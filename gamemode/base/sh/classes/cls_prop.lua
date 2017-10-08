@@ -104,9 +104,9 @@ function CLASS:HUDDrawTargetID(ply)
     local tr = ply:GetEyeTrace()
     if (not IsValid(tr.Entity)) then return end
 
-    if (tr.Entity:GetClass() == 'disguise') or
+    if (tr.Entity:GetClass() == 'lps_disguise') or
        ((tr.Entity:IsPlayer()) and table.HasValue({TEAM.HUNTERS, TEAM.PROPS}, tr.Entity:Team())) then
-        local ply = tr.Entity:GetClass() == 'disguise' and tr.Entity:GetOwner() or tr.Entity
+        local ply = tr.Entity:GetClass() == 'lps_disguise' and tr.Entity:GetOwner() or tr.Entity
         if (not IsValid(ply)) then return end
         surface.SetFont('LPS30')
         local text = ply:Nick()
@@ -225,7 +225,7 @@ function CLASS:CalcView(ply, origin, angles, fov)
         start  = view.origin,
         endpos = view.origin + ((angles + Angle(offset, offset, 0)):Forward() * -dist),
         filter = function(ent)
-            if (table.HasValue({'disguise', 'player'}, ent:GetClass())) then return false end
+            if (table.HasValue({'lps_disguise', 'player'}, ent:GetClass())) then return false end
             return true
         end,
         mins    = Vector(-4, -4, -4),

@@ -126,7 +126,7 @@ function meta:Disguise(ent)
     local disguise = self:GetDisguise()
 
     if not IsValid(disguise) then
-        disguise = ents.Create('disguise')
+        disguise = ents.Create('lps_disguise')
         disguise:SetParent(self)
         disguise:SetOwner(self)
         disguise:Spawn()
@@ -243,26 +243,19 @@ end
 ---------------------------------------------------------]]--
 function meta:IsStuck()
     local pos = self:GetPos()
+    local disguise = self:GetDisguise()
     local t = {}
-    if (self:IsDisguised()) then
-        local disguise = self:GetDisguise()
-        if (IsValid(disguise)) then
-            t.filter = function(ent)
-                if (ent:GetClass() == 'disguise' and ent:GetOwner() == self) then return false end
-                if ent == self then return false end
-                return true
-            end
-            t.start = pos
-            t.endpos = pos
-            t.mins = disguise:OBBMins()
-            t.maxs = disguise:OBBMaxs()
-            t.mask = MASK_PLAYERSOLID
-
-            local tr = util.TraceHull(t)
-            if tr.Entity and (tr.Entity:IsWorld() or tr.Entity:IsValid()) then
-                return true
-            end
+    if (IsValid(disguise)) then
+        t.filter = function(ent)
+            if (ent:GetClass() == 'lps_disguise' and ent:GetOwner() == self) then return false end
+            if ent == self then return false end
+            return true
         end
+        t.start = pos
+        t.endpos = pos
+        t.mins = disguise:OBBMins()
+        t.maxs = disguise:OBBMaxs()
+        t.mask = MASK_PLAYERSOLID
     else
         t.filter = self
         t.start = pos
@@ -270,11 +263,11 @@ function meta:IsStuck()
         t.mins = self:OBBMins()
         t.maxs = self:OBBMaxs()
         t.mask = MASK_PLAYERSOLID
+    end
 
-        local tr = util.TraceHull(t)
-        if tr.Entity and (tr.Entity:IsWorld() or tr.Entity:IsValid()) then
-            return true
-        end
+    local tr = util.TraceHull(t)
+    if tr.Entity and (tr.Entity:IsWorld() or tr.Entity:IsValid()) then
+        return true
     end
     return false
 end
@@ -286,10 +279,23 @@ function meta:UnStick()
 
     local t = { start = nil, endpos = nil, mask = MASK_PLAYERSOLID, filter = nil }
     local function PlayerNotStuck()
-        t.start = self:GetPos()
-        t.endpos = t.start
-        t.filter = self
-        return util.TraceEntity(t, self).StartSolid == false
+        local disguise = self:GetDisguise()
+        local t = {}
+        if (IsValid(disguise)) then
+            t.start = self:GetPos()
+            t.endpos = t.start
+            t.filter = function(ent)
+                if (ent:GetClass() == 'lps_disguise' and ent:GetOwner() == self) then return false end
+                if ent == self then return false end
+                return true
+            end
+        else
+            t.start = self:GetPos()
+            t.endpos = t.start
+            t.filter = self
+        end
+
+        return util.TraceEntity(t, IsValid(disguise) and disguise or self).StartSolid == false
     end
 
     local newPos = nil
@@ -300,7 +306,7 @@ function meta:UnStick()
             origin = origin + step * direction
 
             self:SetPos(origin)
-            if (PlayerNotStuck(self)) then
+            if (PlayerNotStuck()) then
                 newPos = self:GetPos()
                 return true
             end
@@ -312,20 +318,25 @@ function meta:UnStick()
     newPos = self:GetPos()
     local oldPos = newPos
 
-    if (not PlayerNotStuck(self)) then
+    if (not PlayerNotStuck()) then
         local angle = self:GetAngles()
         local forward = angle:Forward()
         local right = angle:Right()
         local up = angle:Up()
 
-        local searchScale = 1 -- Increase and it will unstuck you from even harder places but with lost accuracy. Please, don't try higher values than 12
+        local searchScale = 6 -- Increase and it will unstuck you from even harder places but with lost accuracy. Please, don't try higher values than 12
         if (not FindPassableSpace( forward, searchScale)) then
             if (not FindPassableSpace( right, searchScale)) then
                 if (not FindPassableSpace( right, -searchScale)) then --Left
                         if (not FindPassableSpace( up, searchScale)) then -- up
                             if (not FindPassableSpace( up, -searchScale)) then -- down
                                 if (not FindPassableSpace( forward, -searchScale)) then -- back
-                                return false
+                                local spawn = GAMEMODE:PlayerSelectTeamSpawn( self:Team(), self )
+                                if (IsValid(spawn)) then
+                                    newPos = spawn:GetPos() -- spawn if cant find spot
+                                else
+                                    return false
+                                end
                             end
                         end
                     end

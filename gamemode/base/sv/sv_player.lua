@@ -7,7 +7,7 @@ function GM:PlayerDisconnected(ply)
     ply:ClassCall('PlayerDisconnected')
     self.BaseClass:PlayerDisconnected(ply)
 
-    if (player.GetCount() == 1) then
+    if (player.GetCount() == 1 and not self:Paused()) then
         self:Pause()
     end
 end
@@ -23,7 +23,7 @@ end
 --   Name: GM:PlayerInitialSpawn()
 ---------------------------------------------------------]]--
 function GM:PlayerInitialSpawn(ply)
-    if (player.GetCount() == 1) then
+    if (player.GetCount() == 1 and self:Paused()) then
         self:Resume()
     end
 

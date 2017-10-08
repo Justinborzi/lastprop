@@ -172,7 +172,7 @@ end
 --[[---------------------------------------------------------
 --   Hook: DefaultSounds
 ---------------------------------------------------------]]--
-hook.Add('InitPostEntity', 'DefaultSounds', function()
+hook.Add('Initialize', 'DefaultSounds', function()
 
     GAMEMODE:AddUISound('lock', 'buttons/button24.wav')
     GAMEMODE:AddUISound('unlock', 'buttons/button3.wav')

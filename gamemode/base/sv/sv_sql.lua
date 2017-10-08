@@ -14,7 +14,7 @@ function GM:DBInitialize()
             if (config.module) then
                 lps.sql:SetModule(config.module)
                 lps.sql:SetPrefix(config.prefix)
-                lps.Info('Database prefix and module set to \'%s\' \'%s\'.', config.prefix, config.module)
+                lps.Info('Database prefix set to \'%s\' and module set to \'%s\'.', config.prefix, config.module)
             end
             lps.sql:Connect(config.host, config.username, config.password, config.database, config.port, config.unixsocket)
         else

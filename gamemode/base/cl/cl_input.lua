@@ -8,7 +8,7 @@ function GM:RegisterBindings()
     lps.bindings:Register('global', 'tpv', KEY_CAPSLOCK, INPUT.KEY, '3rd Person', 'Toggles thirdperson view.')
     lps.bindings:Register('global', 'tpvDistance', KEY_LALT, INPUT.KEY, 'View Adjust', 'When key is pressed you can adjust your view distance in thirdperson using the scroll wheel.')
     lps.bindings:Register('global', 'tpvOffset', KEY_B, INPUT.KEY, 'Shoulder View', 'Toggles thirdperson shoulder view.')
-    lps.bindings:Register('global', 'tauntMenu', KEY_Y, INPUT.KEY, 'Taunt Menu', 'Show the taunt menu.')
+    lps.bindings:Register('global', 'tauntMenu', KEY_H, INPUT.KEY, 'Taunt Menu', 'Show the taunt menu.')
 end
 
 --[[---------------------------------------------------------
