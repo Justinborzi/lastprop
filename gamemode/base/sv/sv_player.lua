@@ -64,11 +64,10 @@ function GM:PlayerSpawn(ply)
 
     ply:SetupHands()
 
+    hook.Call('SetPlayerSpeed', self, ply, class.walkSpeed, class.runSpeed)
     if (class.duckSpeed) then ply:SetDuckSpeed(class.duckSpeed) end
-    if (class.walkSpeed) then ply:SetWalkSpeed(class.walkSpeed) end
-    if (class.runSpeed) then ply:SetRunSpeed(class.runSpeed) end
-    if (class.gravity) then ply:SetGravity(class.gravity) end
     if (class.crouchedWalkSpeed) then ply:SetCrouchedWalkSpeed(class.crouchedWalkSpeed) end
+    if (class.gravity) then ply:SetGravity(class.gravity) end
     if (class.jumpPower) then ply:SetJumpPower(class.jumpPower) end
     if (class.drawViewModel == false) then ply:DrawViewModel(false) else ply:DrawViewModel(true) end
     if (class.canUseFlashlight ~= nil) then ply:SetVar('allowFlashlight', class.canUseFlashlight, true) end
@@ -142,10 +141,19 @@ function GM:PlayerSetHandsModel( ply, ent )
         info = player_manager.TranslatePlayerHands(player_manager.TranslateToPlayerModelName(ply:GetModel()))
     end
     if (info) then
-        if(info.model) then ent:SetModel(info.model) end
-        if(info.skin) then ent:SetSkin(info.skin) end
-        if(info.body) then ent:SetBodyGroups(info.body) end
+        ent:SetModel(info.model or 'models/weapons/c_arms_combine.mdl')
+        ent:SetSkin(info.skin or 1)
+        ent:SetBodyGroups(info.body or '0100000')
     end
+end
+
+--[[---------------------------------------------------------
+   Name: gamemode:SetPlayerSpeed( )
+   Desc: Sets the player's run/walk speed
+-----------------------------------------------------------]]
+function GM:SetPlayerSpeed( ply, walk, run )
+	ply:SetWalkSpeed( walk )
+	ply:SetRunSpeed( run )
 end
 
 --[[---------------------------------------------------------
@@ -480,6 +488,13 @@ function GM:PlayerSay(ply, text, teamChat)
         return ''
     end
     return text
+end
+
+--[[---------------------------------------------------------
+--   Name: GM:PlayerSpray()
+---------------------------------------------------------]]--
+function GM:PlayerSpray(ply)
+    return true
 end
 
 --[[---------------------------------------------------------

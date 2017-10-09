@@ -66,6 +66,7 @@ end
 ---------------------------------------------------------]]--
 function GM:OnStartGame()
     lps.Info('Game Started!\n')
+    util.ForceSpawnAll()
 end
 
 --[[---------------------------------------------------------
@@ -184,4 +185,19 @@ end
 ---------------------------------------------------------]]--
 function GM:ShowHelp(ply)
     ply:ConCommand('lps_showhelp')
+end
+
+--[[---------------------------------------------------------
+--   Name: GM:CheckPassword()
+---------------------------------------------------------]]--
+function GM:CheckPassword( steamid, networkid, server_password, password, name )
+	-- The server has sv_password set
+	if ( server_password != "" ) then
+		-- The joining clients password doesn't match sv_password
+		if ( server_password != password ) then
+			return false
+		end
+	end
+
+	return true
 end

@@ -7,8 +7,8 @@
 ---------------------------------------------------------]]--
 function GM:OnPreRoundStart(num)
     self:CleanMap()
-    util.ForceSpawnAll()
     self:PlaySound(table.Random(lps.sounds.music), SOUND.MUSIC, hook.Call('GetPreRoundTime', self, num))
+    util.SpawnAll()
 end
 
 --[[---------------------------------------------------------

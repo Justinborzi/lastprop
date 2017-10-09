@@ -52,6 +52,15 @@ function GM:PlayerBindPress(ply, bind, down)
         if (bind == '+attack') then RunConsoleCommand('specnext') end
         if (bind == '+attack2') then RunConsoleCommand('specprev') end
     end
+
+    for _, setting in pairs(lps.bindings.settings) do
+        for class, data in pairs(setting) do
+            if (input.LookupKeyBinding(data.key) == bind) then
+                return true
+            end
+        end
+    end
+
     return false
 end
 
