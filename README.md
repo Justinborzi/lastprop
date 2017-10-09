@@ -41,7 +41,7 @@ Last Prop Standing is a twist on the popular game mode Prop Hunt. The main diffe
 * **[Download Stable Version](https://github.com/gluaws/lastprop/releases/latest)**
 * **Go [here](https://github.com/gluaws/lastprop/releases) to view all releases and changelogs.**
 
-### Need Help Setting Up LPS?:
+### Need Help Setting Up LPS?
 Visit the **[wiki](https://github.com/gluaws/lastprop/wiki)** for some usefull information on setting up LPS.
 
 ### Reporting an Issue:
