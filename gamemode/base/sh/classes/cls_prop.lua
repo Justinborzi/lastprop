@@ -206,7 +206,7 @@ function CLASS:ShouldDrawLocalPlayer(ply)
 end
 
 function CLASS:CalcView(ply, origin, angles, fov)
-    if (not IsValid(ply)) then return end
+    if (not IsValid(ply) or ply:IsObserver()) then return end
 
     local tpv = GetConVar('lps_tpvp'):GetBool()
     local view = {}
@@ -289,14 +289,13 @@ function CLASS:PlayerDisconnected(ply)
 end
 
 function CLASS:Loadout(ply)
-    if (GAMEMODE:InPreGame() and GAMEMODE:GetConfig('pregame_deathmatch')) then
-        timer.Simple(0.1, function ()
-            if (IsValid(ply) and ply:Alive()) then
-                ply:Give('weapon_357')
-                ply:GiveAmmo(255, '357', true)
-            end
-        end)
-    end
+    timer.Simple(0.1, function ()
+        if (not IsValid(ply) and not ply:Alive()) then return end
+        if (GAMEMODE:InPreGame() and GAMEMODE:GetConfig('pregame_deathmatch')) then
+            ply:Give('weapon_357')
+            ply:GiveAmmo(255, '357', true)
+        end
+    end)
 end
 
 function CLASS:Think(ply)

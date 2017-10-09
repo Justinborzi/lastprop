@@ -109,7 +109,7 @@ function CLASS:ShouldDrawLocalPlayer(ply)
 end
 
 function CLASS:CalcView(ply, origin, angles, fov)
-    if (not IsValid(ply)) then return end
+    if (not IsValid(ply) or ply:IsObserver()) then return end
 
     local view = {}
 
@@ -170,37 +170,30 @@ function CLASS:PlayerDisconnected(ply)
 end
 
 function CLASS:Loadout(ply)
-    if (GAMEMODE:InPreGame() and GAMEMODE:GetConfig('pregame_deathmatch')) then
-        timer.Simple(0.1, function ()
-            if (IsValid(ply) and ply:Alive()) then
-                ply:Give('weapon_357')
-                ply:GiveAmmo(255, '357', true)
-            end
-        end)
-    end
-
-    if (GAMEMODE:InRound()) then
-        timer.Simple(0.1, function ()
-            if (IsValid(ply) and ply:Alive()) then
-                for wep, ammo in pairs(GAMEMODE:GetLoadout(ply, TEAM.HUNTERS)) do
-                    ply:Give(wep, true)
-                    if (ammo.primary) then
-                        ply:GiveAmmo(ammo.primary[2], ammo.primary[1], true)
-                    end
-                    if (ammo.secondary) then
-                        ply:GiveAmmo(ammo.secondary[2], ammo.secondary[1], true)
-                    end
+    timer.Simple(0.1, function ()
+        if (not IsValid(ply) and not ply:Alive()) then return end
+        if (GAMEMODE:InPreGame() and GAMEMODE:GetConfig('pregame_deathmatch')) then
+            ply:Give('weapon_357')
+            ply:GiveAmmo(255, '357', true)
+        elseif (GAMEMODE:InRound()) then
+            for wep, ammo in pairs(GAMEMODE:GetLoadout(ply, TEAM.HUNTERS)) do
+                ply:Give(wep, true)
+                if (ammo.primary) then
+                    ply:GiveAmmo(ammo.primary[2], ammo.primary[1], true)
                 end
-
-                local defult = ply:GetInfo('lps_defaultswep')
-                if ply:HasWeapon(defult) then
-                    ply:SelectWeapon(defult)
-                elseif ply:HasWeapon('weapon_smg1') then
-                    ply:SelectWeapon('weapon_smg1')
+                if (ammo.secondary) then
+                    ply:GiveAmmo(ammo.secondary[2], ammo.secondary[1], true)
                 end
             end
-        end)
-    end
+
+            local defult = ply:GetInfo('lps_defaultswep')
+            if ply:HasWeapon(defult) then
+                ply:SelectWeapon(defult)
+            elseif ply:HasWeapon('weapon_smg1') then
+                ply:SelectWeapon('weapon_smg1')
+            end
+        end
+    end)
 end
 
 function CLASS:Think(ply)
