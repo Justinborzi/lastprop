@@ -145,21 +145,19 @@ function GM:CalcViewModelView(weapon, vm, old_eyepos, old_eyeang, eyepos, eyeang
 end
 
 function GM:OnPlayerChat(ply, text, teamChat, dead)
-
     local tab = {}
-
-    if (dead) then
-        table.insert(tab, Color(255, 30, 40))
-        table.insert(tab, '*DEAD* ')
-    end
-
-    table.insert(tab, team.GetColor(ply:Team()))
-
-    if (teamChat) then
-        table.insert(tab, '(TEAM) ')
-    end
-
     if (IsValid(ply)) then
+        if (dead) then
+            table.insert(tab, Color(255, 30, 40))
+            table.insert(tab, '*DEAD* ')
+        end
+
+        table.insert(tab, team.GetColor(ply:Team()))
+
+        if (teamChat) then
+            table.insert(tab, '(TEAM) ')
+        end
+
         if (lps.support[ply:SteamID()]) then
             table.insert(tab, Color(252, 249, 53))
             table.insert(tab, string.format('%s ', lps.support[ply:SteamID()]))

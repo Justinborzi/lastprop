@@ -261,10 +261,6 @@ function CLASS:Cleanup(ply)
         ply:UnStick()
     end
 
-    if (ply:GetVar('allowPickupWeapon', false)) then
-        ply:SetVar('allowPickupWeapon', false, true)
-    end
-
     if (ply:GetVar('allowPickup', false)) then
         ply:SetVar('allowPickup', false, true)
     end
@@ -375,7 +371,6 @@ function CLASS:OnRoundStart(ply, num)
 end
 
 function CLASS:OnLastMan(ply)
-    ply:SetVar('allowPickupWeapon', true, true)
     ply:SetVar('canDisguise', false, true)
     ply:SetVar('canTaunt', false, true)
 
@@ -426,9 +421,7 @@ function CLASS:OnRoundEnd(ply, teamID, num)
 end
 
 function CLASS:PlayerCanPickupWeapon(ply, weapon)
-    if (GAMEMODE:InPreGame() and GAMEMODE:GetConfig('pregame_deathmatch')) then return true end
-    if (GAMEMODE:InPostRound() and GAMEMODE:GetConfig('postround_deathmatch')) then return true end
-    return ply:GetVar('allowPickupWeapon', false)
+    return true
 end
 
 function CLASS:AllowPlayerPickup(ply, ent)

@@ -268,7 +268,7 @@ end
 --   Name: GM:PlayerSwitchFlashlight()
 ---------------------------------------------------------]]--
 function GM:PlayerSwitchFlashlight(ply, on)
-    if (ply:IsSpec() or ply:IsDisguised() or (ply:GetVar('allowFlashlight', false) == false)) then
+    if (ply:IsSpec() or (ply:GetVar('allowFlashlight', false) == false)) then
         return not on
     end
 end
