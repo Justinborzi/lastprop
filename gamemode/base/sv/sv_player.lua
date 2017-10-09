@@ -142,9 +142,9 @@ function GM:PlayerSetHandsModel( ply, ent )
         info = player_manager.TranslatePlayerHands(player_manager.TranslateToPlayerModelName(ply:GetModel()))
     end
     if (info) then
-        ent:SetModel( info.model )
-        ent:SetSkin( info.skin )
-        ent:SetBodyGroups( info.body )
+        if(info.model) then ent:SetModel(info.model) end
+        if(info.skin) then ent:SetSkin(info.skin) end
+        if(info.body) then ent:SetBodyGroups(info.body) end
     end
 end
 
