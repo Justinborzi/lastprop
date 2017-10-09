@@ -271,6 +271,7 @@ function GM:PlayerSwitchFlashlight(ply, on)
     if (ply:IsSpec() or (ply:GetVar('allowFlashlight', false) == false)) then
         return not on
     end
+    return true
 end
 
 --[[---------------------------------------------------------
