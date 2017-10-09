@@ -51,9 +51,7 @@ end
 ---------------------------------------------------------]]--
 function GM:OnRoundStart(num)
     for _, v in pairs(player.GetAll()) do
-        if (not v:Alive() and not v:IsObserver() and not v:IsSpec()) then
-            hook.Call('PlayerLoadout', self, v)
-        end
+        hook.Call('PlayerLoadout', self, v)
     end
 end
 
