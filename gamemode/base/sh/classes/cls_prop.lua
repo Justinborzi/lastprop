@@ -330,7 +330,7 @@ function CLASS:Think(ply)
 
         if (taunt) then
             util.Notify(ply, 'Auto Taunting! Keep moving to avoid auto taunts!')
-            ply:PlayTaunt(ply:GetInfo('lps_tauntpack') or 'default', 'prop')
+            ply:RandomTaunt()
         end
     end
 
