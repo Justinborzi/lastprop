@@ -42,6 +42,61 @@ function GM:PlayerDeath(ply, inflictor, attacker)
 end
 lps.net.Hook('PlayerDeath', function(data) hook.Call('PlayerDeath', GAMEMODE, data[1], data[2], data[3]) end)
 
+
+local binds = {
+    '+forward',
+    '+back',
+    '+moveleft',
+    '+moveright',
+    '+lookup',
+    '+lookdown',
+    '+left',
+    '+right',
+    '+jump',
+    '+duck',
+    '+showscores',
+    '+speed',
+    '+attack',
+    'lastinv',
+    '+attack',
+    '+attack2',
+    'invprev',
+    'invnext',
+    'pause',
+    'cancelselect',
+    'toggleconsole',
+    'gm_showhelp',
+    'gm_showteam',
+    'gm_showspare1',
+    'gm_showspare2',
+    'jpeg',
+    'save quick',
+    'load quick',
+    'toggleconsole',
+    'slot1',
+    'slot2',
+    'slot3',
+    'slot4',
+    'slot5',
+    'slot6',
+    'slot7',
+    'slot8',
+    'slot9',
+    'slot0',
+    '+menu',
+    '+use',
+    '+reload',
+    'impulse 201',
+    'messagemode',
+    'messagemode2',
+    'impulse 100',
+    'gmod_undo',
+    '+voicerecord',
+    '+menu_context',
+    'noclip',
+    '+zoom'
+}
+
 --[[---------------------------------------------------------
 --   Name: GM:PlayerBindPress()
 ---------------------------------------------------------]]--
@@ -53,10 +108,12 @@ function GM:PlayerBindPress(ply, bind, down)
         if (bind == '+attack2') then RunConsoleCommand('specprev') end
     end
 
-    for _, setting in pairs(lps.bindings.settings) do
-        for class, data in pairs(setting) do
-            if (input.LookupKeyBinding(data.key) == bind) then
-                return true
+    if (not table.HasValue(binds, bind)) then
+        for _, setting in pairs(lps.bindings.settings) do
+            for class, data in pairs(setting) do
+                if (input.LookupKeyBinding(data.key) == bind) then
+                    return true
+                end
             end
         end
     end

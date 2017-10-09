@@ -120,8 +120,6 @@ function meta:Disguise(ent)
         self:SetVar('collisionGroup', self:GetCollisionGroup(), true)
     end
 
-    self:Flashlight(false)
-
     local validEnt = IsValid(ent)
     local disguise = self:GetDisguise()
 
