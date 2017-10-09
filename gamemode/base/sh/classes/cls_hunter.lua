@@ -177,7 +177,8 @@ function CLASS:Loadout(ply)
             ply:GiveAmmo(255, '357', true)
         elseif (GAMEMODE:InRound()) then
             for wep, ammo in pairs(GAMEMODE:GetLoadout(ply, TEAM.HUNTERS)) do
-                ply:Give(wep, true)
+                local weapon = ply:Give(wep, true)
+                weapon:SetClip1(weapon:GetMaxClip1())
                 if (ammo.primary) then
                     ply:GiveAmmo(ammo.primary[2], ammo.primary[1], true)
                 end

@@ -387,6 +387,7 @@ function CLASS:OnLastMan(ply)
     end
 
     local weapon = ply:Give(swep, true)
+    weapon:SetClip1(weapon:GetMaxClip1())
     if (sweps[swep].primary) then
         ply:GiveAmmo(sweps[swep].primary[2], sweps[swep].primary[1], true)
     end
