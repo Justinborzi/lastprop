@@ -6,7 +6,6 @@
 --   Name: GM:OnPreRoundStart()
 ---------------------------------------------------------]]--
 function GM:OnPreRoundStart(num)
-    self:CleanMap()
     self:PlaySound(table.Random(lps.sounds.music), SOUND.MUSIC, hook.Call('GetPreRoundTime', self, num))
     util.SpawnAll()
 end
@@ -245,6 +244,7 @@ end
 --   Name: GM:OnNextRound()
 ---------------------------------------------------------]]--
 function GM:OnNextRound(num)
+    self:CleanMap()
     util.SetVarAll('lastMan', false, true)
     if (self:GetConfig('team_swap')) then
         util.SwitchTeams(TEAM.PROPS, TEAM.HUNTERS)

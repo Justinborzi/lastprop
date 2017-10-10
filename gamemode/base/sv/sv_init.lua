@@ -66,7 +66,6 @@ end
 ---------------------------------------------------------]]--
 function GM:OnStartGame()
     lps.Info('Game Started!\n')
-    util.ForceSpawnAll()
 end
 
 --[[---------------------------------------------------------
@@ -76,6 +75,8 @@ function GM:StartGame()
     self:InPreGame(false)
     hook.Call('OnStartGame', self)
     self:InGame(true)
+    self:CleanMap()
+    util.ForceSpawnAll()
     self:PreRoundStart(1)
 end
 
@@ -160,6 +161,7 @@ end
 --   Name: GM:CleanMap()
 ---------------------------------------------------------]]--
 function GM:CleanMap()
+
     game.CleanUpMap()
 
     -- Remove weapons
@@ -172,9 +174,13 @@ function GM:CleanMap()
         item:Remove()
     end
 
-    -- Fixes Collisions
+    -- Fixes Collisions and remove banned props
     for _, ent in pairs(ents.FindByClass('prop_physics*')) do
-        ent:SetCollisionGroup(COLLISION_GROUP_NONE)
+        if (not ent:IsValidDisguise()) then
+            ent:Remove()
+        else
+            ent:SetCollisionGroup(COLLISION_GROUP_NONE)
+        end
     end
 
     hook.Call('OnCleanMap', self)
