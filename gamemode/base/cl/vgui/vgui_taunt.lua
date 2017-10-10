@@ -24,8 +24,9 @@ function GM:TauntMenu()
     gui.EnableScreenClicker(true)
     self.tauntMenu = DermaMenu()
     self.tauntMenu:ParentToHUD()
-    self.tauntMenu:AddOption(tauntType:gsub("^%l", string.upper))
+    self.tauntMenu:AddOption(tauntType:gsub("^%l", string.upper), function() RunConsoleCommand("randomtaunt") end )
     self.tauntMenu:AddSpacer()
+
     for _, t in SortedPairs(lps.taunts.sounds[tauntPack][tauntType]) do
         local letter = string.upper(string.sub(t.label, 1, 1))
         if (not letters[letter]) then
@@ -35,6 +36,7 @@ function GM:TauntMenu()
             RunConsoleCommand("taunt", t.name )
         end)
     end
+
     self.tauntMenu:AddSpacer()
     self.tauntMenu:AddOption('Close')
     self.tauntMenu:Open(gui.MouseX(), gui.MouseY() - ((table.Count(letters) + 1) * 21))

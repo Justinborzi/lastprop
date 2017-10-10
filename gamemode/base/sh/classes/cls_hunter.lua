@@ -179,6 +179,7 @@ function CLASS:Loadout(ply)
             for wep, ammo in pairs(GAMEMODE:GetLoadout(ply, TEAM.HUNTERS)) do
                 local weapon = ply:Give(wep, true)
                 weapon:SetClip1(weapon:GetMaxClip1())
+
                 if (ammo.primary) then
                     ply:GiveAmmo(ammo.primary[2], ammo.primary[1], true)
                 end
@@ -224,7 +225,7 @@ function CLASS:OnSpawn(ply)
 end
 
 function CLASS:OnKill(ply, victim, inflictor)
-    if (not ply:Alive()) then return end
+    if (not ply:Alive() or not GAMEMODE:InRound()) then return end
     if (GAMEMODE:GetConfig('hunter_kill_bonus_health') > 0 and not GAMEMODE:GetConfig('hunter_steal_health')) then
         ply:SetHealth(math.Clamp(ply:Health() + GAMEMODE:GetConfig('hunter_kill_bonus_health'), 10, ply:GetMaxHealth()))
     end
@@ -310,8 +311,10 @@ function CLASS:OnCausedDamage(ply, ent, dmgInfo)
         ply:SetHealth(health)
     end
 
-    local swep = ply:GetActiveWeapon()
-    if (IsValid(swep) and swep:GetClass() == 'weapon_crowbar') then return end
+    if (GAMEMODE:GetConfig('hunter_crowbar_nopenalty')) then
+        local swep = ply:GetActiveWeapon()
+        if ( IsValid(swep) and swep:GetClass() == 'weapon_crowbar') then return end
+    end
 
     if (GAMEMODE:GetConfig('hunter_damage_penalty') > 0 and table.HasValue({'prop_physics', 'prop_physics_multiplayer'}, ent:GetClass())) then
         local dmgInfo = DamageInfo()

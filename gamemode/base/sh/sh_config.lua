@@ -98,6 +98,7 @@ GM.config = GM.config or {
 
     ['hunter_friendlyfire']       = false,            -- Set to false to stop hunter on hunter violence
     ['hunter_damage_penalty']     = 10,               -- Health taken from hunter when damaging a non prop ent
+    ['hunter_crowbar_nopenalty']  = true,             -- Set to true to stop hunters from taking penalty damage when using crowbar
     ['hunter_steal_health']       = true,             -- Takes 50% of damage dealt to prop and gives it to hunter
     ['hunter_steal_maxhealth']    = 200,              -- Max Health a hunter can get from stealing health.
     ['hunter_kill_bonus_health']  = 10,               -- Added health once hunter gets a kill

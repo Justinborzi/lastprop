@@ -244,7 +244,7 @@
             "text"       "Hunter friendly fire"
             "help"       "Set to false to stop hunter on hunter violence"
             "type"       "CheckBox"
-            "default"    "false"
+            "default"    "1"
         }
         29
         {
@@ -256,13 +256,21 @@
         }
         30
         {
+            "name"       "lps_hunter_crowbar_nopenalty"
+            "text"       "Hunter damage penalty"
+            "help"       "Set to true to stop hunters from taking penalty damage when using crowbar"
+            "type"       "CheckBox"
+            "default"    "1"
+        }
+        31
+        {
             "name"       "lps_hunter_steal_health"
             "text"       "Hunter steal health"
             "help"       "Takes 50% of damage dealt to prop and gives it to the hunter"
             "type"       "CheckBox"
             "default"    "1"
         }
-        31
+        32
         {
             "name"       "lps_hunter_steal_maxhealth"
             "text"       "Hunter steal max health"
@@ -270,7 +278,7 @@
             "type"       "Numeric"
             "default"    "200"
         }
-        32
+        33
         {
             "name"       "lps_hunter_kill_bonus_health"
             "text"       "Hunter kill bonus health"
@@ -278,7 +286,7 @@
             "type"       "Numeric"
             "default"    "10"
         }
-        33
+        34
         {
             "name"      "lps_hunter_kill_bonus_nade"
             "text"      "Hunter kill bonus grenade"
@@ -286,7 +294,7 @@
             "type"      "Numeric"
             "default"   "1"
         }
-        34
+        35
         {
             "name"       "lps_hunter_lastman_bonus_nade"
             "text"       "Hunter last man grenade bonus"
@@ -294,7 +302,7 @@
             "type"       "CheckBox"
             "default"    "1"
         }
-        35
+        36
         {
             "name"       "lps_hunter_jetpack_jump"
             "text"       "Hunter jetpack jump"
