@@ -241,6 +241,17 @@ end
 -------------------------------
 
 --[[---------------------------------------------------------
+--   Name: GM:CanStartNextRound()
+---------------------------------------------------------]]--
+function GM:CanStartNextRound(num)
+    if (self:GetConfig('round_limit') > 0 and self:Round() >= self:GetConfig('round_limit')) then
+        timer.Simple(0.5, function() GAMEMODE:EndGame() end)
+        return false
+    end
+    return true
+end
+
+--[[---------------------------------------------------------
 --   Name: GM:OnNextRound()
 ---------------------------------------------------------]]--
 function GM:OnNextRound(num)
@@ -263,16 +274,13 @@ function GM:NextRound()
     self:RoundEndTime(-1)
     self:NextRoundTime(-1)
 
-    if (self:GetConfig('round_limit') > 0 and self:Round() >= self:GetConfig('round_limit')) then
-        timer.Simple(0.5, function() GAMEMODE:EndGame() end)
-        return
-    end
-
     num = self:Round() + 1
 
-    hook.Call('OnNextRound', self, num)
-    util.ClassCallAll('OnNextRound', num)
-    lps.net.Start(nil, 'OnNextRound', {num})
+    if (hook.Call('CanStartNextRound', self, num) ~= false) then
+        hook.Call('OnNextRound', self, num)
+        util.ClassCallAll('OnNextRound', num)
+        lps.net.Start(nil, 'OnNextRound', {num})
 
-    timer.Simple(0.5, function() GAMEMODE:PreRoundStart(num) end)
+        timer.Simple(0.5, function() GAMEMODE:PreRoundStart(num) end)
+    end
 end
