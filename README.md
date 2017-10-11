@@ -34,7 +34,7 @@ Last Prop Standing is a twist on the popular game mode Prop Hunt. The main diffe
 * and many more!
 
 ### Planed Features:
-* Leveling! Spawn with more ammo, get more health when you become a prop!
+* None at the moment! Taking Suggestions!
 
 ### Releases:
 * **[Download Devlopemnt Version](https://github.com/gluaws/lastprop/archive/dev.zip)**
