@@ -18,6 +18,9 @@ lps = lps or {
     },
     player = {},
     support = {},
+    minigames = {
+        'none',
+    }
 }
 
 MsgC(Color(0,255,255), [[

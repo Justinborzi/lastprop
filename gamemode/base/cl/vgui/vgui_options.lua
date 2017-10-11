@@ -258,6 +258,19 @@ function PANEL:DrawFrame()
                 },
             }
         },
+        minigames = {
+            name = 'Minigame Settings',
+            settings = {
+                {
+                    convar = 'lps_minigame',
+                    type = 'list',
+                    name = 'Minigame',
+                    func = function()
+                        return lps.minigames
+                    end
+                },
+            }
+        },
         visuals = {
             name = 'Visuals Settings',
             settings = {
