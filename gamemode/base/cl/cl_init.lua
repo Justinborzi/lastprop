@@ -26,7 +26,7 @@ CreateClientConVar('lps_specmode', '6', true, true)         -- Spectator mode
 CreateClientConVar('lps_tauntpack', 'default', true, true)  -- Taunt pack
 CreateClientConVar('lps_noglow', '0', true, true)           -- Disable glow
 CreateClientConVar('lps_hidehud', '0', true, true)          -- Hide HUD
-CreateClientConVar('lps_minigame', 'snake', true, true)      -- Minigame Settings
+CreateClientConVar('lps_minigame', 'Snake', true, true)      -- Minigame Settings
 CreateClientConVar('lps_defaultswep', 'weapon_smg1', true, true) -- Set default hunter SWEP
 CreateClientConVar('lps_lastmanswep', 'weapon_lastman', true, true) -- Set lastman SWEP
 

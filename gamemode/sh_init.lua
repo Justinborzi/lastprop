@@ -19,7 +19,7 @@ lps = lps or {
     player = {},
     support = {},
     minigames = {
-        'none',
+        'None',
     }
 }
 
