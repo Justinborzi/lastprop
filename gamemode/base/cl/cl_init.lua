@@ -23,7 +23,7 @@ include('cl_input.lua')
 --   Misc Convars
 ---------------------------------------------------------]]--
 CreateClientConVar('lps_specmode', '6', true, true)         -- Spectator mode
-CreateClientConVar('lps_tauntpack', 'default', true, true)  -- Taunt pack
+CreateClientConVar('lps_tauntpack', 'any', true, true)      -- Taunt pack
 CreateClientConVar('lps_noglow', '0', true, true)           -- Disable glow
 CreateClientConVar('lps_hidehud', '0', true, true)          -- Hide HUD
 CreateClientConVar('lps_minigame', 'Snake', true, true)      -- Minigame Settings

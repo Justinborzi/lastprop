@@ -40,17 +40,23 @@ end
 --[[---------------------------------------------------------
 --   Name: meta:GetTauntPack()
 ---------------------------------------------------------]]--
-function meta:GetTauntPack()
+function meta:GetTauntPack(tPack)
     if (CLIENT and LocalPlayer() ~= self) then return 'default' end
-    local pack = SERVER and self:GetInfo('lps_tauntpack') or GetConVar('lps_tauntpack'):GetName()
-    if (not pack) or
-       (not lps.taunts.sounds[pack]) or
-       (table.Count(lps.taunts.sounds[pack]) == 0) or
-       (not lps.taunts.sounds[pack][type]) or
-       (lps.taunts.info[pack][type].count == 0) then
+
+    if (not tPack) then
+        tPack = SERVER and self:GetInfo('lps_tauntpack') or GetConVar('lps_tauntpack'):GetString()
+        if (tPack == 'any') then
+            tPack = table.Random(lps.taunts.packs)
+        end
+    end
+
+    local tType = self:GetTauntType()
+    if (not lps.taunts.sounds[tPack]) or
+       (not lps.taunts.sounds[tPack][tType]) or
+       (lps.taunts.info[tPack][tType].count == 0) then
         return 'default'
     end
-    return pack
+    return tPack
 end
 
 --[[---------------------------------------------------------

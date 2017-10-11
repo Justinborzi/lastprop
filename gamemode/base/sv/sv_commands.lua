@@ -96,7 +96,7 @@ end)
 ---------------------------------------------------------]]--
 concommand.Add('taunt', function(ply, cmd, args)
     if(ply:GetVar('canTaunt', false)) then
-        ply:PlayTaunt(args[1])
+        ply:PlayTaunt(args[1], args[2])
     end
 end)
 

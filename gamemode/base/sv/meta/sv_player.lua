@@ -37,26 +37,30 @@ function meta:RandomTaunt(min, max)
         return
     end
 
-    local tauntType, tauntPack = self:GetTauntType(), self:GetTauntPack()
-    if (not tauntType or not tauntPack) then return end
+    local tType, tPack = self:GetTauntType(), self:GetTauntPack()
+    if (not tType or not tPack) then return end
 
-    min = math.Clamp(min or 0, lps.taunts.info[tauntPack][tauntType].min, lps.taunts.info[tauntPack][tauntType].max)
-    max = math.Clamp(max or 500, min, lps.taunts.info[tauntPack][tauntType].max)
+    min = math.Clamp(min or 0, lps.taunts.info[tPack][tType].min, lps.taunts.info[tPack][tType].max)
+    max = math.Clamp(max or 500, min, lps.taunts.info[tPack][tType].max)
 
     local taunt
-    repeat
-        taunt = table.Random(lps.taunts.sounds[tauntPack][tauntType])
-    until
-        taunt.name ~= self:GetVar('lastTaunt', nil) and taunt.length >= min and taunt.length <= max
+    if (lps.taunts.info[tPack][tType].count > 1) then
+        repeat
+            taunt = table.Random(lps.taunts.sounds[tPack][tType])
+        until
+            taunt.name ~= self:GetVar('lastTaunt', nil) and taunt.length >= min and taunt.length <= max
+    else
+        taunt = table.Random(lps.taunts.sounds[tPack][tType])
+    end
 
-    self:PlayTaunt(taunt.name)
+    self:PlayTaunt(taunt.name, tPack)
 end
 
 
 --[[---------------------------------------------------------
 --   Name: meta:PlayTaunt()
 ---------------------------------------------------------]]--
-function meta:PlayTaunt(name)
+function meta:PlayTaunt(name, pack)
 
     if (self:IsSpec() or not self:Alive()) then return end
 
@@ -65,16 +69,17 @@ function meta:PlayTaunt(name)
         return
     end
 
-    local tauntType, tauntPack = self:GetTauntType(), self:GetTauntPack()
-    if (not tauntType or not tauntPack) then return end
+    local tType, tPack = self:GetTauntType(), self:GetTauntPack(pack)
+    if (not tType or not tPack) then return end
 
-    if (lps.taunts.sounds[tauntPack][tauntType][name]) then
-        self:SetVar('tauntCooldown', (CurTime() + lps.taunts.sounds[tauntPack][tauntType][name].length + 0.5))
+    if (lps.taunts.sounds[tPack][tType][name]) then
+        self:SetVar('tauntCooldown', (CurTime() + lps.taunts.sounds[tPack][tType][name].length + 0.5))
         self:SetVar('lastTaunt', name)
-        self:SetVar('taunt', lps.taunts.sounds[tauntPack][tauntType][name])
-        hook.Call('PlayerTaunt', GAMEMODE, self, lps.taunts.sounds[tauntPack][tauntType][name])
+        self:SetVar('tauntPack', tPack)
+        self:SetVar('taunt', lps.taunts.sounds[tPack][tType][name])
+        hook.Call('PlayerTaunt', GAMEMODE, self, lps.taunts.sounds[tPack][tType][name])
     else
-        util.Notify(self, string.format('Unable to find taunt [%s][%s][%s]!', tauntPack, tauntType, name))
+        util.Notify(self, string.format('Unable to find taunt [%s][%s][%s]!', tPack, tType, name))
     end
 end
 
@@ -82,15 +87,16 @@ end
 --   Name: meta:StopTaunt()
 ---------------------------------------------------------]]--
 function meta:StopTaunt()
-    local taunt, tauntCooldown = self:GetVar('taunt', nil), self:GetVar('tauntCooldown', 0)
-    if (not taunt or tauntCooldown == 0) then return end
+    local taunt, tCooldown = self:GetVar('taunt', nil), self:GetVar('tauntCooldown', 0)
+    if (not taunt or tCooldown == 0) then return end
 
-    local tauntSound = self:GetTaunt(taunt)
-    if (tauntSound and tauntSound[1]:IsPlaying()) then
-        tauntSound[1]:Stop()
+    local tSound = self:GetTaunt(taunt)
+    if (tSound and tSound[1]:IsPlaying()) then
+        tSound[1]:Stop()
     end
 
     self:SetVar('taunt', nil)
+    self:SetVar('tauntPack', nil)
     self:SetVar('tauntCooldown', 0)
 end
 

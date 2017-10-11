@@ -154,7 +154,11 @@ function PANEL:DrawFrame()
                     type = 'list',
                     name = 'Taunt Pack',
                     func = function()
-                        return lps.taunts.packs
+                        local packs = {'any'}
+                        for _, v in pairs(lps.taunts.packs) do
+                            table.insert(packs, v)
+                        end
+                        return packs
                     end
                 },
             }
