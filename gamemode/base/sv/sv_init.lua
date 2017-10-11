@@ -174,9 +174,14 @@ function GM:CleanMap()
         item:Remove()
     end
 
+    -- Exclude certain props from being removed.
+    local excluded = {
+        'models/props_c17/signpole001.mdl',
+    }
+
     -- Fixes Collisions and remove banned props
     for _, ent in pairs(ents.FindByClass('prop_physics*')) do
-        if (not ent:IsValidDisguise()) then
+        if (not ent:IsValidDisguise() and not table.HasValue(excluded, ent:GetModel())) then
             ent:Remove()
         else
             ent:SetCollisionGroup(COLLISION_GROUP_NONE)
