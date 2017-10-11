@@ -1,11 +1,4 @@
 --[[---------------------------------------------------------
---   Name: GM:PropBreak()
----------------------------------------------------------]]--
-function GM:PropBreak( attacker, prop )
-    --todo: maybe a perk of some kind
-end
-
---[[---------------------------------------------------------
 --   Name: GM:EntityTakeDamage()
 ---------------------------------------------------------]]--
 function GM:EntityTakeDamage(ent, dmgInfo)
