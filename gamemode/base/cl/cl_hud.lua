@@ -3,7 +3,7 @@
 --   Name: GM:PreDrawHalos()
 ---------------------------------------------------------]]--
 function GM:PreDrawHalos()
-    if (GetConVar('lps_noglow'):GetBool()) then return end
+    if (not GetConVar('lps_glow'):GetBool()) then return end
 
     local localPlayer = LocalPlayer()
     if (not IsValid(localPlayer)) then return end

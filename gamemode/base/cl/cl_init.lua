@@ -24,9 +24,9 @@ include('cl_input.lua')
 ---------------------------------------------------------]]--
 CreateClientConVar('lps_specmode', '6', true, true)         -- Spectator mode
 CreateClientConVar('lps_tauntpack', 'any', true, true)      -- Taunt pack
-CreateClientConVar('lps_noglow', '0', true, true)           -- Disable glow
 CreateClientConVar('lps_hidehud', '0', true, true)          -- Hide HUD
-CreateClientConVar('lps_minigame', 'Snake', true, true)      -- Minigame Settings
+CreateClientConVar('lps_glow', '1', true, true)             -- Glow/Halos
+CreateClientConVar('lps_minigame', 'Snake', true, true)     -- Minigame Settings
 CreateClientConVar('lps_defaultswep', 'weapon_smg1', true, true) -- Set default hunter SWEP
 CreateClientConVar('lps_lastmanswep', 'weapon_lastman', true, true) -- Set lastman SWEP
 
@@ -59,18 +59,32 @@ CreateClientConVar('lps_xhair_l', '10', true, true)   -- xhiar length (Int: 0 to
 --   concommand: lps_reset
 ---------------------------------------------------------]]--
 concommand.Add('lps_reset', function(ply, cmd, args, arg_str)
+    hook.Call('ResetConvars', GAMEMODE)
+end)
+
+--[[---------------------------------------------------------
+--   Name: GM:ResetConvars()
+---------------------------------------------------------]]--
+function GM:ResetConvars()
     for var, value in pairs({
         specmode = 6,
-        tauntpack = 'default',
-        noglow = 0,
+        tauntpack = 'any',
+        hidehud = 0,
+        glow = 1,
+        minigame = 'Snake',
         defaultswep = 'weapon_smg1',
-        tpv = 0,
+        lastmanswep = 'weapon_lastman',
+
+        tpvp = 1,
+        tpvh = 0,
         tpv_dist = 50,
         tpv_offset = 15,
         tpv_offset_on = 0,
+
         vol_ui = 0.5,
         vol_sfx = 0.5,
         vol_music = 0.5,
+
         xhair_r = 255,
         xhair_g = 208,
         xhair_b = 64,
@@ -79,8 +93,7 @@ concommand.Add('lps_reset', function(ply, cmd, args, arg_str)
     }) do
         RunConsoleCommand('lps_' .. var, value)
     end
-end)
-
+end
 
 --[[---------------------------------------------------------
 --   Name: GM:Initialize()

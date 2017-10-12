@@ -68,10 +68,10 @@ CLASS.fullRotation         = false -- Allow the player's model to rotate upwards
 function CLASS:RegisterBindings()
      lps.bindings:Register('prop', 'tauntLong', KEY_3, INPUT.KEY, 'Taunt Long',  'When pressed you will taunt for 11 to 60 seconds.')
      lps.bindings:Register('prop', 'tauntMedium', KEY_2, INPUT.KEY, 'Taunt Medium',  'When pressed you will taunt for 6 to 10 seconds.')
-     lps.bindings:Register('prop', 'tauntShort', KEY_2, INPUT.KEY, 'Taunt Short',  'When pressed you will taunt for 0 to 5 seconds.')
+     lps.bindings:Register('prop', 'tauntShort', KEY_1, INPUT.KEY, 'Taunt Short',  'When pressed you will taunt for 0 to 5 seconds.')
      lps.bindings:Register('prop', 'taunt', KEY_T, INPUT.KEY, 'Taunt',  'When pressed you will random taunt.')
      lps.bindings:Register('prop', 'replace', KEY_LCONTROL, INPUT.KEY, 'Prop Replace',  'When pressed you will replace the prop you want to become.')
-     lps.bindings:Register('prop', 'adjust', KEY_RALT, INPUT.KEY, 'Lock Adjust',  'When pressed you can adjust the angle your disguise is locked at by using the mouse wheel.')
+     lps.bindings:Register('prop', 'adjust', KEY_LSHIFT, INPUT.KEY, 'Lock Adjust',  'When pressed you can adjust the angle your disguise is locked at by using the mouse wheel.')
      lps.bindings:Register('prop', 'lock', MOUSE_LEFT, INPUT.MOUSE, 'Lock',  'Locks your disguise.')
      lps.bindings:Register('prop', 'unlock', MOUSE_RIGHT, INPUT.MOUSE, 'Unlock',  'Unlocks your disguise.')
      lps.bindings:Register('prop', 'snap', MOUSE_MIDDLE, INPUT.MOUSE, 'Snap Lock',  'Locks your disguise to the nearest flat angle.')
@@ -179,12 +179,22 @@ function CLASS:OnKeyDown(ply, key, keycode, char, keytype, busy, cursor)
     if (key == replace.key and keytype == replace.type) then
         RunConsoleCommand('+replaceprop')
     end
+
+    local adjust = lps.bindings:GetKey('prop', 'adjust')
+    if (key == adjust.key and keytype == adjust.type) then
+        ply:SetVar('lockAdjust', true)
+    end
 end
 
 function CLASS:OnKeyUp(ply, key, keycode, char, keytype, busy, cursor)
     local replace = lps.bindings:GetKey('prop', 'replace')
     if (key == replace.key and keytype == replace.type) then
         RunConsoleCommand('-replaceprop')
+    end
+
+    local adjust = lps.bindings:GetKey('prop', 'adjust')
+    if (key == adjust.key and keytype == adjust.type) then
+        ply:SetVar('lockAdjust', false)
     end
 end
 
@@ -196,7 +206,8 @@ function CLASS:CreateMove(ply, cmd)
     if  (ply:IsDisguised()) and
         (ply:DisguiseLocked()) and
         (cmd:GetMouseWheel() ~= 0) and
-        (input.IsKeyDown(lps.bindings:GetKey('prop', 'adjust').key)) then
+        (ply:GetVar('lockAdjust', false))
+    then
         RunConsoleCommand('lockadjust', (cmd:GetMouseWheel()), 0, 0)
     end
 end

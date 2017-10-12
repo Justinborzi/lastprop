@@ -279,14 +279,14 @@ function PANEL:DrawFrame()
             name = 'Visuals Settings',
             settings = {
                 {
-                    convar = 'lps_noglow',
-                    type = 'bool',
-                    name = 'Disable Glow',
-                },
-                {
                     convar = 'lps_hidehud',
                     type = 'bool',
                     name = 'Hide HUD',
+                },
+                {
+                    convar = 'lps_glow',
+                    type = 'bool',
+                    name = 'Glow/Halo Enabled',
                 },
             }
         },
