@@ -127,7 +127,7 @@ function CLASS:HUDPaint(ply)
 end
 
 function CLASS:OnKeyDown(ply, key, keycode, char, keytype, busy, cursor)
-    if (busy or cursor or ply:GetVar('lastMan', false) or not ply:Alive() or IsValid(ply:GetActiveWeapon())) then return end
+    if (busy or cursor or ply:GetVar('lastMan', false) or not ply:Alive() or ply:IsLastMan()) then return end
 
     local tauntLong = lps.bindings:GetKey('prop', 'tauntLong')
     local tauntMedium = lps.bindings:GetKey('prop', 'tauntMedium')
@@ -302,9 +302,32 @@ end
 function CLASS:Loadout(ply)
     timer.Simple(0.1, function ()
         if (not IsValid(ply) and not ply:Alive()) then return end
+
         if (GAMEMODE:InPreGame() and GAMEMODE:GetConfig('pregame_deathmatch')) then
             ply:Give('weapon_357')
             ply:GiveAmmo(255, '357', true)
+        end
+
+        if (GAMEMODE:InRound() and ply:IsLastMan()) then
+            local sweps = GAMEMODE:GetLoadout(ply, TEAM.PROPS)
+            local swep = ply:GetInfo('lps_lastmanswep')
+            if (not sweps[swep]) then
+                swep = table.Random(table.GetKeys(sweps))
+            end
+
+            local weapon = ply:Give(swep, true)
+            weapon:SetClip1(weapon:GetMaxClip1())
+
+            if (sweps[swep].primary) then
+                ply:GiveAmmo(sweps[swep].primary[2], sweps[swep].primary[1], true)
+            end
+            if (sweps[swep].secondary) then
+                ply:GiveAmmo(sweps[swep].secondary[2], sweps[swep].secondary[1], true)
+            end
+
+            if ply:HasWeapon(swep) then
+                ply:SelectWeapon(swep)
+            end
         end
     end)
 end
@@ -391,25 +414,7 @@ function CLASS:OnLastMan(ply)
 
     ply:StopTaunt()
 
-    local sweps = GAMEMODE:GetLoadout(ply, TEAM.PROPS)
-    local swep = ply:GetInfo( 'lps_lastmanswep' )
-    if (not sweps[swep]) then
-        swep = table.Random(table.GetKeys(sweps))
-    end
-
-    local weapon = ply:Give(swep, true)
-    weapon:SetClip1(weapon:GetMaxClip1())
-
-    if (sweps[swep].primary) then
-        ply:GiveAmmo(sweps[swep].primary[2], sweps[swep].primary[1], true)
-    end
-    if (sweps[swep].secondary) then
-        ply:GiveAmmo(sweps[swep].secondary[2], sweps[swep].secondary[1], true)
-    end
-
-    if ply:HasWeapon(swep) then
-        ply:SelectWeapon(swep)
-    end
+    hook.Call('PlayerLoadout', GAMEMODE, ply)
 
     ply:SetVar('trail', util.SpriteTrail(ply, 0, Color(255, 255, 255), false, 15, 1, 1.5, 0.125, 'trails/rainbow.vmt'), true)
 
@@ -433,7 +438,7 @@ function CLASS:OnRoundEnd(ply, teamID, num)
 end
 
 function CLASS:PlayerCanPickupWeapon(ply, weapon)
-    return true
+    return GAMEMODE:InRound() and ply:IsLastMan() or true
 end
 
 function CLASS:AllowPlayerPickup(ply, ent)
@@ -473,7 +478,6 @@ function CLASS:Use(ply, ent)
             if (IsValid(disguise)) then
                 disguise:SetLocked(angles)
             end
-
         else
             ply:Disguise(ent)
         end
