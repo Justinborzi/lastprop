@@ -24,9 +24,9 @@ V 1.2.0
  - Added custom handling for k,v tables without any array component.
 V 1.2.1
  - fixed deserialization bug.
-THANKS TO .. .
+THANKS TO ...
  - VERCAS for the inspiration.
-]]
+]]--
 
 
 local pon = {}
