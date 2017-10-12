@@ -99,7 +99,7 @@ lps.input = lps.input or {
         {KEY_F12,           123, false, 'F12'},
         {KEY_NUMLOCK,       144, false, 'NUM LK'},
         {KEY_SCROLLLOCK,    145, false, 'SCRL LK'},
-        {KEY_SEMICOLON,     186, false, ';'},
+        {KEY_SEMICOLON,     186, false, ''},
         {KEY_EQUAL,         187, false, '='},
         {KEY_COMMA,         188, false, ','},
         -- Dash, 189

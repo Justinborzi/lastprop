@@ -80,7 +80,7 @@ if (SERVER) then
     --
     local path = string.format('%s/%s', lps.paths.mod, 'lastprop.txt')
     if (file.Exists(path, 'MOD')) then
-        local config = util.KeyValuesToTable(file.Read(path, 'MOD'));
+        local config = util.KeyValuesToTable(file.Read(path, 'MOD'))
         lps.version = config.version
         for id, tag in pairs(config.support) do
             lps.support[string.upper(id)] = tag

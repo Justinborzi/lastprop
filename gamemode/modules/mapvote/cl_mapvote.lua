@@ -25,7 +25,7 @@ net.Receive("MapVote_Stop", function()
 end)
 
 net.Receive("MapVote_End", function()
-    MapVote.active = false;
+    MapVote.active = false
     local winner = net.ReadUInt(32)
     local button = MapVote.gui:GetButton(winner)
     button:Blink()

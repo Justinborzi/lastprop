@@ -111,16 +111,16 @@ function SWEP:PrimaryAttack()
     if (SERVER) then
 
         if (tr.Entity and IsValid(tr.Entity) and tr.Entity:IsPlayer()) then
-            local dmgInfo = DamageInfo();
-            dmgInfo:SetDamage(100);
-            dmgInfo:SetAttacker(ply);
-            dmgInfo:SetInflictor(self);
+            local dmgInfo = DamageInfo()
+            dmgInfo:SetDamage(100)
+            dmgInfo:SetAttacker(ply)
+            dmgInfo:SetInflictor(self)
 
             if(dmgInfo.SetDamageType) then
-                dmgInfo:SetDamagePosition(tr.HitPos);
-                dmgInfo:SetDamageType(DMG_DISSOLVE);
+                dmgInfo:SetDamagePosition(tr.HitPos)
+                dmgInfo:SetDamageType(DMG_DISSOLVE)
             end
-            tr.Entity:DispatchTraceAttack(dmgInfo, tr.HitPos, tr.HitPos - (tr.HitPos - ply:GetShootPos()):GetNormal():Angle():Forward() * 20);
+            tr.Entity:DispatchTraceAttack(dmgInfo, tr.HitPos, tr.HitPos - (tr.HitPos - ply:GetShootPos()):GetNormal():Angle():Forward() * 20)
         end
 
         ply:FireBullets({
@@ -139,7 +139,7 @@ function SWEP:PrimaryAttack()
     end
 
     ply:ViewPunch(Angle(math.Rand(-0.4, -0.2) * self.Primary.Recoil, math.Rand(-0.3, 0.2) * self.Primary.Recoil, 0))
-    util.ParticleTracerEx('Weapon_LaserP_Beam', eyepos, tr.HitPos, true, self:GetOwner():EntIndex(), 1);
+    util.ParticleTracerEx('Weapon_LaserP_Beam', eyepos, tr.HitPos, true, self:GetOwner():EntIndex(), 1)
     util.Decal('FadingScorch', tr.HitPos + tr.HitNormal, tr.HitPos - tr.HitNormal)
     self:TakePrimaryAmmo(1)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
@@ -178,7 +178,7 @@ if (SERVER) then
     ---------------------------------------------------------]]--
     function SWEP:Deploy()
         self:EmitSound('weapon_lastman_deploy')
-        return true;
+        return true
     end
 else
 

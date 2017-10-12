@@ -156,7 +156,7 @@ end
 ---------------------------------------------------------]]--
 function GM:CalcView(ply, origin, angles, fov)
 
-    local view = ply:ClassCall('CalcView', origin, angles, fov) or {['origin'] = origin, ['angles'] = angles, ['fov'] = fov};
+    local view = ply:ClassCall('CalcView', origin, angles, fov) or {['origin'] = origin, ['angles'] = angles, ['fov'] = fov}
     origin = view.origin or origin
     angles = view.angles or angles
     fov = view.fov or fov

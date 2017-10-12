@@ -44,7 +44,7 @@ local function log(color, flag, time, format, ...)
         end
     end
 
-    local log;
+    local log
     if (#data > 0) then
         log = string.format(format, unpack(data))
     elseif(type(format) == 'table') then
@@ -53,7 +53,7 @@ local function log(color, flag, time, format, ...)
         log = string.format('%s', format)
     end
 
-    local flagStr;
+    local flagStr
 
     if (flag == LOG.INFO) then
         flagStr = ' INFO: '

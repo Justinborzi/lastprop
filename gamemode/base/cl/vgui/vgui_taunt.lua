@@ -40,7 +40,7 @@ function GM:TauntMenu()
         return table.Count(letters)
     end
 
-    local count;
+    local count
     if (GetConVar('lps_tauntpack'):GetString() == 'any' and #lps.taunts.packs > 1) then
         count = #lps.taunts.packs
         for _, pack in SortedPairs(lps.taunts.packs) do

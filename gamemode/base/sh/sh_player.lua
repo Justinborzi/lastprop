@@ -42,11 +42,11 @@ end
 --             If you want to disable footsteps on a class, set Class.DisableFootsteps to true.
 ---------------------------------------------------------]]--
 function GM:PlayerFootstep(ply, pos, foot, sound, volume, rf)
-    local class = ply:Class();
+    local class = ply:Class()
     if(not class) then return end
-    if(class.disableFootsteps) then return true; end
+    if(class.disableFootsteps) then return true end
     if(class.Footstep) then
-        local footstep = class:Footstep(ply, pos, foot, sound, volume, rf);
+        local footstep = class:Footstep(ply, pos, foot, sound, volume, rf)
         if(footstep ~= nil) then
             return footstep
         end
