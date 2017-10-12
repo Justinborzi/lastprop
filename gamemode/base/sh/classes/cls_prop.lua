@@ -376,6 +376,7 @@ function CLASS:CanSpawn(ply)
     if (GAMEMODE:InPreRound() and (GAMEMODE:GetConfig('preround_time')/2) > (GAMEMODE:RoundStartTime()-CurTime())) then return false end
     if (GAMEMODE:InRound()) then return false end
     if (GAMEMODE:InPostRound()) then return false end
+    if (GAMEMODE:InGame() and not GAMEMODE:InRound() and not GAMEMODE:InPostRound() and not GAMEMODE:InPreRound()) then return false end
     if (GAMEMODE:InPostGame()) then return false end
     return true
 end
