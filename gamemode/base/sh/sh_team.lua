@@ -16,7 +16,7 @@ function GM:CreateTeams()
         if t.id and t.name and t.color then team.SetUp(t.id, t.name, t.color, true) end
         if t.id and t.spawns and #t.spawns > 0 then team.SetSpawnPoint(t.id, t.spawns) end
         if t.id and t.class then team.SetClass(t.id, t.class) end
-        lps.Info('Set up team: %s\n', t.name)
+        lps.Info('Set up team: %s', t.name)
     end
 end
 

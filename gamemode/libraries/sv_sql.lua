@@ -10,7 +10,7 @@ lps = lps or {};
 local type = type;
 local tostring = tostring;
 local table = table;
-local moduleNotExist = 'The %s module does not exist!\n';
+local moduleNotExist = 'The %s module does not exist!';
 
 local QUERY = {};
 QUERY.__index = QUERY;
@@ -131,7 +131,7 @@ local function BuildSelectQuery(queryObj)
     if (type(queryObj.tableName) == 'string') then
         queryString[#queryString + 1] = ' FROM `' .. queryObj.tableName .. '` ';
     else
-        hook.Call('DBError', GAMEMODE, 'No table name specified!\n');
+        hook.Call('DBError', GAMEMODE, 'No table name specified!');
         return;
     end;
 
@@ -161,7 +161,7 @@ local function BuildInsertQuery(queryObj)
     if (type(queryObj.tableName) == 'string') then
         queryString[#queryString + 1] = ' `' .. queryObj.tableName .. '`';
     else
-        hook.Call('DBError', GAMEMODE, 'No table name specified!\n');
+        hook.Call('DBError', GAMEMODE, 'No table name specified!');
         return;
     end;
 
@@ -186,7 +186,7 @@ local function BuildUpdateQuery(queryObj)
     if (type(queryObj.tableName) == 'string') then
         queryString[#queryString + 1] = ' `' .. queryObj.tableName .. '`';
     else
-        hook.Call('DBError', GAMEMODE, 'No table name specified!\n');
+        hook.Call('DBError', GAMEMODE, 'No table name specified!');
         return;
     end;
 
@@ -221,7 +221,7 @@ local function BuildDeleteQuery(queryObj)
     if (type(queryObj.tableName) == 'string') then
         queryString[#queryString + 1] = ' `' .. queryObj.tableName .. '`';
     else
-        hook.Call('DBError', GAMEMODE, 'No table name specified!\n');
+        hook.Call('DBError', GAMEMODE, 'No table name specified!');
         return;
     end;
 
@@ -244,7 +244,7 @@ local function BuildDropQuery(queryObj)
     if (type(queryObj.tableName) == 'string') then
         queryString[#queryString + 1] = ' `' .. queryObj.tableName .. '`';
     else
-        hook.Call('DBError', GAMEMODE, 'No table name specified!\n');
+        hook.Call('DBError', GAMEMODE, 'No table name specified!');
         return;
     end;
 
@@ -257,7 +257,7 @@ local function BuildTruncateQuery(queryObj)
     if (type(queryObj.tableName) == 'string') then
         queryString[#queryString + 1] = ' `' .. queryObj.tableName .. '`';
     else
-        hook.Call('DBError', GAMEMODE, 'No table name specified!\n');
+        hook.Call('DBError', GAMEMODE, 'No table name specified!');
         return;
     end;
 
@@ -270,7 +270,7 @@ local function BuildCreateQuery(queryObj)
     if (type(queryObj.tableName) == 'string') then
         queryString[#queryString + 1] = ' `' .. queryObj.tableName .. '`';
     else
-        hook.Call('DBError', GAMEMODE, 'No table name specified!\n');
+        hook.Call('DBError', GAMEMODE, 'No table name specified!');
         return;
     end;
 
@@ -433,11 +433,11 @@ function lps.sql:RawQuery(query, callback, flags,  ...)
                     local bStatus, value = pcall(callback, result[1]['data'], queryStatus, result[1]['lastid']);
 
                     if (!bStatus) then
-                        hook.Call('DBError', GAMEMODE, string.format('SQL Callback Error!\n%s\n', value));
+                        hook.Call('DBError', GAMEMODE, string.format('SQL Callback Error!%s', value));
                     end;
                 end;
             else
-                hook.Call('DBError', GAMEMODE, string.format('SQL Query Error!\nQuery: %s\n%s\n', query, result[1]['error']));
+                hook.Call('DBError', GAMEMODE, string.format('SQL Query Error!Query: %s%s', query, result[1]['error']));
             end;
         end, queryFlag,  ...);
     elseif (self.module == 'mysqloo') then
@@ -450,13 +450,13 @@ function lps.sql:RawQuery(query, callback, flags,  ...)
                 local bStatus, value = pcall(callback, result, true, queryObj:lastInsert());
 
                 if (!bStatus) then
-                    hook.Call('DBError', GAMEMODE, string.format('SQL Callback Error!\n%s\n', value));
+                    hook.Call('DBError', GAMEMODE, string.format('SQL Callback Error!%s', value));
                 end;
             end;
         end;
 
         queryObj.onError = function(queryObj, errorText)
-            hook.Call('DBError', GAMEMODE, string.format('SQL Query Error!\nQuery: %s\n%s\n', query, errorText));
+            hook.Call('DBError', GAMEMODE, string.format('SQL Query Error!Query: %s%s', query, errorText));
         end;
 
         queryObj:start();
@@ -464,18 +464,18 @@ function lps.sql:RawQuery(query, callback, flags,  ...)
         local result = sql.Query(query);
 
         if (result == false) then
-            hook.Call('DBError', GAMEMODE, string.format('SQL Query Error!\nQuery: %s\n%s\n', query, sql.LastError()));
+            hook.Call('DBError', GAMEMODE, string.format('SQL Query Error!Query: %s%s', query, sql.LastError()));
         else
             if (callback) then
                 local bStatus, value = pcall(callback, result);
 
                 if (!bStatus) then
-                    hook.Call('DBError', GAMEMODE, string.format('SQL Callback Error!\n%s\n', value));
+                    hook.Call('DBError', GAMEMODE, string.format('SQL Callback Error!%s', value));
                 end;
             end;
         end;
     else
-        hook.Call('DBError', GAMEMODE, string.format('Unsupported module \'%s\'!\n', self.module));
+        hook.Call('DBError', GAMEMODE, string.format('Unsupported module \'%s\'!', self.module));
     end;
 end;
 

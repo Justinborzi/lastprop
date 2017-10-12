@@ -65,7 +65,7 @@ end
 --   Name: GM:OnStartGame()
 ---------------------------------------------------------]]--
 function GM:OnStartGame()
-    lps.Info('Game Started!\n')
+    lps.Info('Game Started!')
 end
 
 --[[---------------------------------------------------------
@@ -85,7 +85,7 @@ end
 ---------------------------------------------------------]]--
 function GM:OnEndGame()
     util.KillAll()
-    lps.Info('Game Ended!\n')
+    lps.Info('Game Ended!')
 end
 
 --[[---------------------------------------------------------
