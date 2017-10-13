@@ -48,6 +48,18 @@ function PANEL:DrawFrame()
         self:Remove()
     end
 
+
+    local issues = vgui.Create('LPSButton', bottom)
+    issues:SetWide(120)
+    issues:Dock(LEFT)
+    issues:SetText('Report an Isssue')
+    issues:DockMargin(4, 4, 4, 4)
+    issues.DoClick = function(button)
+        gui.OpenURL('https://github.com/gluaws/lastprop/issues')
+        surface.PlaySound('ui/buttonclickrelease.wav')
+        self:Remove()
+    end
+
     local loading = vgui.Create('DLabel', self)
     loading:SetText('Loading...')
     loading:SetColor(Color(0,0,0))
