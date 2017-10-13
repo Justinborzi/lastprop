@@ -1,4 +1,3 @@
-
 --[[---------------------------------------------------------
 --   Name: GM:PreDrawHalos()
 ---------------------------------------------------------]]--
@@ -92,7 +91,6 @@ function GM:HUDPaint()
         surface.DrawLine(pos.x - 1, pos.y, pos.x + 1, pos.y)
         surface.DrawLine(pos.x, pos.y - 1, pos.x, pos.y + 1)
     end
-
 
     if (lps and lps.version and lps.version == 'dev' and not GetConVar('lps_hidehud'):GetBool()) then
         draw.DrawText('This gamemode is a development version, please report any bugs you see!', 'LPS16', 20, ScrH() - 25, util.Rainbow(), TEXT_ALIGN_LEFT)

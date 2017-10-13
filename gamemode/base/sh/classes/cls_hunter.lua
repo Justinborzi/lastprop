@@ -113,7 +113,7 @@ function CLASS:CalcView(ply, origin, angles, fov)
 
     local view = {}
 
-    if (ply:GetVar('blinded', false)) then
+    if (ply:GetVar('blinded', false) and ply:IsFrozen()) then
         view.origin = Vector(20000, 0, 0)
         view.angles = Angle(0, 0, 0)
         view.fov    = fov

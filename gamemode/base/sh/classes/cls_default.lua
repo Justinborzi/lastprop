@@ -104,7 +104,7 @@ end
 --[[---------------------------------------------------------
 --   Name: CLASS:CalcViewModelView()
 ---------------------------------------------------------]]--
-function CLASS:CalcViewModelView(ply, weapon, vm, old_eyePos, old_eyeAng, eyePos, eyeAng)
+function CLASS:CalcViewModelView(ply, weapon, vm, oldEyePos, oldEyeAng, eyePos, eyeAng)
 
 end
 
