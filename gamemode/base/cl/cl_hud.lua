@@ -8,14 +8,14 @@ function GM:PreDrawHalos()
     if (not IsValid(localPlayer)) then return end
     localPlayer:ClassCall('PreDrawHalos')
 
-    local lastMan = GAMEMODE:LastMan(TEAM.PROPS)
-    if (IsValid(lastMan)) and (lastMan ~= LocalPlayer()) and (GAMEMODE:InRound()) then
-        local disguise = lastMan:GetDisguise()
-        if (IsValid(disguise)) then
-            halo.Add({disguise}, util.Rainbow(), 2, 2, 1)
-        else
-            halo.Add({lastMan}, util.Rainbow(), 2, 2, 1)
-        end
+    local lastMan = self:LastMan(TEAM.PROPS)
+    if (not IsValid(lastMan)) or (not self:InRound()) then return end
+
+    local disguise = lastMan:GetDisguise()
+    if (IsValid(disguise)) then
+        halo.Add({disguise}, util.Rainbow(), 2, 2, 1)
+    else
+        halo.Add({lastMan}, util.Rainbow(), 2, 2, 1)
     end
 end
 
@@ -61,9 +61,8 @@ end
 --   Name: GM:AddHUDItem()
 ---------------------------------------------------------]]--
 function GM:AddHUDItem(item, pos, parent)
-    if (IsValid(self.hud)) then
-        self.hud:AddItem(item, pos, parent)
-    end
+    if (not IsValid(self.hud)) then return end
+    self.hud:AddItem(item, pos, parent)
 end
 
 --[[---------------------------------------------------------

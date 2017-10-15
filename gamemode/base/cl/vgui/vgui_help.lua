@@ -26,6 +26,17 @@ function PANEL:DrawFrame()
         draw.RoundedBox(0, 0, 0, w, h, Color(149, 165, 166))
     end
 
+    local issues = vgui.Create('LPSButton', bottom)
+    issues:SetWide(120)
+    issues:Dock(LEFT)
+    issues:SetText('Report an Isssue')
+    issues:DockMargin(4, 4, 4, 4)
+    issues.DoClick = function(button)
+        gui.OpenURL('https://github.com/gluaws/lastprop/issues')
+        surface.PlaySound('ui/buttonclickrelease.wav')
+        self:Remove()
+    end
+
     local options = vgui.Create('LPSButton', bottom)
     options:SetWide(120)
     options:Dock(RIGHT)
@@ -44,18 +55,6 @@ function PANEL:DrawFrame()
     bindings:DockMargin(4, 4, 4, 4)
     bindings.DoClick = function(button)
         RunConsoleCommand('lps_show_bindings')
-        surface.PlaySound('ui/buttonclickrelease.wav')
-        self:Remove()
-    end
-
-
-    local issues = vgui.Create('LPSButton', bottom)
-    issues:SetWide(120)
-    issues:Dock(LEFT)
-    issues:SetText('Report an Isssue')
-    issues:DockMargin(4, 4, 4, 4)
-    issues.DoClick = function(button)
-        gui.OpenURL('https://github.com/gluaws/lastprop/issues')
         surface.PlaySound('ui/buttonclickrelease.wav')
         self:Remove()
     end
