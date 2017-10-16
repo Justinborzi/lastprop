@@ -217,6 +217,7 @@ function GM:PlayerDeath(victim, inflictor, attacker)
     end
 
     lps.Log('%s was killed by %s', victim:Nick(), attacker:GetClass())
+
 end
 
 --[[---------------------------------------------------------

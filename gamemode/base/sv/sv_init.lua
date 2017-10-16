@@ -19,9 +19,6 @@ function GM:Initialize()
     self:InPreGame(true)
     self:Paused(true)
     self:DBInitialize()
-    if (self:GetConfig('team_auto_balance')) then
-        timer.Create('CheckTeamBalance', 15, 0, function() GAMEMODE:CheckTeamBalance() end)
-    end
 end
 
 --[[---------------------------------------------------------

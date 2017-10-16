@@ -104,16 +104,16 @@ function GM:FindLeastCommittedOnTeam(teamID)
         end
     end
     if worstTeamSwapper then
-        return worstTeamSwapper, 'They changed teams recently'
+        return worstTeamSwapper, 'They changed teams recently.'
     end
-    return worstTeamSwapper, 'Least points on their team'
+    return worstTeamSwapper, 'Least points on their team.'
 end
 
 --[[---------------------------------------------------------
 --   Name: GM:CheckTeamBalance()
 ---------------------------------------------------------]]--
 function GM:CheckTeamBalance()
-    if(not self:GetConfig('team_auto_balance')) then timer.Destroy('CheckTeamBalance') return end
+    if(not self:GetConfig('team_auto_balance')) then return end
 
     local highest
     for id, tm in pairs(team.GetAllTeams()) do
@@ -131,7 +131,6 @@ function GM:CheckTeamBalance()
             if team.NumPlayers(id) < team.NumPlayers(highest) then
                 while team.NumPlayers(id) < team.NumPlayers(highest) - 1 do
                     local ply, reason = self:FindLeastCommittedOnTeam(highest)
-                    if (ply:Alive()) then continue end
                     self:PlayerSetTeam(ply, id)
                     util.Notify(nil, string.format('%s has been changed to %s for team balance. (%s)', ply:Nick(), team.GetName(id), reason))
                 end

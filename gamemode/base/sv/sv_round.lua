@@ -177,6 +177,10 @@ end
 --   Name: GM:OnRoundEnd()
 ---------------------------------------------------------]]--
 function GM:OnRoundEnd(teamID, num)
+    if(self:GetConfig('team_auto_balance')) then
+        self:CheckTeamBalance()
+    end
+
     if (teamID == ROUND.TIMER) then
         team.AddScore(TEAM.PROPS, 1)
         util.Notify(nil, 'Round Over! ', team.GetColor(TEAM.PROPS), team.GetName(TEAM.PROPS), NOTIFY.DEFAULT, ' Won!')
