@@ -439,7 +439,10 @@ function CLASS:OnRoundEnd(ply, teamID, num)
 end
 
 function CLASS:PlayerCanPickupWeapon(ply, weapon)
-    return GAMEMODE:InRound() and ply:IsLastMan() or true
+    if (GAMEMODE:InRound() and ply:IsLastMan()) then return true end
+    if (GAMEMODE:InPreGame()) then return true end
+    if (GAMEMODE:InPostRound()) then return true end
+    return false
 end
 
 function CLASS:AllowPlayerPickup(ply, ent)

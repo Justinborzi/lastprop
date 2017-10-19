@@ -24,6 +24,8 @@ end
 --   Name: GM:PlayerJoinTeam()
 ---------------------------------------------------------]]--
 function GM:PlayerJoinTeam(ply, newTeam)
+    if (not IsValid(ply)) then return end
+
     local oldTeam = ply:Team()
 
     ply:ClassCall('Cleanup')
@@ -38,8 +40,11 @@ function GM:PlayerJoinTeam(ply, newTeam)
 
     ply:SetTeam(newTeam)
     ply:ClassCall('Setup')
-    ply:SetVar('lastTeamChange', CurTime(), true)
     ply:SetVar('team', newTeam)
+
+    if (not table.HasValue({TEAM.SPECTATORS, TEAM.UNASSIGNED, TEAM.CONNECTING}, newTeam)) then
+        ply:SetVar('lastTeamChange', CurTime(), true)
+    end
 
     if (table.HasValue({TEAM.SPECTATORS, TEAM.UNASSIGNED, TEAM.CONNECTING}, newTeam)) then
         self:PlayerSpawnAsSpectator(ply)
@@ -60,6 +65,8 @@ end
 --   Name: GM:PlayerSetTeam()
 ---------------------------------------------------------]]--
 function GM:PlayerSetTeam(ply, newTeam)
+    if (not IsValid(ply)) then return end
+
     local oldTeam = ply:Team()
 
     ply:ClassCall('Cleanup')
@@ -94,19 +101,24 @@ end
 --   Name: GM:FindLeastCommittedOnTeam()
 ---------------------------------------------------------]]--
 function GM:FindLeastCommittedOnTeam(teamID)
-    local worst, worstTeamSwapper
-    for k, v in pairs(team.GetPlayers(teamID)) do
-        if (v:GetVar('lastTeamChange', nil) and CurTime() < v:GetVar('lastTeamChange', nil) + 180 and (not worstTeamSwapper or worstTeamSwapper:GetVar('lastTeamChange', nil) < v:GetVar('lastTeamChange', nil))) then
-            worstTeamSwapper = v
-        end
-        if (not worst or v:Frags() < worst:Frags()) then
-            worst = v
-        end
-    end
-    if worstTeamSwapper then
-        return worstTeamSwapper, 'They changed teams recently.'
-    end
-    return worstTeamSwapper, 'Least points on their team.'
+	local worst, worstTeamSwapper
+
+	for k, v in pairs(team.GetPlayers(teamID)) do
+        local lastTeamChange = v:GetVar('lastTeamChange', nil)
+		if (lastTeamChange and (CurTime() < lastTeamChange + 180) and (not worstteamswapper or worstteamswapper:GetVar('lastTeamChange', nil) < lastTeamChange)) then
+			worstTeamSwapper = v
+		end
+
+		if (not worst or (v:Frags() < worst:Frags())) then
+			worst = v
+		end
+	end
+
+	if (worstTeamSwapper) then
+		return worstTeamSwapper, 'They changed teams recently.'
+	end
+
+	return worst, 'Least points on their team.'
 end
 
 --[[---------------------------------------------------------
@@ -116,25 +128,26 @@ function GM:CheckTeamBalance()
     if(not self:GetConfig('team_auto_balance')) then return end
 
     local highest
-    for id, tm in pairs(team.GetAllTeams()) do
-        if (id > 0 and id < 1000 and team.Joinable(id)) then
-            if (not highest or team.NumPlayers(id) > team.NumPlayers(highest)) then
-                highest = id
-            end
-        end
-    end
+	for id, tm in pairs(team.GetAllTeams()) do
+		if (id > 0 and id < 1000 and team.Joinable(id)) then
+			if (not highest or team.NumPlayers(id) > team.NumPlayers(highest)) then
+				highest = id
+			end
+		end
+	end
 
-    if not highest then return end
+	if not highest then return end
 
-    for id, tm in pairs(team.GetAllTeams()) do
-        if (id ~= highest and id > 0 and id < 1000 and team.Joinable(id)) then
-            if team.NumPlayers(id) < team.NumPlayers(highest) then
-                while team.NumPlayers(id) < team.NumPlayers(highest) - 1 do
+	for id, tm in pairs(team.GetAllTeams()) do
+		if (id ~= highest and id > 0 and id < 1000 and team.Joinable(id)) then
+			if team.NumPlayers(id) < team.NumPlayers(highest) then
+				while team.NumPlayers(id) < team.NumPlayers(highest) - 1 do
                     local ply, reason = self:FindLeastCommittedOnTeam(highest)
+                    if (not IsValid(ply)) then return end
                     self:PlayerSetTeam(ply, id)
                     util.Notify(nil, string.format('%s has been changed to %s for team balance. (%s)', ply:Nick(), team.GetName(id), reason))
-                end
-            end
-        end
-    end
+				end
+			end
+		end
+	end
 end
