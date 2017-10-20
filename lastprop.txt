@@ -3,7 +3,7 @@
     "base"          "base"
     "title"         "Last Prop Standing"
 
-    "version"       "dev"
+    "version"       "1.0.1"
     "menusystem"    "1"
     "maps"          "^lps_"
     "workshopid"    "1150837716"
