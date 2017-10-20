@@ -85,9 +85,6 @@ if (SERVER) then
         for id, tag in pairs(config.support) do
             lps.support[string.upper(id)] = tag
         end
-        if (config.version == 'dev') then
-            lps.Warning('Using a development version of the gamemode! You might experience bugs!')
-        end
     end
 
     timer.Simple(1, function()
@@ -97,15 +94,15 @@ if (SERVER) then
                 lps.Warning('UNABLE TO CHECK FOR UPDATE!')
                 return
             end
-            local config = util.JSONToTable(body)
-            if(lps.version ~= 'dev' ) then
-                if(config.version ~= lps.version) then
-                    lps.Log('There\'s a new update! v%s is out! Go to \'%s\' to download and view changelogs!', config.version, config.download_url)
-                else
-                    lps.Log('v%s is up to date! Enjoy!', lps.version)
-                end
+            local info = util.JSONToTable(body)
+            if (lps.version ~= 'dev') then
+                lps.Warning('Using a development version of the gamemode! You might experience bugs!')
+            elseif (info.version ~= lps.version) then
+                lps.Warning('There\'s a new update! v%s is out! Go to \'%s\' to download and view changelogs!', info.version, info.download_url)
+            else
+                lps.Log('v%s is up to date! Enjoy!', lps.version)
             end
-            for id, tag in pairs(config.support) do
+            for id, tag in pairs(info.support) do
                 lps.support[string.upper(id)] = tag
             end
         end,
