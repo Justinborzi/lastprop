@@ -108,7 +108,7 @@ lps.input = lps.input or {
         {KEY_LBRACKET,      219, false, '['},
         {KEY_BACKSLASH,     220, false, '\\'},
         {KEY_RBRACKET,      221, false, ']'},
-        {KEY_BACKQUOTE,     222, false, '\"'},
+        {KEY_BACKQUOTE,     222, false, '\''},
         {KEY_APOSTROPHE,    222, false, '\''}
     },
     mice = {
@@ -185,6 +185,23 @@ function lps.input:KeyData(key, keytype)
     return false
 end
 
-hook.Add('Think', 'GAMEMODE:CheckKeys', function()
+--[[---------------------------------------------------------
+--   Hook: input:CheckKeys
+---------------------------------------------------------]]--
+hook.Add('Think', 'input:CheckKeys', function()
     lps.input:CheckKeys()
+end)
+
+--[[---------------------------------------------------------
+--   Hook: StartChat:IsBusy
+---------------------------------------------------------]]--
+hook.Add('StartChat', 'StartChat:IsBusy', function()
+    hook.Add('IsBusy', 'IsBusy:Chat', function() return true end)
+end)
+
+--[[---------------------------------------------------------
+--   Hook: FinishChat:IsBusy
+---------------------------------------------------------]]--
+hook.Add('FinishChat', 'FinishChat:IsBusy', function()
+    hook.Remove('IsBusy', 'IsBusy:Chat')
 end)
