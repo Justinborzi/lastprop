@@ -403,8 +403,15 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
         return false
     end
 
+    -- All Talk
+    if (ConVarExists('sv_alltalk'):GetBool() and GetConVar('sv_alltalk'):GetBool() == true) then
+        return true,  (self:InRound() and speaker:GetVar('localChat', false))
+    end
+
     -- Let people talk if not in round
-    if (not self:InRound()) then return true end
+    if (not self:InRound()) then
+        return true
+    end
 
     -- Spectators can't talk to players
     if (speaker:IsSpec() and not listener:IsSpec()) then
@@ -442,6 +449,9 @@ function GM:PlayerCanSeePlayersChat( text, teamOnly, listener, speaker )
 
     -- Muted players
     if (listener:GetVar('muted', {})[speaker:UniqueID()]) then return false end
+
+    -- All Talk
+    if (ConVarExists('sv_alltalk'):GetBool() and GetConVar('sv_alltalk'):GetBool() == true) then return true end
 
     -- Let people talk if not in round
     if (not self:InRound()) then return true end
