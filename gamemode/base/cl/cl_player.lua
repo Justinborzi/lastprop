@@ -13,6 +13,8 @@ function GM:PlayerDeath(ply, inflictor, attacker)
     end
 
     if (self:InRound()) then
+
+        if (not IsValid(ply) or not ply:IsPlayer()) then return end
         local pnl = vgui.Create('GameNotice', g_DeathNotify)
         if (attacker == ply) then
             local class = ply:Class()
@@ -26,6 +28,7 @@ function GM:PlayerDeath(ply, inflictor, attacker)
             return
         end
 
+        if (not IsValid(attacker)) then return end
         if (attacker:IsPlayer()) then
             local class = ply:Class()
             local deathText = 'killed!'
