@@ -95,7 +95,7 @@ if (SERVER) then
                 return
             end
             local info = util.JSONToTable(body)
-            if (lps.version ~= 'dev') then
+            if (lps.version == 'dev') then
                 lps.Warning('Using a development version of the gamemode! You might experience bugs!')
             elseif (info.version ~= lps.version) then
                 lps.Warning('There\'s a new update! v%s is out! Go to \'%s\' to download and view changelogs!', info.version, info.download_url)
