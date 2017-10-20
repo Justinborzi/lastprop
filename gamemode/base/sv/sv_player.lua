@@ -404,7 +404,7 @@ function GM:PlayerCanHearPlayersVoice(listener, speaker)
     end
 
     -- All Talk
-    if (ConVarExists('sv_alltalk'):GetBool() and GetConVar('sv_alltalk'):GetBool() == true) then
+    if (ConVarExists('sv_alltalk') and GetConVar('sv_alltalk'):GetBool() == true) then
         return true,  (self:InRound() and speaker:GetVar('localChat', false))
     end
 
@@ -451,7 +451,7 @@ function GM:PlayerCanSeePlayersChat( text, teamOnly, listener, speaker )
     if (listener:GetVar('muted', {})[speaker:UniqueID()]) then return false end
 
     -- All Talk
-    if (ConVarExists('sv_alltalk'):GetBool() and GetConVar('sv_alltalk'):GetBool() == true) then return true end
+    if (ConVarExists('sv_alltalk') and GetConVar('sv_alltalk'):GetBool() == true) then return true end
 
     -- Let people talk if not in round
     if (not self:InRound()) then return true end
