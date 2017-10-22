@@ -167,7 +167,7 @@ function PANEL:DrawFrame()
             name = 'Loadout Settings',
             settings = {
                 {
-                    convar = 'lps_defaultswep',
+                    convar = 'lps_hunter_default',
                     type = 'list',
                     name = 'Hunter Default Weapon',
                     func = function()
@@ -175,9 +175,9 @@ function PANEL:DrawFrame()
                     end
                 },
                 {
-                    convar = 'lps_lastmanswep',
+                    convar = 'lps_prop_default',
                     type = 'list',
-                    name = 'Last Prop Weapon',
+                    name = 'Last Prop Default Weapon',
                     func = function()
                         return table.GetKeys(GAMEMODE:GetLoadout(LocalPlayer(), TEAM.PROPS))
                     end

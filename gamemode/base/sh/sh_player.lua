@@ -66,3 +66,12 @@ function GM:PlayerNoClip(ply, on)
     -- Don't if it's not.
     return false
 end
+
+--[[---------------------------------------------------------
+--   Name: GM:GetLoadout()
+---------------------------------------------------------]]--
+function GM:GetLoadout(ply, id)
+    if (self.loadouts[id]) then
+        return self.loadouts[id]
+    end
+end

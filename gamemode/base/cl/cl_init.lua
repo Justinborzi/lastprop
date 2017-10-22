@@ -27,8 +27,8 @@ CreateClientConVar('lps_tauntpack', 'any', true, true)      -- Taunt pack
 CreateClientConVar('lps_hidehud', '0', true, true)          -- Hide HUD
 CreateClientConVar('lps_glow', '1', true, true)             -- Glow/Halos
 CreateClientConVar('lps_minigame', 'Snake', true, true)     -- Minigame Settings
-CreateClientConVar('lps_defaultswep', 'weapon_smg1', true, true) -- Set default hunter SWEP
-CreateClientConVar('lps_lastmanswep', 'weapon_lastman', true, true) -- Set lastman SWEP
+CreateClientConVar('lps_hunter_default', 'weapon_smg1', true, true) -- Set default hunter SWEP
+CreateClientConVar('lps_prop_default', 'weapon_lastman', true, true) --Set default prop SWEP (lastman)
 
 --[[---------------------------------------------------------
 --   3rd person view
@@ -72,8 +72,8 @@ function GM:ResetConvars()
         hidehud = 0,
         glow = 1,
         minigame = 'Snake',
-        defaultswep = 'weapon_smg1',
-        lastmanswep = 'weapon_lastman',
+        hunter_default = 'weapon_smg1',
+        prop_default = 'weapon_lastman',
 
         tpvp = 1,
         tpvh = 0,

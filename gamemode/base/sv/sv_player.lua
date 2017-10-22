@@ -528,3 +528,46 @@ end
 function GM:PlayerTaunt(taunt, min, max)
 
 end
+
+--[[---------------------------------------------------------
+--   Name: GM:GiveLoadout()
+---------------------------------------------------------]]--
+function GM:GiveLoadout(ply, id)
+    if (not self.loadouts[id]) then return end
+    for wep, ammo in pairs(self.loadouts[id]) do
+        local weapon = ply:Give(wep, true)
+
+        if (weapon.GetMaxClip1) then
+            weapon:SetClip1(weapon:GetMaxClip1())
+        end
+
+        if (ammo.primary) then
+            ply:GiveAmmo(ammo.primary[2], ammo.primary[1], true)
+        end
+
+        if (ammo.secondary) then
+            ply:GiveAmmo(ammo.secondary[2], ammo.secondary[1], true)
+        end
+    end
+end
+
+--[[---------------------------------------------------------
+--   Name: GM:GiveLoadoutRandom()
+---------------------------------------------------------]]--
+function GM:GiveLoadoutRandom(ply, id)
+    if (not self.loadouts[id]) then return end
+    local swep = table.Random(table.GetKeys(self.loadouts[id]))
+    local weapon = ply:Give(swep, true)
+
+    if (weapon.GetMaxClip1) then
+        weapon:SetClip1(weapon:GetMaxClip1())
+    end
+
+    if (self.loadouts[id][swep].primary) then
+        ply:GiveAmmo(self.loadouts[id][swep].primary[2], self.loadouts[id][swep].primary[1], true)
+    end
+
+    if (self.loadouts[id].secondary) then
+        ply:GiveAmmo(self.loadouts[id][swep].secondary[2], self.loadouts[id][swep].secondary[1], true)
+    end
+end

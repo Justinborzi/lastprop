@@ -173,22 +173,10 @@ function CLASS:Loadout(ply)
     timer.Simple(0.1, function ()
         if (not IsValid(ply) and not ply:Alive()) then return end
         if (GAMEMODE:InPreGame() and GAMEMODE:GetConfig('pregame_deathmatch')) then
-            ply:Give('weapon_357')
-            ply:GiveAmmo(255, '357', true)
+            GAMEMODE:GiveLoadoutRandom(ply, 'PREGAME')
         elseif (GAMEMODE:InRound()) then
-            for wep, ammo in pairs(GAMEMODE:GetLoadout(ply, TEAM.HUNTERS)) do
-                local weapon = ply:Give(wep, true)
-                weapon:SetClip1(weapon:GetMaxClip1())
-
-                if (ammo.primary) then
-                    ply:GiveAmmo(ammo.primary[2], ammo.primary[1], true)
-                end
-                if (ammo.secondary) then
-                    ply:GiveAmmo(ammo.secondary[2], ammo.secondary[1], true)
-                end
-            end
-
-            local defult = ply:GetInfo('lps_defaultswep')
+            GAMEMODE:GiveLoadout(ply, TEAM.HUNTERS)
+            local defult = ply:GetInfo('lps_hunter_default')
             if ply:HasWeapon(defult) then
                 ply:SelectWeapon(defult)
             elseif ply:HasWeapon('weapon_smg1') then
@@ -281,10 +269,9 @@ function CLASS:OnRoundEnd(ply, teamID, num)
     end
 
     if (GAMEMODE:GetConfig('postround_deathmatch')) then
-        timer.Simple(2.5, function ()
+        timer.Simple(2, function ()
             if (IsValid(ply) and ply:Alive()) then
-                ply:Give('weapon_rpg')
-                ply:GiveAmmo(20, 'RPG_Round', true)
+                GAMEMODE:GiveLoadoutRandom(ply, 'POSTROUND')
             end
         end)
     end

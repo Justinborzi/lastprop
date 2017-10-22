@@ -33,7 +33,7 @@ function GM:TauntMenu()
             if (not letters[letter]) then
                 letters[letter] = menu:AddSubMenu(letter)
             end
-            letters[letter]:AddOption(string.format('%s (%ss)', t.label,  t.length) , function()
+            letters[letter]:AddOption(string.format('%s (%ss)', t.label, math.Round(t.length, 1)) , function()
                 RunConsoleCommand('taunt', t.name, tPack)
             end)
         end

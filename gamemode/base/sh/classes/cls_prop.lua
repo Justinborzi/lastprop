@@ -304,29 +304,17 @@ function CLASS:Loadout(ply)
         if (not IsValid(ply) and not ply:Alive()) then return end
 
         if (GAMEMODE:InPreGame() and GAMEMODE:GetConfig('pregame_deathmatch')) then
-            ply:Give('weapon_357')
-            ply:GiveAmmo(255, '357', true)
+            GAMEMODE:GiveLoadoutRandom(ply, 'PREGAME')
         end
 
         if (GAMEMODE:InRound() and ply:IsLastMan()) then
-            local sweps = GAMEMODE:GetLoadout(ply, TEAM.PROPS)
-            local swep = ply:GetInfo('lps_lastmanswep')
-            if (not sweps[swep]) then
-                swep = table.Random(table.GetKeys(sweps))
-            end
+            GAMEMODE:GiveLoadout(ply, TEAM.PROPS)
 
-            local weapon = ply:Give(swep, true)
-            weapon:SetClip1(weapon:GetMaxClip1())
-
-            if (sweps[swep].primary) then
-                ply:GiveAmmo(sweps[swep].primary[2], sweps[swep].primary[1], true)
-            end
-            if (sweps[swep].secondary) then
-                ply:GiveAmmo(sweps[swep].secondary[2], sweps[swep].secondary[1], true)
-            end
-
-            if ply:HasWeapon(swep) then
-                ply:SelectWeapon(swep)
+            local defult = ply:GetInfo('lps_prop_default')
+            if ply:HasWeapon(defult) then
+                ply:SelectWeapon(defult)
+            elseif ply:HasWeapon('weapon_lastman') then
+                ply:SelectWeapon('weapon_lastman')
             end
         end
     end)
@@ -429,10 +417,9 @@ function CLASS:OnRoundEnd(ply, teamID, num)
     ply:StripWeapons()
 
     if (GAMEMODE:GetConfig('postround_deathmatch')) then
-        timer.Simple(2.5, function ()
+        timer.Simple(2, function ()
             if (IsValid(ply) and ply:Alive()) then
-                ply:Give('weapon_rpg')
-                ply:GiveAmmo(20, 'RPG_Round', true)
+                GAMEMODE:GiveLoadoutRandom(ply, 'POSTROUND')
             end
         end)
     end
