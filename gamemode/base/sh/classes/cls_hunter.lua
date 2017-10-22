@@ -297,7 +297,7 @@ function CLASS:PlayerCanPickupWeapon(ply, weapon)
 end
 
 function CLASS:ShouldTakeDamage(ply, attacker)
-    if (IsValid(attacker) and attacker:IsPlayer() and not GAMEMODE:GetConfig('hunter_friendlyfire') and ply:Team() == attacker:Team() and ply ~= attacker and GAMEMODE:InRound()) then return false end
+    if (IsValid(attacker) and attacker:IsPlayer() and ply ~= attacker and attacker:Team() == TEAM.HUNTERS and not GAMEMODE:GetConfig('hunter_friendlyfire') and GAMEMODE:InRound()) then return false end
 end
 
 function CLASS:OnCausedDamage(ply, ent, dmgInfo)
