@@ -33,6 +33,18 @@ Last Prop Standing is a twist on the popular game mode Prop Hunt. The main diffe
 * Server Guard Support
 * and many more!
 
+### Having fun with the game mode? Want more cool stuff?
+Support the continued development of this gamemode and get cool stuff too! I have made a few modules that enhance this gamemode and put it on gmodstore! 
+* Pro Tips
+* Lucky Blocks
+* Prop Dial
+* PiP (Picture in Picture)
+* Voice Icons
+* Button Masher Minigame
+* Snake Minigame
+
+ [Read more about the extra modules here.](https://www.gmodstore.com/scripts/view/4633)
+
 ### Planed Features:
 * None at the moment! Taking Suggestions!
 
