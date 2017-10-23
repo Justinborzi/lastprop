@@ -3,23 +3,27 @@
 --   THERE IS NO VGUI FOR THIS FEATURE!
 ---------------------------------------------------------]]--
 
+GM.db = GM.db or {}
+GM.db.enabled    = GM.db.enabled    or true
+GM.db.prefix     = GM.db.prefix     or 'lps_'
+GM.db.username   = GM.db.username   or 'root'
+GM.db.password   = GM.db.password   or ''
+GM.db.database   = GM.db.database   or 'lps'
+GM.db.host       = GM.db.host       or '127.0.0.1'
+GM.db.unixsocket = GM.db.unixsocket or ''
+GM.db.module     = GM.db.module     or 'sqlite'
+
 --[[---------------------------------------------------------
 --   Name: GM:DBInitialize()
 ---------------------------------------------------------]]--
 function GM:DBInitialize()
-    local path = string.format('%s/%s', lps.paths.mod, 'database.cfg')
-    if (file.Exists(path, 'MOD')) then
-        local config = util.KeyValuesToTable(file.Read(path, 'MOD'))
-        if (config and tobool(config.enabled)) then
-            if (config.module) then
-                lps.sql:SetModule(config.module)
-                lps.sql:SetPrefix(config.prefix)
-                lps.Info('Database prefix set to \'%s\' and module set to \'%s\'.', config.prefix, config.module)
-            end
-            lps.sql:Connect(config.host, config.username, config.password, config.database, config.port, config.unixsocket)
-        else
-            lps.Warning('Unable to find database.cfg, your stats will not be saved!')
-        end
+    if (self.db.enabled) then
+        lps.sql:SetModule(self.db.config.module)
+        lps.sql:SetPrefix(self.db.config.prefix)
+        lps.Info('Database prefix set to \'%s\' and module set to \'%s\'.', self.db.prefix, self.db.module)
+        lps.sql:Connect(self.db.host, self.db.username, self.db.password, self.db.database, self.db.port, self.db.unixsocket)
+    else
+        lps.Warning('Unable to find database.cfg, your stats will not be saved!')
     end
 end
 
@@ -148,7 +152,7 @@ hook.Add('OnRoundEnd', 'DB:OnRoundEnd', function(teamID, num)
     for _, v in pairs(player.GetAll()) do
         if (not IsValid(v) or v:IsBot()) then continue end
 
-        local col = ''
+        local col
         if (teamID == ROUND.TIMER and v:Team() == TEAM.PROPS) or (teamID == v:Team()) then
             col = 'wins'
         else
