@@ -3,6 +3,7 @@ lps.mapvote.active = lps.mapvote.active or false
 lps.mapvote.endtime = lps.mapvote.endtime or 0
 lps.mapvote.votes = lps.mapvote.votes or {}
 lps.mapvote.recentMaps = lps.mapvote.recentMaps or {}
+lps.mapvote.mapExtends = lps.mapvote.mapExtends or 0
 lps.mapvote.rtv = lps.mapvote.rtv or {
     queued = false,
     votes = {},
@@ -11,6 +12,8 @@ lps.mapvote.config = lps.mapvote.config or {
     voteTime = 20,
     mapsToVote = 10,
     mapRevoteBanRounds = 4,
+    mapAllowExtend = false,
+    mapMaxExtends = 4,
     mapPrefixes = {'lps_', 'cs_', 'ph_', 'ttt_', 'mu_', 'rp_'},
     mapExcludes = {},
     rtvMinPlayers = 4,
@@ -52,6 +55,14 @@ function lps.mapvote:GetMaps()
 
         table.insert(maps, map)
     end
+
+    if (self.config.mapAllowExtend and not table.HasValue(maps, game.GetMap())) then
+        if (self.config.mapMaxExtends > 0 and self.mapExtends >= self.config.mapMaxExtends) then
+            return maps
+        end
+        table.insert(maps, 1, game.GetMap())
+    end
+
     return maps
 end
 
@@ -93,6 +104,18 @@ function lps.mapvote:Finish()
         winner = table.Random(table.GetKeys(self.votes))
     end
 
+    lps.net.Start(nil, 'Mapvote:Finish', {winner})
+
+    if (winner == game.GetMap()) then
+        timer.Simple(5, function()
+            self:Cancel()
+            util.Notify(nil, NOTIFY.YELLOW, 'Everyone voted to extend the map! New game starting!')
+            self.mapExtends = self.mapExtends + 1
+            GAMEMODE:StartGame()
+        end)
+        return
+    end
+
     local recentMaps = {}
     if (#self.recentMaps + 1  > self.config.mapRevoteBanRounds) then
         for i=1, (self.config.mapRevoteBanRounds - 1) do
@@ -103,8 +126,6 @@ function lps.mapvote:Finish()
 
     lps.fs:Save('recent_maps.txt', recentMaps)
 
-    lps.net.Start(nil, 'Mapvote:Finish', {winner})
-
     timer.Simple(5, function()
         RunConsoleCommand('changelevel', winner)
     end)
@@ -112,9 +133,15 @@ end
 
 function lps.mapvote:Cancel()
     if (not self.active) then return end
+
+    hook.Remove('CanStartRound', 'MapVote:CanStartRound')
+    hook.Remove('CanStartNextRound', 'MapVote:CanStartNextRound')
+    hook.Remove('OnRoundEnd', 'MapVote:OnRoundEnd')
+
     self.active = false
     self.endtime = 0
     self.votes = {}
+
     lps.net.Start(nil, 'Mapvote:Cancel', {1})
     timer.Destroy('Mapvote:Finish')
 end
@@ -161,6 +188,12 @@ hook.Add('Initialize', 'Mapvote:Initialize', function()
         lps.mapvote.recentMaps = recentMaps
     end
 end)
+
+hook.Add('PlayerDisconnected', 'Mapvote:PlayerDisconnected', function(ply)
+    if (not lps.mapvote.active) then return end
+    lps.net.Start(nil, 'Mapvote:Update', {'disconnected', ply:UserID()})
+end)
+
 
 hook.Add('PlayerInitialSpawn', 'Mapvote:PlayerInitialSpawn', function(ply)
     if (not lps.mapvote.active) then return end

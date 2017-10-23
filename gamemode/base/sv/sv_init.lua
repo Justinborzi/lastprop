@@ -69,9 +69,18 @@ end
 --   Name: GM:StartGame()
 ---------------------------------------------------------]]--
 function GM:StartGame()
-    self:InPreGame(false)
-    hook.Call('OnStartGame', self)
+    if(self:InPreGame()) then
+        self:InPreGame(false)
+    end
+
+    if(self:InPostGame()) then
+        self:InPostGame(false)
+    end
+
     self:InGame(true)
+
+    hook.Call('OnStartGame', self)
+
     self:CleanMap()
     util.ForceSpawnAll()
     self:PreRoundStart(1)
@@ -89,9 +98,17 @@ end
 --   Name: GM:EndGame()
 ---------------------------------------------------------]]--
 function GM:EndGame()
-    self:InGame(false)
-    hook.Call('OnEndGame', self)
+    if(self:InPreGame()) then
+        self:InPreGame(false)
+    end
+
+    if(self:InGame()) then
+        self:InGame(false)
+    end
+
     self:InPostGame(true)
+
+    hook.Call('OnEndGame', self)
 end
 
 --[[---------------------------------------------------------

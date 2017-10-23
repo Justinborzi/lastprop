@@ -130,7 +130,7 @@ end
 
 function PANEL:UpdateVoters()
     for id, icon in pairs(self.voters) do
-        if (not table.HasValue(lps.mapvote.votes[self.map], id)) then
+        if (not IsValid(Player(id)) or not table.HasValue(lps.mapvote.votes[self.map], id)) then
             self:RemoveVoter(id)
         end
     end
