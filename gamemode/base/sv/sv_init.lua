@@ -69,11 +69,11 @@ end
 --   Name: GM:StartGame()
 ---------------------------------------------------------]]--
 function GM:StartGame()
-    if(self:InPreGame()) then
+    if (self:InPreGame()) then
         self:InPreGame(false)
     end
 
-    if(self:InPostGame()) then
+    if (self:InPostGame()) then
         self:InPostGame(false)
     end
 
@@ -98,11 +98,11 @@ end
 --   Name: GM:EndGame()
 ---------------------------------------------------------]]--
 function GM:EndGame()
-    if(self:InPreGame()) then
+    if (self:InPreGame()) then
         self:InPreGame(false)
     end
 
-    if(self:InGame()) then
+    if (self:InGame()) then
         self:InGame(false)
     end
 
@@ -130,6 +130,7 @@ function GM:Pause()
     if (timer.Exists('pregameStart')) then
         timer.Destroy('pregameStart')
     end
+
     if (self:InRound()) then
         self:RoundEnd(self:Round())
     end
