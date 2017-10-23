@@ -169,6 +169,9 @@ GM.loadouts['POSTROUND'] = GM.loadouts['POSTROUND'] or {
 
 GM.loadouts[TEAM.PROPS] = GM.loadouts[TEAM.PROPS] or {
     weapon_lastman = {},
+    weapon_rpg = {
+        primary = {'RPG_Round', 1}
+    },
 }
 
 GM.loadouts[TEAM.HUNTERS] = GM.loadouts[TEAM.HUNTERS] or {
