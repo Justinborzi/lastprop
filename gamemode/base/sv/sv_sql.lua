@@ -18,8 +18,8 @@ GM.db.module     = GM.db.module     or 'sqlite'
 ---------------------------------------------------------]]--
 function GM:DBInitialize()
     if (self.db.enabled) then
-        lps.sql:SetModule(self.db.config.module)
-        lps.sql:SetPrefix(self.db.config.prefix)
+        lps.sql:SetModule(self.db.module)
+        lps.sql:SetPrefix(self.db.prefix)
         lps.Info('Database prefix set to \'%s\' and module set to \'%s\'.', self.db.prefix, self.db.module)
         lps.sql:Connect(self.db.host, self.db.username, self.db.password, self.db.database, self.db.port, self.db.unixsocket)
     else
