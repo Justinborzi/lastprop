@@ -477,7 +477,9 @@ end
 --   Name: GM:PlayerSay()
 ---------------------------------------------------------]]--
 function GM:PlayerSay(ply, text, teamChat)
-    if table.HasValue({'stuck', '!stuck', '/stuck', 'unstuck', '!unstuck', '/unstuck', 'unstick', '!unstick', '/unstick'}, string.lower(text)) then
+
+    local cmd = string.lower(string.Trim(text))
+    if table.HasValue({'stuck', '!stuck', '/stuck', 'unstuck', '!unstuck', '/unstuck', 'unstick', '!unstick', '/unstick'}, cmd) then
         if (ply:IsStuck()) then
             util.Notify(ply, '[STUCK] Attempting to unstick you!')
             if(ply:UnStick()) then
@@ -490,11 +492,11 @@ function GM:PlayerSay(ply, text, teamChat)
         end
         return ''
     end
-    if table.HasValue({'settings', '!settings', '/settings', 'options', '!options', '/options'}, string.lower(text)) then
+    if table.HasValue({'settings', '!settings', '/settings', 'options', '!options', '/options'}, cmd) then
         ply:ConCommand('lps_show_options')
         return ''
     end
-    if table.HasValue({'bindings', '!bindings', '/bindings'}, string.lower(text)) then
+    if table.HasValue({'bindings', '!bindings', '/bindings'}, cmd) then
         ply:ConCommand('lps_show_bindings')
         return ''
     end

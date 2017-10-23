@@ -25,10 +25,10 @@ end
 --[[---------------------------------------------------------
 --   Name: lps.fs:Save()
 ---------------------------------------------------------]]--
-function lps.fs:Save(sFile, data)
+function lps.fs:Save(sFile, data, pretty)
     if (not file.Exists(lps.paths.data, 'DATA')) then
         file.CreateDir(lps.paths.data)
     end
-    file.Write(string.format('%s/%s',  lps.paths.data, sFile), util.TableToJSON(data))
+    file.Write(string.format('%s/%s',  lps.paths.data, sFile),  util.TableToJSON(data, pretty))
     lps.Info('Saved file \'%s\'', sFile)
 end
