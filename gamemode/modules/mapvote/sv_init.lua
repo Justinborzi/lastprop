@@ -27,11 +27,20 @@ lps.mapvote.config = lps.mapvote.config or {
 function lps.mapvote:GetMaps()
     local maps = {}
 
+    if (self.config.mapAllowExtend and (self.config.mapMaxExtends == 0 or self.mapExtends <= self.config.mapMaxExtends)) then
+        table.insert(maps, game.GetMap())
+    end
+
     for _, map in RandomPairs(file.Find('maps/*.bsp', 'GAME')) do
 
-        local map = map:sub(1, -5)
+        map = map:sub(1, -5)
+
         if (#maps >= self.config.mapsToVote) then
             break
+        end
+
+        if (table.HasValue(maps, map)) then
+            continue
         end
 
         if (table.HasValue(self.recentMaps, map)) then
@@ -54,13 +63,6 @@ function lps.mapvote:GetMaps()
         end
 
         table.insert(maps, map)
-    end
-
-    if (self.config.mapAllowExtend and not table.HasValue(maps, game.GetMap())) then
-        if (self.config.mapMaxExtends > 0 and self.mapExtends >= self.config.mapMaxExtends) then
-            return maps
-        end
-        table.insert(maps, 1, game.GetMap())
     end
 
     return maps
