@@ -409,6 +409,7 @@ function GM:AddScoreboardIcon(score)
         local icon = vgui.Create('LPSInfoBox', panel)
         icon:SetImage(hook.Call('GetPlayerScoreboardIcon', self, ply) or  'icon16/user.png')
         icon:SetInfo(hook.Call('GetPlayerScoreboardIconText', self, ply) or '')
+        icon:SetInfoSize(120, 40)
         icon:SetPos(8, 8)
         icon:SetSize(16, 16)
 

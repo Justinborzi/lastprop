@@ -484,6 +484,17 @@ AccessorFunc(PANEL, 'info', 'Info', FORCE_STRING)
 function PANEL:Init()
     self:SetImage('icon16/help.png')
     self:SetMouseInputEnabled(true)
+
+    self.infoW = 200
+    self.infoH = 90
+end
+
+--[[---------------------------------------------------------
+--   Name: PANEL:Think()
+---------------------------------------------------------]]--
+function PANEL:SetInfoSize(w, h)
+    self.infoW = w
+    self.infoH = h
 end
 
 --[[---------------------------------------------------------
@@ -494,7 +505,7 @@ function PANEL:Think()
     if (info and info ~= '' and self:IsHovered() and not IsValid(self.infobox)) then
 
         local x, y = self:LocalToScreen(8,8)
-        local w, h = 120, 40
+        local w, h = self.infoW, self.infoH
         local text = util.textWrap(info, 'LPS14', w - 10)
 
         self.infobox = vgui.Create('DPanel')
