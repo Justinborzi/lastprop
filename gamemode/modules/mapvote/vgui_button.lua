@@ -25,7 +25,13 @@ function PANEL:Init()
         self.force:SetText('Force Map')
         self.force:Dock(BOTTOM)
         self.force.DoClick = function()
-            lps.net.Start('Mapvote:Force', {self.map})
+            Derma_Query('Are you sure you want to force map \'' .. self.map .. '\'?', 'Force map?',
+            'Yes', function()
+                lps.net.Start('Mapvote:Force', {self.map})
+            end,
+            'No', function()
+                -- DO NOTHING
+            end)
         end
     end
 

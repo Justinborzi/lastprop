@@ -156,7 +156,8 @@ function lps.mapvote:VotePower(ply)
 end
 
 lps.net.Hook('Mapvote:Force', function(ply, data)
-    if (ply:IsAdmin()) then
+    if (IsValid(ply) and ply:IsAdmin()) then
+        util.Notify(nil, NOTIFY.YELLOW, '%s forced mapvote to %s', ply:Nick(), data[1])
         lps.mapvote:Finish(data[1])
     end
 end)
@@ -258,7 +259,7 @@ function lps.mapvote:RTV(ply)
             self:Start()
         end
     else
-        util.Notify(nil, NOTIFY.GREEN, ply:Nick(), NOTIFY.YELLOW, string.format(' wants to start a map vote. (%i/%i)', votes, math.ceil(percentage * players)))
+        util.Notify(nil, NOTIFY.GREEN, ply:Nick(), NOTIFY.YELLOW, string.format(' wants to start a map vote. (%i/%i) Type \'!rtv\' to cast your vote!', votes, math.ceil(percentage * players)))
     end
 end
 
