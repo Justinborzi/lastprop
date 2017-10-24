@@ -426,11 +426,11 @@ function GM:AddScoreboardMute(score)
         if (not IsValid(panel) or not IsValid(LocalPlayer()) or not IsValid(ply)) then return end
         local muted = LocalPlayer():GetVar('muted', {})
         if (muted[ply:UniqueID()]) then
-            panel:SetImage('icon16/sound_mute.png')
-            panel:SetPos(5, 7)
-        else
             panel:SetImage('icon16/sound_none.png')
             panel:SetPos(9, 7)
+        else
+            panel:SetImage('icon16/sound_mute.png')
+            panel:SetPos(5, 7)
         end
         RunConsoleCommand('playermute', ply:UniqueID())
     end
@@ -459,11 +459,11 @@ function GM:AddScoreboardMute(score)
 
         local muted = LocalPlayer():GetVar('muted', {})
         if (muted[ply:UniqueID()]) then
-            mute:SetImage('icon16/sound_none.png')
-            mute:SetPos(9, 7)
-        else
             mute:SetImage('icon16/sound_mute.png')
             mute:SetPos(5, 7)
+        else
+            mute:SetImage('icon16/sound_none.png')
+            mute:SetPos(9, 7)
         end
 
         return panel
