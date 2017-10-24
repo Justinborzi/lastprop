@@ -17,7 +17,6 @@ function GM:PlayerRequestTeam(ply, teamID)
     end
 
     self:PlayerJoinTeam(ply, teamID)
-
 end
 
 --[[---------------------------------------------------------
@@ -44,6 +43,7 @@ function GM:PlayerJoinTeam(ply, newTeam)
 
     if (not table.HasValue({TEAM.SPECTATORS, TEAM.UNASSIGNED, TEAM.CONNECTING}, newTeam)) then
         ply:SetVar('lastTeamChange', CurTime(), true)
+        ply:SetVar('teamChanges', ply:GetVar('teamChanges', 0) + 1, true)
     end
 
     if (table.HasValue({TEAM.SPECTATORS, TEAM.UNASSIGNED, TEAM.CONNECTING}, newTeam)) then

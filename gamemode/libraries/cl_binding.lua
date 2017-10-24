@@ -27,10 +27,19 @@ end
 --   Name: lps.bindings:Register()
 ---------------------------------------------------------]]--
 function lps.bindings:Register(class, id, default, type, name, description)
-    if (not self.default[class]) then self.default[class] = {} end
-    if (not self.settings[class]) then self.settings[class] = {} end
+    if (not self.default[class]) then
+        self.default[class] = {}
+    end
+
+    if (not self.settings[class]) then
+        self.settings[class] = {}
+    end
+
     self.default[class][id] = {key = default, name = name, desc = description, type = type}
-    self.settings[class][id] = {key = default, type = type}
+
+    if (not self.settings[class][id]) then
+        self.settings[class][id] = {key = default, type = type}
+    end
 end
 
 --[[---------------------------------------------------------
