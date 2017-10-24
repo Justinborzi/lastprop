@@ -40,7 +40,7 @@ function GM:PlayerCanJoinTeam(ply, teamID)
         return false, 'You\'re already on that team!'
     end
 
-    local maxTeamSwitch = hook.Call('MaxTeamSwitch', self, ply, teamID)
+    local maxTeamSwitch = hook.Call('PlayerMaxTeamSwitch', self, ply, teamID)
     if ( maxTeamSwitch > 0 and maxTeamSwitch <= ply:GetVar('teamChanges', 0) ) then
         return false, 'You have reached the team switch limit!'
     end
@@ -62,8 +62,8 @@ function GM:PlayerCanJoinTeam(ply, teamID)
 end
 
 --[[---------------------------------------------------------
---   Name: GM:MaxTeamSwitch(Player ply, Number teamid)
+--   Name: GM:PlayerMaxTeamSwitch(Player ply, Number teamid)
 ---------------------------------------------------------]]--
-function GM:MaxTeamSwitch(ply, teamID)
+function GM:PlayerMaxTeamSwitch(ply, teamID)
     return 0
 end
