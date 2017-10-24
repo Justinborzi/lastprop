@@ -27,16 +27,28 @@ function GM:TauntMenu()
     self.tauntMenu:AddSpacer()
 
     local function addPack(menu, tPack, tType)
+
         local letters = {}
-        for _, t in SortedPairs(lps.taunts.sounds[tPack][tType]) do
+        for _, t in pairs(lps.taunts.sounds[tPack][tType]) do
             local letter = string.upper(string.sub(t.label, 1, 1))
             if (not letters[letter]) then
-                letters[letter] = menu:AddSubMenu(letter)
+                letters[letter] = {}
             end
-            letters[letter]:AddOption(string.format('%s (%ss)', t.label, math.Round(t.length, 1)) , function()
-                RunConsoleCommand('taunt', t.name, tPack)
-            end)
+            table.insert(letters[letter], t)
         end
+
+        local menus = {}
+        for letter, taunts in SortedPairs(letters) do
+            if (not menus[letter]) then
+                menus[letter] = menu:AddSubMenu(letter)
+            end
+            for _, t in SortedPairs(taunts) do
+                menus[letter]:AddOption(string.format('%s (%ss)', t.label, math.Round(t.length, 1)) , function()
+                    RunConsoleCommand('taunt', t.name, tPack)
+                end)
+            end
+        end
+
         return table.Count(letters)
     end
 
@@ -49,6 +61,7 @@ function GM:TauntMenu()
     else
         count = addPack(self.tauntMenu, tauntPack, tauntType)
     end
+
 
     self.tauntMenu:AddSpacer()
     self.tauntMenu:AddOption('Close')

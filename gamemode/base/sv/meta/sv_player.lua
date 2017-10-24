@@ -248,7 +248,9 @@ end
 function meta:IsStuck()
     local pos = self:GetPos()
     local disguise = self:GetDisguise()
+
     local t = {}
+
     if (IsValid(disguise)) then
         t.filter = function(ent)
             if (ent:GetClass() == 'lps_disguise' and ent:GetOwner() == self) then return false end
@@ -260,19 +262,22 @@ function meta:IsStuck()
         t.mins = disguise:OBBMins()
         t.maxs = disguise:OBBMaxs()
         t.mask = MASK_PLAYERSOLID
-    else
-        t.filter = self
-        t.start = pos
-        t.endpos = pos
-        t.mins = self:OBBMins()
-        t.maxs = self:OBBMaxs()
-        t.mask = MASK_PLAYERSOLID
+
+        local tr = util.TraceHull(t)
+        if (tr.Entity and (tr.Entity:IsWorld() or tr.Entity:IsValid())) then
+            return true
+        end
     end
 
+    t.filter = t.filter or self
+    t.mins = self:OBBMins()
+    t.maxs = self:OBBMaxs()
+
     local tr = util.TraceHull(t)
-    if tr.Entity and (tr.Entity:IsWorld() or tr.Entity:IsValid()) then
+    if (tr.Entity and (tr.Entity:IsWorld() or tr.Entity:IsValid())) then
         return true
     end
+
     return false
 end
 
@@ -285,21 +290,25 @@ function meta:UnStick()
     local function PlayerNotStuck()
         local disguise = self:GetDisguise()
         local t = {}
+
+        t.start = self:GetPos()
+        t.endpos = t.start
+
         if (IsValid(disguise)) then
-            t.start = self:GetPos()
-            t.endpos = t.start
             t.filter = function(ent)
                 if (ent:GetClass() == 'lps_disguise' and ent:GetOwner() == self) then return false end
                 if ent == self then return false end
                 return true
             end
-        else
-            t.start = self:GetPos()
-            t.endpos = t.start
-            t.filter = self
+
+            if (util.TraceEntity(t, disguise).StartSolid ~= false) then
+               return false
+            end
         end
 
-        return util.TraceEntity(t, IsValid(disguise) and disguise or self).StartSolid == false
+        t.filter = t.filter or self
+
+        return util.TraceEntity(t, self).StartSolid == false
     end
 
     local newPos = nil
@@ -352,10 +361,8 @@ function meta:UnStick()
             return true -- Not stuck?
         else
             self:SetPos(newPos)
-            if SERVER and self and self:IsValid() and self:GetPhysicsObject():IsValid() then
-                if self:IsPlayer() then
-                    self:SetVelocity(vector_origin)
-                end
+            if (self:GetPhysicsObject():IsValid()) then
+                self:SetVelocity(vector_origin)
                 self:GetPhysicsObject():SetVelocity(vector_origin) -- prevents bugs :s
             end
             return true
