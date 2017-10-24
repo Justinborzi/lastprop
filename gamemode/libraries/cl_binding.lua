@@ -15,7 +15,7 @@ function lps.bindings:Load()
                 self.settings[class] = {}
             end
             for id, setting in pairs(keys) do
-                self.default[class][id] = setting
+                self.settings[class][id] = setting
             end
         end
     end
