@@ -10,8 +10,13 @@ lps.bindings = lps.bindings or {
 function lps.bindings:Load()
     local data = lps.fs:Load('bindings.txt')
     if (data and type(data) == 'table') then
-        for class, setting in pairs(data) do
-            self.settings[class] = setting
+        for class, keys in pairs(data) do
+            if (not self.settings[class]) then
+                self.settings[class] = {}
+            end
+            for id, setting in pairs(keys) do
+                self.default[class][id] = setting
+            end
         end
     end
 end
@@ -71,7 +76,6 @@ function lps.bindings:ResetKey(class, id, key, type)
     self.settings[class][id] = {key = self.default[class][id].key, type = self.default[class][id].type}
     lps.bindings:Save()
 end
-
 
 --[[---------------------------------------------------------
 --   hook: BindingsLoad
