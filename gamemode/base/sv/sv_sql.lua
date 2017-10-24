@@ -11,6 +11,7 @@ GM.db.password   = GM.db.password   or ''
 GM.db.database   = GM.db.database   or 'lps'
 GM.db.host       = GM.db.host       or '127.0.0.1'
 GM.db.unixsocket = GM.db.unixsocket or ''
+GM.db.port       = GM.db.port       or 3306
 GM.db.module     = GM.db.module     or 'sqlite'
 
 --[[---------------------------------------------------------
