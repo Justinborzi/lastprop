@@ -483,6 +483,7 @@ AccessorFunc(PANEL, 'info', 'Info', FORCE_STRING)
 
 function PANEL:Init()
     self:SetImage('icon16/help.png')
+    self:SetMouseInputEnabled(true)
 end
 
 --[[---------------------------------------------------------
@@ -493,27 +494,27 @@ function PANEL:Think()
     if (info and info ~= '' and self:IsHovered() and not IsValid(self.infobox)) then
 
         local x, y = self:LocalToScreen(8,8)
-        local w, h = 200, 90
-         local text = util.textWrap(info, 'LPS14', w - 10)
+        local w, h = 120, 40
+        local text = util.textWrap(info, 'LPS14', w - 10)
 
         self.infobox = vgui.Create('DPanel')
         self.infobox:SetSize(w, h)
         self.infobox.Paint = function(self)
-            local w, h = self:GetWide(), self:GetTall()
             local ts = 8
+            local w, h = self:GetWide(), self:GetTall()
             local triangle = {
                 { x = (w / 2), y = h },
                 { x = (w / 2) - ts, y = h -ts},
                 { x = (w / 2) + ts , y = h -ts}
             }
-            local color = Color(35, 92, 130)
+            local color = Color(0, 0, 0, 250)
             draw.RoundedBox(4, 0, 0, w, h - ts, color)
             surface.SetDrawColor(color)
             draw.NoTexture()
             surface.DrawPoly(triangle)
             surface.SetFont('LPS14')
             local tw, th = surface.GetTextSize(text)
-            draw.DrawText(text, 'LPS14', w/2, ((h - (10 + ts))/2) - (th/2), Color(255,255,255), TEXT_ALIGN_CENTER)
+            draw.DrawText(text, 'LPS14', w/2, ((h - ts)/2) - (th/2), Color(255,255,255), TEXT_ALIGN_CENTER)
         end
 
         self.infobox:SetPos(x - (w/2), y - (h + (self:GetTall() / 2)))
@@ -528,10 +529,68 @@ end
 --[[---------------------------------------------------------
 --   Name: PANEL:Remove()
 ---------------------------------------------------------]]--
-function PANEL:Remove()
-    if IsValid(self.infobox) then
+function PANEL:OnRemove()
+    if (IsValid(self.infobox)) then
         self.infobox:Remove()
     end
 end
 
-derma.DefineControl('LPSInfoButton', '', PANEL, 'DImageButton')
+derma.DefineControl('LPSInfoBox', '', PANEL, 'DImage')
+
+--[[---------------------------------------------------------
+--   Name: PANEL:Init()
+---------------------------------------------------------]]--
+local PANEL = {}
+
+function PANEL:Init()
+    self.Avatar = vgui.Create('AvatarImage', self)
+    self.Avatar:SetPaintedManually(true)
+end
+
+--[[---------------------------------------------------------
+--   Name: PANEL:PerformLayout()
+---------------------------------------------------------]]--
+function PANEL:PerformLayout()
+    self.Avatar:SetSize(self:GetWide(), self:GetTall())
+end
+
+--[[---------------------------------------------------------
+--   Name: PANEL:SetPlayer()
+---------------------------------------------------------]]--
+function PANEL:SetPlayer(ply)
+    self.Avatar:SetPlayer(ply)
+end
+
+--[[---------------------------------------------------------
+--   Name: PANEL:Paint()
+---------------------------------------------------------]]--
+function PANEL:Paint(w, h)
+    render.ClearStencil()
+    render.SetStencilEnable(true)
+
+    render.SetStencilWriteMask(1)
+    render.SetStencilTestMask(1)
+
+    render.SetStencilFailOperation(STENCILOPERATION_REPLACE)
+    render.SetStencilPassOperation(STENCILOPERATION_ZERO)
+    render.SetStencilZFailOperation(STENCILOPERATION_ZERO)
+    render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
+    render.SetStencilReferenceValue(1)
+
+    util.DrawSimpleCircle(w/2, w/2, w/2, color_white)
+
+    render.SetStencilFailOperation(STENCILOPERATION_ZERO)
+    render.SetStencilPassOperation(STENCILOPERATION_REPLACE)
+    render.SetStencilZFailOperation(STENCILOPERATION_ZERO)
+    render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
+    render.SetStencilReferenceValue(1)
+
+    self.Avatar:SetPaintedManually(false)
+    self.Avatar:PaintManual()
+    self.Avatar:SetPaintedManually(true)
+
+    render.SetStencilEnable(false)
+    render.ClearStencil()
+end
+
+vgui.Register('AvatarMask', PANEL)

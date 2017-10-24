@@ -7,16 +7,74 @@ function PANEL:Init()
     self:SetMouseInputEnabled(true)
 
     self.teamID = 0
+    self.columns = {}
 
-    self.label = vgui.Create('DLabel', self)
-    self.label:DockMargin(30, 10, 30, 10)
-    self.label:Dock(TOP)
-    self.label:SetTall(40)
-    self.label:SetColor(Color(255,255,255))
-    self.label:SetFont('LPS40')
-    self.label:SetText(string.format('%s %s/%s', team.GetName(self.teamID), team.GetScore(self.teamID), GAMEMODE:GetConfig('round_limit')))
-    self.label:SetContentAlignment(4)
-    self.label.Paint = function(self,w,h) end
+    self.header = vgui.Create('Panel', self)
+    self.header:DockMargin(30, 10, 30, 10)
+    self.header:Dock(TOP)
+    self.header:SetTall(40)
+
+    self.teamLabel = vgui.Create('DLabel', self.header)
+    self.teamLabel:Dock(LEFT)
+    self.teamLabel:SetColor(Color(255,255,255))
+    self.teamLabel:SetFont('LPS40')
+    self.teamLabel:SetContentAlignment(4)
+    self.teamLabel:SizeToContents()
+    self.teamLabel.Paint = function(self,w,h) end
+
+    self.scoreLabel = vgui.Create('DLabel', self.header)
+    self.scoreLabel:Dock(RIGHT)
+    self.scoreLabel:SetColor(Color(255,255,255))
+    self.scoreLabel:SetFont('LPS40')
+    self.scoreLabel:SizeToContents()
+    self.scoreLabel:SetContentAlignment(4)
+    self.scoreLabel.Paint = function(self,w,h) end
+
+    self.list = vgui.Create('DListView', self)
+    self.list.VBar:Remove()
+    self.list.VBar = vgui.Create('LPSScrollBar', self.list)
+    self.list.PerformLayout = function(self)
+        -- Do Scrollbar
+        local Wide = self:GetWide()
+        local YPos = 0
+
+        if (IsValid(self.VBar)) then
+            self.VBar:SetPos(self:GetWide() - 6, 0)
+            self.VBar:SetSize(6, self:GetTall())
+            self.VBar:SetUp(self.VBar:GetTall() - self:GetHeaderHeight(), self.pnlCanvas:GetTall())
+            YPos = self.VBar:GetOffset()
+            if (self.VBar.Enabled) then Wide = Wide - 6 end
+        end
+
+        if (self.m_bHideHeaders) then
+            self.pnlCanvas:SetPos(0, YPos)
+        else
+            self.pnlCanvas:SetPos(0, YPos + self:GetHeaderHeight())
+        end
+
+        self.pnlCanvas:SetSize(Wide, self.pnlCanvas:GetTall())
+        self:FixColumnsLayout()
+
+        --
+        -- If the data is dirty, re-layout
+        --
+        if (self:GetDirty(true)) then
+            self:SetDirty(false)
+            local y = self:DataLayout()
+            self.pnlCanvas:SetTall(y)
+            -- Layout again, since stuff has changed..
+            self:InvalidateLayout(true)
+        end
+    end
+
+    self.list:DockMargin(15, 0, 15, 20)
+    self.list:Dock(FILL)
+    self.list:SetDataHeight(32)
+    self.list:SetHeaderHeight(20)
+    self.list.Paint = function(self,w,h)
+        draw.RoundedBox(6, 0, 0, w, h, Color(255,255,255))
+    end
+
 end
 
 --[[---------------------------------------------------------
@@ -31,148 +89,108 @@ end
 ---------------------------------------------------------]]--
 function PANEL:SetTeam(teamID)
     self.teamID = teamID
-    self:CreateScores()
 end
 
 --[[---------------------------------------------------------
---   Name: PANEL:CreateScores()
+--   Name: PANEL:AddColumn()
 ---------------------------------------------------------]]--
-function PANEL:CreateScores()
+function PANEL:AddColumn(col)
 
-    self.label:SetText(string.format('%s %s/%s', team.GetName(self.teamID), team.GetScore(self.teamID), GAMEMODE:GetConfig('round_limit')))
+    local column = self.list:AddColumn(col.name)
+    if (col.fixedSize) then column:SetMinWidth(col.fixedSize) column:SetMaxWidth(col.fixedSize) end
+    if (col.headerAlign) then column.Header:SetContentAlignment(col.headerAlign) end
 
-    if (IsValid(self.scroll)) then
-        self.scroll:Remove()
+    col.teamColor = team.GetColor(self.teamID)
+    col.teamID = self.teamID
+    table.insert(self.columns, col)
+
+    local first = table.Count(self.list.Columns) == 1
+    column.Header.Paint = function(self, w, h)
+
+        if (first) then
+            draw.RoundedBox(6, 0, 0, w, h, Color(255,255,255))
+            draw.RoundedBox(0, w - 6, 0, 6, h, Color(255,255,255))
+        else
+            draw.RoundedBox(0, 0, 0, w, h, Color(255,255,255))
+        end
+    end
+end
+
+--[[---------------------------------------------------------
+--   Name: PANEL:SetSortColumns()
+---------------------------------------------------------]]--
+function PANEL:SetSortColumns(...)
+    self.sortArgs = ...
+end
+
+--[[---------------------------------------------------------
+--   Name: PANEL:FindPlayerLine()
+---------------------------------------------------------]]--
+function PANEL:FindPlayerLine(ply)
+    for _, line in pairs(self.list.Lines) do
+        if (line.player == ply) then return line end
     end
 
-    self.scroll = vgui.Create('LPSScroll', self)
-    self.scroll:DockMargin(15, 0, 15, 20)
-    self.scroll:Dock(FILL)
-    self.scroll.Paint = function(self,w,h)
-        draw.RoundedBox(8, 0, 0, w, h, Color(255,255,255))
+    local line = self.list:AddLine()
+    line.player = ply
+    line.updateTime = {}
+    line.count = table.Count(self.list.Lines)
+
+    line.Paint = function(self, w, h)
+         if (self.player:Alive()) then
+            draw.RoundedBox(0, 0, 0, w, h, (self.count % 2 == 0) and Color(255, 255, 255) or util.Darken(Color(255, 255, 255), 20))
+        else
+            draw.RoundedBox(0, 0, 0, w, h, (self.count % 2 == 0) and Color(255, 204, 204) or util.Darken(Color(255, 204, 204), 20))
+        end
     end
 
-    local panel = vgui.Create('DPanel', self.scroll)
-    panel:Dock(TOP)
-    panel.Paint = function(self,w,h) end
+    line.SetSelected = function(self, b) end
 
-    local name = vgui.Create('DLabel', panel)
-    name:DockMargin(15, 0, 15, 0)
-    name:SetColor(Color(0,0,0))
-    name:SetText('Player:')
-    name:Dock(LEFT)
+    return line
+end
 
-    local mute = vgui.Create('DLabel', panel)
-    mute:SetColor(Color(0,0,0))
-    mute:SetContentAlignment(5)
-    mute:SetWide(40)
-    mute:SetText('Mute:')
-    mute:Dock(RIGHT)
+--[[---------------------------------------------------------
+--   Name: PANEL:UpdateColumn()
+---------------------------------------------------------]]--
+function PANEL:UpdateColumn(i, col, line)
 
-    local ping = vgui.Create('DLabel', panel)
-    ping:SetColor(Color(0,0,0))
-    ping:SetContentAlignment(5)
-    ping:SetWide(40)
-    ping:SetText('Ping:')
-    ping:Dock(RIGHT)
+    if (!col.value) then return end
 
-    local frags = vgui.Create('DLabel', panel)
-    frags:SetColor(Color(0,0,0))
-    frags:SetContentAlignment(5)
-    frags:SetWide(40)
-    frags:SetText('Frags:')
-    frags:Dock(RIGHT)
+    line.updateTime[i] = line.updateTime[i] or 0
 
-    for i, v in pairs(team.GetPlayers(self.teamID)) do
+    if (col.updateRate == 0 && line.updateRate[i] != 0) then return end // 0 = only update once
+    if (line.updateTime[i] > RealTime()) then return end
 
-        if (not IsValid(v)) then continue end
+    line.updateTime[i] = RealTime() + col.updateRate
 
-        local panel = vgui.Create('DPanel', self.scroll)
-        panel.player = v
-        panel:Dock(TOP)
-        panel:DockPadding(5, 2, 5, 2)
-        panel.Paint = function(panel,w,h)
-            if (not IsValid(v)) then return end
-            if (v:Alive()) then
-                draw.RoundedBox(0, 0, 0, w, h, (i % 2 == 0) and Color(255, 255, 255) or util.Darken(Color(255, 255, 255), 20))
-            else
-                draw.RoundedBox(0, 0, 0, w, h, (i % 2 == 0) and Color(255, 204, 204) or util.Darken(Color(255, 204, 204), 20))
-            end
+    local value = col.value(line.player)
+    if (value == nil) then return end
 
-            if (IsValid(panel.player)) then
-                if (lps.support[panel.player:SteamID()]) then
-                    panel.info:SetColor(util.Rainbow())
-                elseif (v:IsAdmin() or v:IsSuperAdmin()) then
-                    panel.info:SetColor(Color(47, 119, 88))
-                end
-            else
-                panel:Remove()
-            end
+    local lbl = line:SetColumnText(i, value)
+
+    if (IsValid(lbl)) then
+        if (col.valueAlign) then lbl:SetContentAlignment(col.valueAlign) end
+        if (col.font) then lbl:SetFont(col.font) end
+    end
+end
+
+--[[---------------------------------------------------------
+--   Name: PANEL:UpdateLine()
+---------------------------------------------------------]]--
+function PANEL:UpdateLine(line)
+    for i, col in pairs(self.columns) do
+        self:UpdateColumn(i, col, line)
+    end
+end
+
+--[[---------------------------------------------------------
+--   Name: PANEL:CleanLines()
+---------------------------------------------------------]]--
+function PANEL:CleanLines()
+    for k, line in pairs(self.list.Lines) do
+        if (not IsValid(line.player) or line.player:Team() ~= self.teamID) then
+            self.list:RemoveLine(k)
         end
-
-        panel.icon = vgui.Create('AvatarImage', panel)
-        panel.icon:DockMargin(5, 0, 5, 0)
-        panel.icon:SetPlayer(v, 32)
-        panel.icon:SetSize(20, 20)
-        panel.icon:Dock(LEFT)
-
-        panel.name = vgui.Create('DLabel', panel)
-        panel.name:DockMargin(0, 0, 5, 0)
-        panel.name:SetColor(Color(0,0,0))
-        panel.name:SetText(v:Nick())
-        panel.name:SizeToContents()
-        panel.name:Dock(LEFT)
-
-        panel.info = vgui.Create('DLabel', panel)
-        panel.info:SetColor(Color(0,0,0))
-        if (lps.support[v:SteamID()]) then
-            panel.info:SetText(lps.support[v:SteamID()])
-        elseif (v:IsAdmin() or v:IsSuperAdmin()) then
-            panel.info:SetText('[Admin]')
-        else
-            panel.info:SetText('')
-        end
-        panel.info:SizeToContents()
-        panel.info:Dock(LEFT)
-
-        panel.mute = vgui.Create('DImageButton', panel)
-        panel.mute:SetImage('icon16/sound_none.png')
-        panel.mute:SetKeepAspect(true)
-        panel.mute:DockMargin(10, 0, 10, 0)
-        panel.mute:SetSize(16, 16)
-        panel.mute:SetContentAlignment(5)
-        panel.mute:Dock(RIGHT)
-        panel.mute.DoClick = function()
-            if (not IsValid(v)) then return end
-            local muted = LocalPlayer():GetVar('muted', {})
-            if(muted[v:UniqueID()]) then
-                panel.mute:SetImage('icon16/sound_none.png')
-            else
-                panel.mute:SetImage('icon16/sound_mute.png')
-            end
-            RunConsoleCommand('playermute', v:UniqueID())
-        end
-
-        local muted = LocalPlayer():GetVar('muted', {})
-        if(muted[v:UniqueID()]) then
-            panel.mute:SetImage('icon16/sound_mute.png')
-        else
-            panel.mute:SetImage('icon16/sound_none.png')
-        end
-
-        panel.ping = vgui.Create('DLabel', panel)
-        panel.ping:SetWide(40)
-        panel.ping:SetContentAlignment(5)
-        panel.ping:SetColor(Color(0,0,0))
-        panel.ping:SetText(v:Ping())
-        panel.ping:Dock(RIGHT)
-
-        panel.frags = vgui.Create('DLabel', panel)
-        panel.frags:SetWide(40)
-        panel.frags:SetContentAlignment(5)
-        panel.frags:SetColor(Color(0,0,0))
-        panel.frags:SetText(v:Frags())
-        panel.frags:Dock(RIGHT)
     end
 end
 
@@ -180,7 +198,23 @@ end
 --   Name: PANEL:Think()
 ---------------------------------------------------------]]--
 function PANEL:Think()
+    self.teamLabel:SetText(team.GetName(self.teamID))
+    self.teamLabel:SizeToContents()
 
+    self.scoreLabel:SetText(string.format('Wins: %s/%s', team.GetScore(self.teamID), GAMEMODE:GetConfig('round_limit')))
+    self.scoreLabel:SizeToContents()
+
+    self:CleanLines()
+
+    local players = team.GetPlayers(self.teamID)
+    for _, player in pairs(players) do
+        local line = self:FindPlayerLine(player)
+        self:UpdateLine(line)
+    end
+
+    if (self.sortArgs) then
+        self.list:SortByColumns(unpack(self.sortArgs))
+    end
 end
 
 derma.DefineControl('LPSTeamScore', '', PANEL, 'DPanel')
@@ -221,8 +255,6 @@ function PANEL:Init()
     self.hunterScore:Dock(RIGHT)
     self.hunterScore:SetTeam(TEAM.HUNTERS)
 
-    self.propScore:CreateScores()
-    self.hunterScore:CreateScores()
     self:SetVisible(true)
     self:SetKeyboardInputEnabled(false)
     self:MakePopup()
@@ -230,30 +262,248 @@ end
 
 
 --[[---------------------------------------------------------
+--   Name: PANEL:AddColumn()
+---------------------------------------------------------]]--
+function PANEL:SetSortColumns(...)
+    self.propScore:SetSortColumns(...)
+    self.hunterScore:SetSortColumns(...)
+end
+
+--[[---------------------------------------------------------
+--   Name: PANEL:AddColumn()
+---------------------------------------------------------]]--
+function PANEL:AddColumn(name, fixedSize, value, updateRate, headerAlign, valueAlign)
+    local column = {}
+
+    column.name = name
+    column.fixedSize = fixedSize
+    column.value = value
+    column.updateRate = updateRate
+    column.valueAlign = valueAlign
+    column.headerAlign = headerAlign
+
+    self.propScore:AddColumn(column)
+    self.hunterScore:AddColumn(column)
+
+    return column
+end
+
+
+--[[---------------------------------------------------------
 --   Name: PANEL:Paint()
 ---------------------------------------------------------]]--
 function PANEL:Paint(w, h)
+
 end
 
 derma.DefineControl('LPSScoreBoard', '', PANEL, 'DPanel')
 
 --[[---------------------------------------------------------
+--   Name: GAMEMODE:GetPlayerScoreboardColor()
+---------------------------------------------------------]]--
+function GM:GetPlayerScoreboardColor(ply)
+    if (not IsValid(ply)) then return end
+
+    if (lps.support[ply:SteamID()]) then
+         return util.Rainbow(nil, nil, 180)
+    end
+
+    return team.GetColor(ply:Team())
+end
+
+--[[---------------------------------------------------------
+--   Name: GAMEMODE:AddScoreboardAvatar()
+---------------------------------------------------------]]--
+function GM:AddScoreboardAvatar(score)
+    local f = function(ply)
+
+        local panel = vgui.Create('Panel', score)
+        panel:DockPadding(2, 2, 2, 2)
+
+        local subpanel = vgui.Create('Panel', panel)
+        subpanel:Dock(FILL)
+        subpanel:DockPadding(2, 2, 2, 2)
+        subpanel.Paint = function(self, w, h)
+            util.DrawSimpleCircle(w/2, w/2, w/2, hook.Call('GetPlayerScoreboardColor', GAMEMODE, ply) or color_white)
+        end
+
+        local av = vgui.Create('AvatarMask', subpanel)
+        av:Dock(FILL)
+        av:SetPlayer(ply)
+
+        return panel
+    end
+
+    score:AddColumn('', 32, f, 360)
+end
+
+--[[---------------------------------------------------------
+--   Name: GAMEMODE:AddScoreboardSpacer()
+---------------------------------------------------------]]--
+function GM:AddScoreboardSpacer(score)
+    score:AddColumn('', 16, nil, 360)
+end
+
+--[[---------------------------------------------------------
+--   Name: GAMEMODE:AddScoreboardName()
+---------------------------------------------------------]]--
+function GM:AddScoreboardName(score)
+    local f = function(ply) return ply:Name() end
+    score:AddColumn('Name', nil, f, 30, 5, 4)
+end
+
+--[[---------------------------------------------------------
+--   Name: GAMEMODE:AddScoreboardKills()
+---------------------------------------------------------]]--
+function GM:AddScoreboardKills(score)
+    local f = function(ply) return ply:Frags() end
+    score:AddColumn('Frags', 40, f, 1, 5, 5)
+end
+
+--[[---------------------------------------------------------
+--   Name: GAMEMODE:AddScoreboardDeaths()
+---------------------------------------------------------]]--
+function GM:AddScoreboardDeaths(score)
+    local f = function(ply) return ply:Deaths() end
+    score:AddColumn('Deaths', 40, f, 1, nil, 5, 5)
+end
+
+--[[---------------------------------------------------------
+--   Name: GAMEMODE:AddScoreboardPing()
+---------------------------------------------------------]]--
+function GM:AddScoreboardPing(score)
+    local f = function(ply) return ply:Ping() end
+    score:AddColumn('Ping', 30, f, 5, 5, 5)
+end
+
+--[[---------------------------------------------------------
+--   Name: GAMEMODE:GetPlayerScoreboardIcon()
+---------------------------------------------------------]]--
+function GM:GetPlayerScoreboardIcon(ply)
+    if (not IsValid(ply)) then return end
+
+    if (lps.support[ply:SteamID()]) then
+        return 'icon16/color_wheel.png'
+    end
+end
+
+--[[---------------------------------------------------------
+--   Name: GAMEMODE:GetPlayerScoreboardIconText()
+---------------------------------------------------------]]--
+function GM:GetPlayerScoreboardIconText(ply)
+    if (not IsValid(ply)) then return end
+
+    if (lps.support[ply:SteamID()]) then
+        return lps.support[ply:SteamID()]
+    end
+end
+
+--[[---------------------------------------------------------
+--   Name: GAMEMODE:AddScoreboardIcon()
+---------------------------------------------------------]]--
+function GM:AddScoreboardIcon(score)
+    local f = function(ply)
+
+        local panel = vgui.Create('Panel', score)
+
+        local icon = vgui.Create('LPSInfoBox', panel)
+        icon:SetImage(hook.Call('GetPlayerScoreboardIcon', self, ply) or  'icon16/user.png')
+        icon:SetInfo(hook.Call('GetPlayerScoreboardIconText', self, ply) or '')
+        icon:SetPos(8, 8)
+        icon:SetSize(16, 16)
+
+        return panel
+    end
+    score:AddColumn('', 32, f, 360, 4, 4)
+end
+
+--[[---------------------------------------------------------
+--   Name: GAMEMODE:AddScoreboardMute()
+---------------------------------------------------------]]--
+function GM:AddScoreboardMute(score)
+    local function doMute(panel, ply)
+        if (not IsValid(panel) or not IsValid(LocalPlayer()) or not IsValid(ply)) then return end
+        local muted = LocalPlayer():GetVar('muted', {})
+        if (muted[ply:UniqueID()]) then
+            panel:SetImage('icon16/sound_mute.png')
+            panel:SetPos(5, 7)
+        else
+            panel:SetImage('icon16/sound_none.png')
+            panel:SetPos(9, 7)
+        end
+        RunConsoleCommand('playermute', ply:UniqueID())
+    end
+
+    local f = function(ply)
+
+        local panel = vgui.Create('Panel', score)
+        panel:DockPadding(2, 2, 2, 2)
+
+        if (ply == LocalPlayer()) then
+            return panel
+        end
+
+        local subpanel = vgui.Create('Panel', panel)
+        subpanel:Dock(FILL)
+        subpanel:DockPadding(2, 2, 2, 2)
+        subpanel.Paint = function(self, w, h)
+            util.DrawSimpleCircle(w/2, w/2, w/2, util.SetAlpha(color_white, 190))
+        end
+
+        local mute = vgui.Create('DImageButton', subpanel)
+        mute:SetSize(16, 16)
+        mute.DoClick = function(self)
+            doMute(self, ply)
+        end
+
+        local muted = LocalPlayer():GetVar('muted', {})
+        if (muted[ply:UniqueID()]) then
+            mute:SetImage('icon16/sound_none.png')
+            mute:SetPos(9, 7)
+        else
+            mute:SetImage('icon16/sound_mute.png')
+            mute:SetPos(5, 7)
+        end
+
+        return panel
+    end
+    score:AddColumn('', 32, f, 360, 4, 4)
+end
+
+--[[---------------------------------------------------------
+--   Name: GM:CreateScoreboard()
+---------------------------------------------------------]]--
+function GM:CreateScoreboard(scores)
+
+    self:AddScoreboardAvatar(scores)    // 1
+    self:AddScoreboardName(scores)      // 2
+    self:AddScoreboardKills(scores)     // 3
+    self:AddScoreboardDeaths(scores)    // 4
+    self:AddScoreboardPing(scores)      // 5
+    self:AddScoreboardIcon(scores)      // 6
+    self:AddScoreboardMute(scores)      // 7
+
+    scores:SetSortColumns({2, true, 3, false, 4, false, 5, false})
+end
+
+--[[---------------------------------------------------------
 --   Name: GM:ScoreboardShow()
 ---------------------------------------------------------]]--
-local scoreBoard
+local scores
 function GM:ScoreboardShow()
-    if (IsValid(scoreBoard)) then
-        scoreBoard:Remove()
+    if (IsValid(scores)) then
+        scores:Remove()
     end
-    scoreBoard = vgui.Create('LPSScoreBoard')
+    scores = vgui.Create('LPSScoreBoard')
+    self:CreateScoreboard(scores)
 end
 
 --[[---------------------------------------------------------
 --   Name: GM:ScoreboardHide()
 ---------------------------------------------------------]]--
 function GM:ScoreboardHide()
-    if (IsValid(scoreBoard)) then
-        scoreBoard:Remove()
+    if (IsValid(scores)) then
+        scores:Remove()
     end
 end
 
@@ -261,5 +511,5 @@ end
 --   Hook: IsBusy:ShowTeam
 ---------------------------------------------------------]]--
 hook.Add('IsBusy', 'IsBusy:ShowTeam', function ()
-    if (IsValid(scoreBoard) and scoreBoard:IsVisible()) then return true end
+    if (IsValid(scores) and scores:IsVisible()) then return true end
 end)
