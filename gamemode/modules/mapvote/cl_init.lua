@@ -4,8 +4,9 @@ lps.mapvote.endTime = lps.mapvote.endTime or 0
 lps.mapvote.votes = lps.mapvote.votes or {}
 
 lps.net.Hook('Mapvote:Create', function(data)
-    lps.mapvote.endTime = data[1]
-    lps.mapvote.votes = data[2]
+    lps.mapvote.config = data[1]
+    lps.mapvote.endTime = data[2]
+    lps.mapvote.votes = data[3]
     if (not lps.mapvote.vgui) then
         lps.mapvote.vgui = vgui.Create('MapVote:Frame')
     else

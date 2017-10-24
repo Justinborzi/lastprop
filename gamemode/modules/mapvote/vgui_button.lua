@@ -11,8 +11,23 @@ local PANEL = {}
 function PANEL:Init()
     self.voters = {}
 
+    self:SetMouseInputEnabled(true)
+
     self.image = vgui.Create('DImage', self)
-    self.image:DockPadding(4, 4, 4, 4)
+    self.image:SetMouseInputEnabled(true)
+    self.image:DockPadding(2, 2, 2, 2)
+    self.image.OnMousePressed = function()
+        self:DoClick()
+    end
+
+    if (lps.mapvote.config.allowForce and LocalPlayer():IsAdmin() ) then
+        self.force = vgui.Create('LPSButton', self.image)
+        self.force:SetText('Force Map')
+        self.force:Dock(BOTTOM)
+        self.force.DoClick = function()
+            lps.net.Start('Mapvote:Force', {self.map})
+        end
+    end
 
     self.votes = vgui.Create('DIconLayout', self.image)
     self.votes:Dock(FILL)
@@ -32,6 +47,7 @@ function PANEL:Paint(w, h)
 end
 
 function PANEL:DoClick()
+    if (IsValid(self.force) and self.force:IsHovered()) then return end
     lps.net.Start('Mapvote:Vote', {self.map})
 end
 

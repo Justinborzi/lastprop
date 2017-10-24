@@ -43,9 +43,8 @@ function PANEL:Init()
     local w, h = self.scroll:GetSize()
     self.maps:SetSize(w, h)
 
-    self:SetZPos(-1000)
-    self:ParentToHUD()
     self:MakePopup()
+    self:SetMouseInputEnabled(true)
     self:SetKeyboardInputEnabled(false)
 
     for map, votes  in pairs(lps.mapvote.votes) do

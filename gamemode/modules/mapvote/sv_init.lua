@@ -12,13 +12,14 @@ lps.mapvote.config = lps.mapvote.config or {
     voteTime = 20,
     mapsToVote = 10,
     mapRevoteBanRounds = 4,
-    mapAllowExtend = false,
+    mapAllowExtend = true,
     mapMaxExtends = 4,
     mapPrefixes = {'lps_', 'cs_', 'ph_', 'ttt_', 'mu_', 'rp_'},
     mapExcludes = {},
     rtvMinPlayers = 4,
     rtvPercentage = 0.6,
     rtvEnabled = true,
+    allowForce = true,
 }
 
 --[[---------------------------------------------------------
@@ -78,41 +79,43 @@ function lps.mapvote:Start(voteTime)
         self.votes[map] = {}
     end
 
-    lps.net.Start(nil, 'Mapvote:Create', {self.endtime, self.votes})
+    lps.net.Start(nil, 'Mapvote:Create', {self.config, self.endtime, self.votes})
 
     timer.Create('Mapvote:Finish', (voteTime or self.config.voteTime), 1, function()
         lps.mapvote:Finish()
     end)
 end
 
-function lps.mapvote:Finish()
+function lps.mapvote:Finish(winner)
     if (not self.active) then return end
 
-    self.active = false
+    timer.Destroy('Mapvote:Finish')
 
-    local winner, votes = '', 0
-    for map, voters in pairs(self.votes) do
-        local total = 0
-        for _, voter in pairs(voters) do
-            total = total + self:VotePower(Player(voter))
+    if (winner == nil) then
+        local votes = 0
+        for map, voters in pairs(self.votes) do
+            local total = 0
+            for _, voter in pairs(voters) do
+                total = total + self:VotePower(Player(voter))
+            end
+            if (total > votes) then
+                votes = total
+                winner = map
+            end
         end
-        if (total > votes) then
-            votes = total
-            winner = map
-        end
-    end
 
-    if (votes == 0) then
-        winner = table.Random(table.GetKeys(self.votes))
+        if (votes == 0) then
+            winner = table.Random(table.GetKeys(self.votes))
+        end
     end
 
     lps.net.Start(nil, 'Mapvote:Finish', {winner})
 
     if (winner == game.GetMap()) then
         timer.Simple(5, function()
-            self:Cancel()
+            lps.mapvote:Cancel()
+            lps.mapvote.mapExtends = lps.mapvote.mapExtends + 1
             util.Notify(nil, NOTIFY.YELLOW, 'Everyone voted to extend the map! New game starting!')
-            self.mapExtends = self.mapExtends + 1
             GAMEMODE:StartGame()
         end)
         return
@@ -136,9 +139,7 @@ end
 function lps.mapvote:Cancel()
     if (not self.active) then return end
 
-    hook.Remove('CanStartRound', 'MapVote:CanStartRound')
-    hook.Remove('CanStartNextRound', 'MapVote:CanStartNextRound')
-    hook.Remove('OnRoundEnd', 'MapVote:OnRoundEnd')
+    self:ResetRTV()
 
     self.active = false
     self.endtime = 0
@@ -153,6 +154,12 @@ function lps.mapvote:VotePower(ply)
     if (ply:IsAdmin()) then return 2 end
     return 1
 end
+
+lps.net.Hook('Mapvote:Force', function(ply, data)
+    if (ply:IsAdmin()) then
+        lps.mapvote:Finish(data[1])
+    end
+end)
 
 lps.net.Hook('Mapvote:Vote', function(ply, data)
     if (not lps.mapvote.votes[data[1]] or not lps.mapvote.active) then return end
@@ -174,11 +181,12 @@ hook.Add('Initialize', 'Mapvote:Initialize', function()
         lps.fs:Save('mapvote.txt', lps.mapvote.config, true)
     else
         local save = false
-        for id, var in pairs(config) do
-            if (not lps.mapvote.config[id]) then
+        for id, var in pairs(lps.mapvote.config) do
+            if (not config[id]) then
                 save = true
+            else
+                lps.mapvote.config[id] = config[id]
             end
-            lps.mapvote.config[id] = var
         end
         if (save) then
             lps.fs:Save('mapvote.txt', lps.mapvote.config, true)

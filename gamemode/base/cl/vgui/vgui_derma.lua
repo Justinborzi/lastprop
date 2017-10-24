@@ -7,6 +7,8 @@ function BUTTON:Init()
     self.text = ''
     self.enabled = true
     self:SetCursor('hand')
+    self:SetMouseInputEnabled(true)
+    self.backColor = Color(41, 128, 185)
 end
 
 --[[---------------------------------------------------------
@@ -14,11 +16,7 @@ end
 ---------------------------------------------------------]]--
 function BUTTON:Paint()
     if self.enabled then
-        if (self.backColor) then
-            surface.SetDrawColor(self.backColor)
-        else
-            surface.SetDrawColor(Color(41, 128, 185))
-        end
+        surface.SetDrawColor(self:IsHovered() and util.Lighten(self.backColor, 20) or self.backColor)
         surface.DrawRect(0, 0, self:GetWide(), self:GetTall())
         draw.DrawText(self.text, 'LPS16', self:GetWide() / 2, self:GetTall() / 2 - 9, Color(236, 240, 241), TEXT_ALIGN_CENTER)
     else
@@ -137,7 +135,6 @@ function PANEL:PerformLayout()
 end
 
 derma.DefineControl('LPSFrame', 'LPS DFrame', PANEL, 'DFrame')
-
 
 --[[---------------------------------------------------------
 --   Name: PANEL:Init()
