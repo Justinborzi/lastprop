@@ -69,7 +69,7 @@ function PANEL:DrawFrame()
             panel:DockMargin(0, 0, 0, 0)
             panel.Paint = function(self, w, h) end
 
-            local info = vgui.Create('LPSInfoButton', panel)
+            local info = vgui.Create('LPSInfoBox', panel)
             info:SetSize(16,16)
             info:SetInfo(key.desc)
             info:DockMargin(4, 6, 4, 6)
