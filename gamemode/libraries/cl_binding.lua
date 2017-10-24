@@ -9,7 +9,7 @@ lps.bindings = lps.bindings or {
 ---------------------------------------------------------]]--
 function lps.bindings:Load()
     local data = lps.fs:Load('bindings.txt')
-    if (data and type(data) == 'table' and not table.Empty(data)) then
+    if (data and type(data) == 'table') then
         for class, setting in pairs(data) do
             self.settings[class] = setting
         end
