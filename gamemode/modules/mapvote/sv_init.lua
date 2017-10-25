@@ -244,19 +244,19 @@ function lps.mapvote:RTV(ply)
 
     if (votes >= math.ceil(percentage * players)) then
         if (GAMEMODE:InGame()) then
-            hook.Add('CanStartRound', 'MapVote:CanStartRound', function() return false end)
-            hook.Add('CanStartNextRound', 'MapVote:CanStartNextRound', function() return false end)
-            hook.Add('OnRoundEnd', 'MapVote:OnRoundEnd', function() self:Start() end)
-
             self.rtv.queued = true
             util.Notify(nil, NOTIFY.YELLOW, 'RTV Successfull! Map vote will start at the end of the round!')
-        else
+
             hook.Add('CanStartRound', 'MapVote:CanStartRound', function() return false end)
             hook.Add('CanStartNextRound', 'MapVote:CanStartNextRound', function() return false end)
-
+            hook.Add('OnRoundEnd', 'MapVote:OnRoundEnd', function() lps.mapvote:Start() end)
+        else
             self.rtv.queued = true
             util.Notify(nil, NOTIFY.YELLOW, 'RTV Successfull! Map vote starting!')
             self:Start()
+
+            hook.Add('CanStartRound', 'MapVote:CanStartRound', function() return false end)
+            hook.Add('CanStartNextRound', 'MapVote:CanStartNextRound', function() return false end)
         end
     else
         util.Notify(nil, NOTIFY.GREEN, ply:Nick(), NOTIFY.YELLOW, string.format(' wants to start a map vote. (%i/%i) Type \'!rtv\' to cast your vote!', votes, math.ceil(percentage * players)))

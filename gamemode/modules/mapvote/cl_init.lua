@@ -16,12 +16,17 @@ end)
 
 lps.net.Hook('Mapvote:Update', function(data)
     if (not lps.mapvote.votes[data[1]] or not lps.mapvote.vgui) then return end
+
     for map, voters in pairs(lps.mapvote.votes) do
         if (table.HasValue(lps.mapvote.votes[map], data[2])) then
             table.RemoveByValue(lps.mapvote.votes[map], data[2])
         end
     end
-    table.insert(lps.mapvote.votes[data[1]], data[2])
+
+    if (data[1] ~= 'disconnected') then
+        table.insert(lps.mapvote.votes[data[1]], data[2])
+    end
+
     lps.mapvote.vgui:UpdateVoters()
 end)
 
