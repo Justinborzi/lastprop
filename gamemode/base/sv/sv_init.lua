@@ -263,6 +263,8 @@ function GM:ShowStats(ply)
         return
     end
 
+    util.Notify(ply, NOTIFY.YELLOW, 'Grabbing your player stats, please hang tight!')
+
     local playerStats, topStats
     local queryObj = lps.sql:Select('stats')
     queryObj:Where('steam_id', ply:SteamID())

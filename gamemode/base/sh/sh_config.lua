@@ -152,13 +152,14 @@ GM.loadouts['PREGAME'] = GM.loadouts['PREGAME'] or {
         primary = {'Buckshot', 64}
     },
     weapon_smg1 = {
-        primary = {'SMG1', 255}
+        primary = {'SMG1', 255},
+        secondary = {'SMG1_Grenade', 5}
     },
     weapon_crossbow = {
         primary = {'XBowBolt', 32}
     },
     weapon_rpg = {
-        primary = {'RPG_Round', 6}
+        primary = {'RPG_Round', 10}
     },
 }
 
