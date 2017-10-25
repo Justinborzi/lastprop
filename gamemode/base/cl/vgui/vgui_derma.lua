@@ -565,8 +565,8 @@ end
 --[[---------------------------------------------------------
 --   Name: PANEL:SetPlayer()
 ---------------------------------------------------------]]--
-function PANEL:SetPlayer(ply)
-    self.Avatar:SetPlayer(ply)
+function PANEL:SetPlayer(ply, size)
+    self.Avatar:SetPlayer(ply, size)
 end
 
 --[[---------------------------------------------------------
