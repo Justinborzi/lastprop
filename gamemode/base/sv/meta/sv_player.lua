@@ -337,7 +337,7 @@ function meta:UnStick()
         local right = angle:Right()
         local up = angle:Up()
 
-        local searchScale = 2 -- Increase and it will unstuck you from even harder places but with lost accuracy. Please, don't try higher values than 12
+        local searchScale = 1 -- Increase and it will unstuck you from even harder places but with lost accuracy. Please, don't try higher values than 12
         if (not FindPassableSpace( forward, searchScale)) then
             if (not FindPassableSpace( right, searchScale)) then
                 if (not FindPassableSpace( right, -searchScale)) then --Left
