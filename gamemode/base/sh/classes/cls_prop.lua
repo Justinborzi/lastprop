@@ -372,6 +372,9 @@ end
 function CLASS:OnSpawn(ply)
     if (GAMEMODE:InPreRound()) then
         ply:SetVar('canDisguise', true, true)
+        if (ply:GetInfoNum('lps_klinermode', 0) == 1) then
+            ply:Disguise()
+        end
     end
 end
 
@@ -405,7 +408,7 @@ function CLASS:OnLastMan(ply)
 
     hook.Call('PlayerLoadout', GAMEMODE, ply)
 
-    ply:SetVar('trail', util.SpriteTrail(ply, 0, Color(255, 255, 255), false, 15, 1, 1.5, 0.125, 'trails/rainbow.vmt'), true)
+    ply:SetVar('trail', util.SpriteTrail(ply, 0, Color(255, 255, 255), false, 15, 1, 1.5, 0.125, 'trails/lastman/rainbow_'..math.Rand(1, 9)..'.vmt'), true)
 
     ply:RandomTaunt()
 end

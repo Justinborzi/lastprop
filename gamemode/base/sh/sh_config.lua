@@ -83,6 +83,7 @@ GM.config = GM.config or {
     ['falldamage_realistic']      = true,             -- Enable realistic fall damage
 
     ['lastman_enabled']           = true,             -- Enable Last Prop Standing
+    ['lastman_force_all']         = false,            -- Forces all players to be last prop, ignores client settings
     ['lastman_round_time']        = 60,               -- The time the last prop has to hide or kill all hunter before the round ends
 
     ['prop_maxhealth']            = 250,              -- Max health a prop can be

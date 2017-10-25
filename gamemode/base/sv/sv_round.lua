@@ -158,6 +158,8 @@ end
 --   Name: GM:RoundLastMan()
 ---------------------------------------------------------]]--
 function GM:RoundLastMan(ply)
+    if (not IsValid(ply)) then return end
+    if (ply:Team() == TEAM.PROP and ply:GetInfoNum('lps_lastman', 1) == 0 and not self:GetConfig('lastman_force_all')) then return end
 
     self:LastMan(ply:Team(), ply)
 

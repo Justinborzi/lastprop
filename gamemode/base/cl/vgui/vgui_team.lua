@@ -292,5 +292,5 @@ end
 --   Hook: IsBusy:ShowTeam
 ---------------------------------------------------------]]--
 hook.Add('IsBusy', 'IsBusy:ShowTeam', function ()
-    if (IsValid(showTeam) and showTeam:IsVisible()) then return true end
+    if (IsValid(teamSelect) and teamSelect:IsVisible()) then return true end
 end)

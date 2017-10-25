@@ -59,7 +59,12 @@ function PANEL:PositionItem(item)
     if (item.positioned) then return end
     if (IsValid(item.relative) and item ~= item.relative) then self:PositionItem(item.relative) end
 
-    local l, t, r, b = item:GetMargins()
+    local l, t, r, b
+    if (item.GetMargins) then
+         l, t, r, b = item:GetMargins()
+    else
+        l, t, r, b = 0, 0, 0, 0
+    end
 
     item:InvalidateLayout(true)
 

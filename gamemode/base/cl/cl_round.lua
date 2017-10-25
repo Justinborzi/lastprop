@@ -26,8 +26,12 @@ lps.net.Hook('OnRoundStart', function(data) hook.Call('OnRoundStart', GAMEMODE, 
 --[[---------------------------------------------------------
 --   Name: GM:OnRoundLastMan()
 ---------------------------------------------------------]]--
+local lastManNotice
 function GM:OnRoundLastMan(ply)
+    if (not IsValid(ply) or ply:Team() != TEAM.PROPS) then return end
 
+    lastManNotice = vgui.Create('LPSLastManNotice')
+    lastManNotice:Show(ply)
 end
 lps.net.Hook('OnRoundLastMan', function(data) hook.Call('OnRoundLastMan', GAMEMODE, data[1]) end)
 
@@ -38,6 +42,10 @@ function GM:OnRoundEnd(teamID, num)
     local localPlayer = LocalPlayer()
     if (not IsValid(localPlayer)) then return end
     local winner = (teamID == ROUND.TIMER) and TEAM.PROPS or teamID
+
+    if (IsValid(lastManNotice)) then
+        lastManNotice:Hide()
+    end
 
     if (winner == localPlayer:Team()) then
         self:PlaySound(lps.sounds.sfx.victory, SOUND.SFX)
@@ -82,7 +90,7 @@ lps.net.Hook('OnNextRound', function(data) hook.Call('OnPreRoundStart', GAMEMODE
 
 local inPreGame, inGame, inPostGame, roundWinner = false, false, false, -1
 local inPreRound, inRound, inPostRound = false, false, false
-local canStartGame, canStartRound, updaterLastMan = false, false, nil
+local canStartGame, canStartRound = false, false
 
 --[[---------------------------------------------------------
 --   Hook: HUDShouldUpdate:Rounds
@@ -95,7 +103,6 @@ hook.Add('HUDShouldUpdate', 'HUDShouldUpdate:Rounds', function(ply)
     if (GAMEMODE:InRound() ~= inRound) then return true end
     if (GAMEMODE:InPostRound() ~= inPostRound) then return true end
     if (GAMEMODE:RoundWinner() ~= roundWinner) then return true end
-    if (GAMEMODE:LastMan(TEAM.PROPS) ~= updaterLastMan) then return true end
 
     if(GAMEMODE:InPreGame()) then
         if (GAMEMODE:CanStartRound(GAMEMODE:Round()) ~= canStartGame) then return true end
@@ -162,25 +169,6 @@ hook.Add('HUDUpdate', 'HUDUpdate:Rounds', function(ply, hud)
             roundStart:SetMargins(20, 20, 20, 20)
             hud:AddItem(roundStart, 2)
         elseif (inRound) then
-            local lastMan = GAMEMODE:LastMan(TEAM.PROPS)
-            if (IsValid(lastMan)) then
-                local updaterLastMan = vgui.Create('DHudUpdater')
-                updaterLastMan:SetMargins(20, 20, 20, 20)
-                updaterLastMan:SetShowBackground(false)
-                updaterLastMan:SetColorFunction(function() return util.Rainbow() end)
-                updaterLastMan:SetValueFunction(function()
-                    if (not IsValid(lastMan)) then return '' end
-                    if (lastMan:IsBot()) then
-                        return 'A bot is the last prop standing!'
-                    elseif (lastMan == ply) then
-                        return 'You\'re the last prop standing!'
-                    else
-                        return string.format('%s is the last prop standing!', lastMan:Nick())
-                    end
-                end)
-                hud:AddItem(updaterLastMan, 8)
-            end
-
             local bar = vgui.Create('DHudBar')
 
             local round = vgui.Create('DHudUpdater')
@@ -225,5 +213,4 @@ hook.Add('HUDOnUpdate', 'HUDOnUpdate:Rounds', function(ply)
     roundWinner = GAMEMODE:RoundWinner()
     canStartGame = GAMEMODE:CanStartGame()
     canStartRound = GAMEMODE:CanStartRound(GAMEMODE:Round())
-    updaterLastMan = GAMEMODE:LastMan(TEAM.PROPS)
 end)

@@ -71,6 +71,30 @@ end
 function GM:StartGame()
     if (self:InPreGame()) then
         self:InPreGame(false)
+
+        local kills, deaths = 0, 0
+        local killsPly, deathsPly = nil, nil
+
+        for _,v in pairs(player.GetAll()) do
+            if (v:GetVar('preroundKills', 0) > kills) then
+                kills = v:GetVar('preroundKills', 0)
+                killsPly = v
+            end
+
+            if (v:GetVar('preroundDeaths', 0) > deaths) then
+                deaths = v:GetVar('preroundDeaths', 0)
+                deathsPly = v
+            end
+            util.Notify(v, NOTIFY.YELLOW, string.format('You got %s Kills and died %s times in the preround!', v:GetVar('preroundKills', 0), v:GetVar('preroundDeaths', 0)))
+        end
+
+        if (IsValid(killsPly) and kills > 0) then
+            util.Notify(nil, NOTIFY.GREEN, killsPly:Nick(), NOTIFY.YELLOW, string.format(' won the pregame with %s kills!', kills))
+        end
+
+        if (IsValid(deathsPly) and deaths > 0) then
+            util.Notify(nil, NOTIFY.RED, deathsPly:Nick(), NOTIFY.YELLOW, string.format(' lost the pregame with %s deaths!', deaths))
+        end
     end
 
     if (self:InPostGame()) then
@@ -227,4 +251,33 @@ function GM:CheckPassword( steamid, networkid, server_password, password, name )
 	end
 
 	return true
+end
+
+--[[---------------------------------------------------------
+--   Name: GM:ShowStats()
+---------------------------------------------------------]]--
+function GM:ShowStats(ply)
+    if (not lps.sql:IsConnected() or not IsValid(ply)) then return end
+
+    local playerStats, topStats
+    local queryObj = lps.sql:Select('stats')
+    queryObj:Where('steam_id', ply:SteamID())
+    queryObj:Callback(function(result, status, lastID)
+        if (type(result) == 'table' and #result > 0) then
+            playerStats = result[1]
+        end
+    end)
+    queryObj:Execute()
+
+    local queryObj = lps.sql:Select('stats')
+    queryObj:OrderByDesc('wins')
+    queryObj:Limit(10)
+    queryObj:Callback(function(result, status, lastID)
+        if (type(result) == 'table' and #result > 0) then
+            topStats = result
+        end
+    end)
+    queryObj:Execute()
+
+    lps.net.Start(ply, 'ShowStats', {playerStats, topStats})
 end

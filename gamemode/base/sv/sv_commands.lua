@@ -172,3 +172,10 @@ concommand.Add('banprop', function(ply, cmd, args)
     end
 end)
 
+--[[---------------------------------------------------------
+--   concommand: lps_stats
+---------------------------------------------------------]]--
+concommand.Add('lps_stats', function(ply, cmd, args)
+    GAMEMODE:ShowStats(ply)
+end)
+

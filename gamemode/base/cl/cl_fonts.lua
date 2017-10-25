@@ -1,3 +1,10 @@
+surface.CreateFont('LPSNotice', {
+    font = 'Impact',
+    weight = 800,
+    size = 90,
+    antialias = true
+})
+
 surface.CreateFont('LPS80', {
     font = 'Roboto',
     weight = 800,

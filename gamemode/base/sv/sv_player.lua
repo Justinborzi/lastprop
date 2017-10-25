@@ -206,6 +206,15 @@ function GM:PlayerDeath(victim, inflictor, attacker)
         attacker:ClassCall('OnKill', victim, inflictor)
     end
 
+    if (self:InPreGame()) then
+        if (IsValid(victim) and victim:IsPlayer()) then
+            victim:SetVar('preroundDeaths', victim:GetVar('preroundDeaths', 0) + 1)
+        end
+        if (IsValid(attacker) and attacker:IsPlayer()) then
+            attacker:SetVar('preroundKills', attacker:GetVar('preroundKills', 0) + 1)
+        end
+    end
+
     if (attacker == victim) then
         lps.Log('%s suicided!', attacker:Nick())
         return
@@ -217,7 +226,6 @@ function GM:PlayerDeath(victim, inflictor, attacker)
     end
 
     lps.Log('%s was killed by %s', victim:Nick(), attacker:GetClass())
-
 end
 
 --[[---------------------------------------------------------
@@ -498,6 +506,10 @@ function GM:PlayerSay(ply, text, teamChat)
     end
     if table.HasValue({'bindings', '!bindings', '/bindings'}, cmd) then
         ply:ConCommand('lps_show_bindings')
+        return ''
+    end
+    if table.HasValue({'stats', '!stats', '/stats'}, cmd) then
+        self:ShowStats(ply)
         return ''
     end
     return text

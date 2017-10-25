@@ -6,6 +6,7 @@ include('cl_util.lua')
 include('cl_fonts.lua')
 include('vgui/vgui_derma.lua')
 include('vgui/vgui_hud.lua')
+include('vgui/vgui_lps.lua')
 include('vgui/vgui_player.lua')
 include('vgui/vgui_team.lua')
 include('vgui/vgui_score.lua')
@@ -13,6 +14,7 @@ include('vgui/vgui_help.lua')
 include('vgui/vgui_notice.lua')
 include('vgui/vgui_options.lua')
 include('vgui/vgui_taunt.lua')
+include('vgui/vgui_stats.lua')
 include('cl_hud.lua')
 include('cl_minigame.lua')
 include('cl_player.lua')
@@ -29,6 +31,8 @@ CreateClientConVar('lps_glow', '1', true, true)             -- Glow/Halos
 CreateClientConVar('lps_minigame', 'Snake', true, true)     -- Minigame Settings
 CreateClientConVar('lps_hunter_default', 'weapon_smg1', true, true) -- Set default hunter SWEP
 CreateClientConVar('lps_prop_default', 'weapon_lastman', true, true) --Set default prop SWEP (lastman)
+CreateClientConVar('lps_klinermode', '0', true, true)       --Spawn as T-Pose Kliner
+CreateClientConVar('lps_lastman', '1', true, true)          --Enable/Disable last man for player
 
 --[[---------------------------------------------------------
 --   3rd person view
@@ -74,6 +78,8 @@ function GM:ResetConvars()
         minigame = 'Snake',
         hunter_default = 'weapon_smg1',
         prop_default = 'weapon_lastman',
+        lps_klinermode = 0,
+        lps_lastman = 1,
 
         tpvp = 1,
         tpvh = 0,

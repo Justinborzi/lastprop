@@ -163,6 +163,16 @@ function PANEL:DrawFrame()
                 },
             }
         },
+        prop = {
+            name = 'Prop Settings',
+            settings = {
+                {
+                    convar = 'lps_klinermode',
+                    type = 'bool',
+                    name = 'Kliner Mode',
+                },
+            }
+        },
         loadout = {
             name = 'Loadout Settings',
             settings = {
@@ -291,6 +301,14 @@ function PANEL:DrawFrame()
             }
         },
     }
+
+    if (GAMEMODE:GetConfig('lastman_enabled') and not GAMEMODE:GetConfig('lastman_force_all')) then
+        table.insert(settings.prop.settings,  {
+            convar = 'lps_lastman',
+            type = 'bool',
+            name = 'Enable Last Man',
+        })
+    end
 
     settings = table.Merge(settings, hook.Call('GetGameOptions', GAMEMODE, settings))
 

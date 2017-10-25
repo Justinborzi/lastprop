@@ -112,7 +112,7 @@ function SWEP:PrimaryAttack()
 
         if (tr.Entity and IsValid(tr.Entity) and tr.Entity:IsPlayer()) then
             local dmgInfo = DamageInfo()
-            dmgInfo:SetDamage(100)
+            dmgInfo:SetDamage(1000)
             dmgInfo:SetAttacker(ply)
             dmgInfo:SetInflictor(self)
 
@@ -131,7 +131,7 @@ function SWEP:PrimaryAttack()
             Tracer = 0,
             TracerName = '',
             Force = 1000,
-            Damage = 100,
+            Damage = 1000,
             AmmoType = '',
         })
 
