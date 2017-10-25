@@ -258,6 +258,7 @@ end
 ---------------------------------------------------------]]--
 function GM:ShowStats(ply)
     if (not lps.sql:IsConnected() or not IsValid(ply)) then
+        print('err1')
         util.Notify(ply, NOTIFY.RED, 'Unable to get player stats!')
         return
     end
@@ -269,23 +270,24 @@ function GM:ShowStats(ply)
         if (type(result) == 'table' and #result > 0) then
             playerStats = result[1]
         end
+            local queryObj = lps.sql:Select('stats')
+            queryObj:OrderByDesc('wins')
+            queryObj:Limit(10)
+            queryObj:Callback(function(result, status, lastID)
+                if (type(result) == 'table' and #result > 0) then
+                    topStats = result
+                end
+
+                if (not playerStats or not topStats) then
+                    print('err2')
+                    util.Notify(ply, NOTIFY.RED, 'Unable to get player stats!')
+                    return
+                end
+
+                lps.net.Start(ply, 'ShowStats', {playerStats, topStats})
+            end)
+            queryObj:Execute()
     end)
     queryObj:Execute()
 
-    local queryObj = lps.sql:Select('stats')
-    queryObj:OrderByDesc('wins')
-    queryObj:Limit(10)
-    queryObj:Callback(function(result, status, lastID)
-        if (type(result) == 'table' and #result > 0) then
-            topStats = result
-        end
-    end)
-    queryObj:Execute()
-
-    if (not playerStats or not topStats) then
-        util.Notify(ply, NOTIFY.RED, 'Unable to get player stats!')
-        return
-    end
-
-    lps.net.Start(ply, 'ShowStats', {playerStats, topStats})
 end
