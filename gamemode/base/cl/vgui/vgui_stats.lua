@@ -18,10 +18,12 @@ end
 ---------------------------------------------------------]]--
 function PANEL:Show(stats, top)
 
+    if (not stats or not top) then return end --just incase
+
     local columns = {
         ['name'] = 'Name',
-        ['wins'] = 'Wins',
-        ['losses'] = 'Losses',
+        ['wins'] = 'Rounds Won',
+        ['losses'] = 'Rounds Lost',
         ['prop_kills'] = 'Prop Kills',
         ['hunter_kills'] = 'Hunter Kills',
         ['lastman_kills'] = 'Last Prop Kills',

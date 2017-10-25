@@ -257,7 +257,10 @@ end
 --   Name: GM:ShowStats()
 ---------------------------------------------------------]]--
 function GM:ShowStats(ply)
-    if (not lps.sql:IsConnected() or not IsValid(ply)) then return end
+    if (not lps.sql:IsConnected() or not IsValid(ply)) then
+        util.Notify(ply, NOTIFY.RED, 'Unable to get player stats!')
+        return
+    end
 
     local playerStats, topStats
     local queryObj = lps.sql:Select('stats')
@@ -278,6 +281,11 @@ function GM:ShowStats(ply)
         end
     end)
     queryObj:Execute()
+
+    if (not playerStats or not topStats) then
+        util.Notify(ply, NOTIFY.RED, 'Unable to get player stats!')
+        return
+    end
 
     lps.net.Start(ply, 'ShowStats', {playerStats, topStats})
 end
