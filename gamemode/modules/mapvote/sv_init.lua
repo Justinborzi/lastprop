@@ -243,7 +243,7 @@ function lps.mapvote:RTV(ply)
     end
 
     if (votes >= math.ceil(percentage * players)) then
-        if (GAMEMODE:InGame()) then
+        if (GAMEMODE:InRound() or GAMEMODE:InPreRound()) then
             self.rtv.queued = true
             util.Notify(nil, NOTIFY.YELLOW, 'RTV Successfull! Map vote will start at the end of the round!')
 
