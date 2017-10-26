@@ -1,11 +1,8 @@
-**Note:** *This game mode is currently a WIP!*
+# Introduction
 
-![Last Prop Standing](/logo.png "Last Prop Standing")
-
-# Last Prop Standing
 Last Prop Standing is a twist on the popular game mode Prop Hunt. The main difference is that when there's only one prop left alive said prop will become very visible, loud and will get a gun. The hunters will have 60 seconds to catch the prop. The prop can choose to run and wait out the timer or hunt the hunters. This game mode was based off of the original Prop Hunt and Fretta code, but is now built from the ground up with a lot of improvements over the original code.
 
-### Neato Features Include:
+### Features:
 * Rebuilt prop hunt mechanics from the ground up!
 * Improved HUD!
 * Custom key binding!
@@ -43,13 +40,10 @@ Support the continued development of this gamemode and get cool stuff too! I hav
 * Button Masher Minigame
 * Snake Minigame
 
- [Read more about the extra modules here.](https://www.gmodstore.com/scripts/view/4633)
-
-### Planed Features:
-* None at the moment! Taking Suggestions!
+[Read more about the extra modules here.](https://www.gmodstore.com/scripts/view/4633)
 
 ### Releases:
-* **[Download Devlopemnt Version](https://github.com/gluaws/lastprop/archive/dev.zip)**
+* **[Download Development Version](https://github.com/gluaws/lastprop/archive/dev.zip)**
 * **[Download Stable Version](https://github.com/gluaws/lastprop/releases/latest)**
 * **Go [here](https://github.com/gluaws/lastprop/releases) to view all releases and changelogs.**
 
@@ -72,4 +66,3 @@ When reporting an issue please provide detailed information so we can find out w
 * [NetStream](https://github.com/alexgrist/NetStream), [Alex Grist-Hucker](https://github.com/alexgrist)
 * [MySQL Wrapper](https://github.com/alexgrist/GLua-MySQL-Wrapper), [Alex Grist-Hucker](https://github.com/alexgrist)
 * [PoN](https://github.com/thelastpenguin/gLUA-Library/tree/master/pON), [TheLastPenguin™](https://github.com/thelastpenguin)
-
