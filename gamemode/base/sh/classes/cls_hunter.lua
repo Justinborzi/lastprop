@@ -178,13 +178,13 @@ function CLASS:Loadout(ply)
             default = GAMEMODE:GiveLoadoutRandom(ply, 'PREGAME')
         elseif (GAMEMODE:InRound()) then
             GAMEMODE:GiveLoadout(ply, TEAM.HUNTERS)
-            defult = ply:GetInfo('lps_hunter_default')
+            default = ply:GetInfo('lps_hunter_default')
         end
 
         timer.Simple(0.4, function ()
             if (not IsValid(ply) and not ply:Alive()) then return end
-            if (ply:HasWeapon(defult)) then
-                ply:SelectWeapon(defult)
+            if (ply:HasWeapon(default)) then
+                ply:SelectWeapon(default)
             end
         end)
     end)
