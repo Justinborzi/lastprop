@@ -11,5 +11,5 @@
 
 - [Converting to Prop Hunt](prophunt.md)
 
-- [Known Issues & Problems](known.md)
+- [Known Issues](issues.md)
 - [Changelog](changelog.md)

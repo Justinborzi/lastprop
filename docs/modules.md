@@ -38,38 +38,52 @@
 
 [Click here to download the Server Guard module](https://github.com/gluaws/lastprop-modules/archive/serverguard.zip)
 
-## Tips Module:
+## Tips Module
 > This module shows helpfull tips to new players, its toggleable in the `!settings` menu under the `visuals` tab.
 
 ![hint](https://i.imgur.com/z8cayKW.png)
 
-## Lucky Blocks Module:
+[Click here to get the Tips module](https://www.gmodstore.com/scripts/view/4633)
+
+## Lucky Blocks Module
 > This module adds luckyblocks to the game, a lucky block will give you a random perk or punishment once opened up, the luckyblocks are a rare occurrence, by default theres a 10% chance of a luckyblock droping when a prop is broken.
 
 ![luckyblock](https://i.imgur.com/LXNBnwz.gif)
 
-## Prop Dial Module:
+[Click here to get the Lucky Blocks module](https://www.gmodstore.com/scripts/view/4633)
+
+## Prop Dial Module
 > This module adds a prop dial to show the angle the prop is currently in, its toggleable in the `!settings` menu under the `visuals` tab.
 
 ![dial](https://i.imgur.com/tevBtr3.png)
 
-## PiP (Picture in Picture) Module:
+[Click here to get the Prop Dial module](https://www.gmodstore.com/scripts/view/4633)
+
+## PiP (Picture in Picture) Module
 > This module allowes you view your fellow props in a pip screen! Press `[?]` to toggle the pip screen and `[<]` and `[>]` to change targets.
 
 ![pip](https://i.imgur.com/7yPzAsR.png)
 
-## Voice Icons Module:
+[Click here to get the PiP module](https://www.gmodstore.com/scripts/view/4633)
+
+## Voice Icons Module
 > This module replaces the default yellow voice icons in garrys mod and doesn't give away the props position to the hunters.
 
 ![prop](https://i.imgur.com/Bt6rweP.png)
 ![hunter](https://i.imgur.com/Er7XAwu.png)
 
-## Button Masher Module:
+[Click here to get the Tips Module module](https://www.gmodstore.com/scripts/view/4633)
+
+## Button Masher Module
 > This module is a minigame for the hunters while they are blind, the minigame objective is press the button that displays on the screen, for each correct button press you get a point, and you loose a point when you press the wrong button.
 
 ![masher](https://i.imgur.com/HHsvz3S.png)
 
-## Snake Module:
+[Click here to get the Button Masher module](https://www.gmodstore.com/scripts/view/4633)
+
+## Snake Module
 > This module is a minigame for the hunters while they are blind, its the classic snake game.
 
 ![snake](https://i.imgur.com/wgWwH06.png)
+
+[Click here to get the Snake module](https://www.gmodstore.com/scripts/view/4633)
