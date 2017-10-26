@@ -5,4 +5,4 @@
 > A kickass Garry's Mod gamemode!
 
 [GitHub](https://github.com/gluaws/lastprop/)
-[Get Started](#lastprop)
+[Get Started](#Introduction)
