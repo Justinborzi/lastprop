@@ -74,15 +74,31 @@ function GM:RegisterTaunt(pack, type, taunt)
 
     if (not table.HasValue(lps.taunts.packs, pack)) then table.insert(lps.taunts.packs, pack) end
 
-    if (not lps.taunts.sounds[pack]) then lps.taunts.sounds[pack] = {} end
-    if (not lps.taunts.sounds[pack][type]) then lps.taunts.sounds[pack][type] = {} end
+    if (not lps.taunts.sounds[pack]) then
+        lps.taunts.sounds[pack] = {
+            hunter = {},
+            prop = {},
+            lastman = {},
+        }
+    end
 
-    if (not lps.taunts.info[pack]) then lps.taunts.info[pack] = {} end
-    if (not lps.taunts.info[pack][type]) then
-        lps.taunts.info[pack][type] = {
-            count = 0,
-            max = 0,
-            min = 0
+    if (not lps.taunts.info[pack]) then
+        lps.taunts.info[pack] = {
+            hunter = {
+                count = 0,
+                max = 0,
+                min = 0
+            },
+            prop = {
+                count = 0,
+                max = 0,
+                min = 0
+            },
+            lastman = {
+                count = 0,
+                max = 0,
+                min = 0
+            },
         }
     end
 

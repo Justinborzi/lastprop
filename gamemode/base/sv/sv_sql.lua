@@ -23,8 +23,6 @@ function GM:DBInitialize()
         lps.sql:SetPrefix(self.db.prefix)
         lps.Info('Database prefix set to \'%s\' and module set to \'%s\'.', self.db.prefix, self.db.module)
         lps.sql:Connect(self.db.host, self.db.username, self.db.password, self.db.database, self.db.port, self.db.unixsocket)
-    else
-        lps.Warning('Unable to find database.cfg, your stats will not be saved!')
     end
 end
 
@@ -51,7 +49,7 @@ end
 --   Name: GM:DBFailed()
 ---------------------------------------------------------]]--
 function GM:DBFailed(error)
-    lps.Warning('Unable to connect to the database! Check your database.cfg! Your stats will not be saved! %s', error)
+    lps.Warning('Unable to connect to the database! Check your database credentials! Your stats will not be saved! %s', error)
 end
 
 --[[---------------------------------------------------------

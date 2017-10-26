@@ -5,7 +5,6 @@ if SERVER then
                 GAMEMODE.loadouts[id]['weapon_smg1_underwata'] = table.Copy(GAMEMODE.loadouts[id]['weapon_smg1'])
                 GAMEMODE.loadouts[id]['weapon_smg1'] = nil
             end
-
             if (GAMEMODE.loadouts[id]['weapon_ar2']) then
                 GAMEMODE.loadouts[id]['weapon_ar2_underwata'] = table.Copy(GAMEMODE.loadouts[id]['weapon_ar2'])
                 GAMEMODE.loadouts[id]['weapon_ar2'] = nil

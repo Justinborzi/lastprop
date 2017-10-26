@@ -54,9 +54,12 @@ function GM:TauntMenu()
 
     local count
     if (GetConVar('lps_tauntpack'):GetString() == 'any' and #lps.taunts.packs > 1) then
-        count = #lps.taunts.packs
+        count = 0
         for _, pack in SortedPairs(lps.taunts.packs) do
-            addPack(self.tauntMenu:AddSubMenu(pack), pack, tauntType)
+            if (lps.taunts.info[pack] and lps.taunts.info[pack][tauntType] and lps.taunts.info[pack][tauntType].count > 0) then
+                addPack(self.tauntMenu:AddSubMenu(pack), pack, tauntType)
+                count = count + 1
+            end
         end
     else
         count = addPack(self.tauntMenu, tauntPack, tauntType)
