@@ -46,7 +46,7 @@ CLASS.killStrings   = {
 CLASS.walkSpeed            = 250   --
 CLASS.crouchedWalkSpeed    = 0.2   --
 CLASS.runSpeed             = 350   --
-CLASS.duckSpeed            = 0.4   --
+CLASS.duckSpeed            = 0.01  --
 CLASS.jumpPower            = 280   --
 CLASS.gravity              = 1     --
 
@@ -303,20 +303,22 @@ function CLASS:Loadout(ply)
     timer.Simple(0.1, function ()
         if (not IsValid(ply) and not ply:Alive()) then return end
 
+        local default = ''
         if (GAMEMODE:InPreGame() and GAMEMODE:GetConfig('pregame_deathmatch')) then
-            GAMEMODE:GiveLoadoutRandom(ply, 'PREGAME')
+            default = GAMEMODE:GiveLoadoutRandom(ply, 'PREGAME')
         end
 
         if (GAMEMODE:InRound() and ply:IsLastMan()) then
             GAMEMODE:GiveLoadout(ply, TEAM.PROPS)
-
-            local defult = ply:GetInfo('lps_prop_default')
-            if ply:HasWeapon(defult) then
-                ply:SelectWeapon(defult)
-            elseif ply:HasWeapon('weapon_lastman') then
-                ply:SelectWeapon('weapon_lastman')
-            end
+            default = ply:GetInfo('lps_prop_default')
         end
+
+        timer.Simple(0.4, function ()
+            if (not IsValid(ply) and not ply:Alive()) then return end
+            if (ply:HasWeapon(defult)) then
+                ply:SelectWeapon(defult)
+            end
+        end)
     end)
 end
 

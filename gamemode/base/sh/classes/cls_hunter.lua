@@ -172,17 +172,21 @@ end
 function CLASS:Loadout(ply)
     timer.Simple(0.1, function ()
         if (not IsValid(ply) and not ply:Alive()) then return end
+
+        local default = ''
         if (GAMEMODE:InPreGame() and GAMEMODE:GetConfig('pregame_deathmatch')) then
-            GAMEMODE:GiveLoadoutRandom(ply, 'PREGAME')
+            default = GAMEMODE:GiveLoadoutRandom(ply, 'PREGAME')
         elseif (GAMEMODE:InRound()) then
             GAMEMODE:GiveLoadout(ply, TEAM.HUNTERS)
-            local defult = ply:GetInfo('lps_hunter_default')
-            if ply:HasWeapon(defult) then
-                ply:SelectWeapon(defult)
-            elseif ply:HasWeapon('weapon_smg1') then
-                ply:SelectWeapon('weapon_smg1')
-            end
+            defult = ply:GetInfo('lps_hunter_default')
         end
+
+        timer.Simple(0.4, function ()
+            if (not IsValid(ply) and not ply:Alive()) then return end
+            if (ply:HasWeapon(defult)) then
+                ply:SelectWeapon(defult)
+            end
+        end)
     end)
 end
 

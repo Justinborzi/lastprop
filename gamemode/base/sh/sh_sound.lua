@@ -61,7 +61,6 @@ lps.net.Hook('PlaySound', function(data)
     hook.Call('PlaySound', GAMEMODE, data[1], data[2], data[3])
 end)
 
-
 --[[---------------------------------------------------------
 --   Name: GM:RegisterTaunt()
 ---------------------------------------------------------]]--

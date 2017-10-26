@@ -547,7 +547,7 @@ end
 --   Name: GM:GiveLoadout()
 ---------------------------------------------------------]]--
 function GM:GiveLoadout(ply, id)
-    if (not self.loadouts[id]) then return end
+    if (not self.loadouts[id]) then return {} end
     for wep, ammo in pairs(self.loadouts[id]) do
         local weapon = ply:Give(wep, true)
 
@@ -563,13 +563,15 @@ function GM:GiveLoadout(ply, id)
             ply:GiveAmmo(ammo.secondary[2], ammo.secondary[1], true)
         end
     end
+
+    return self.loadouts[id]
 end
 
 --[[---------------------------------------------------------
 --   Name: GM:GiveLoadoutRandom()
 ---------------------------------------------------------]]--
 function GM:GiveLoadoutRandom(ply, id)
-    if (not self.loadouts[id]) then return end
+    if (not self.loadouts[id]) then return '' end
     local swep = table.Random(table.GetKeys(self.loadouts[id]))
     local weapon = ply:Give(swep, true)
 
@@ -584,4 +586,6 @@ function GM:GiveLoadoutRandom(ply, id)
     if (self.loadouts[id].secondary) then
         ply:GiveAmmo(self.loadouts[id][swep].secondary[2], self.loadouts[id][swep].secondary[1], true)
     end
+
+    return swep
 end
