@@ -8,35 +8,42 @@
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/vue.css">
-  <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/dark.css" title="dark" disabled>
-  <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/buble.css" title="buble" disabled>
-  <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/pure.css" title="pure" disabled>
+  <link rel="stylesheet" href="//unpkg.com/docsify/lib/themes/pure.css" title="pure">
+  <link rel="stylesheet" href="//unpkg.com/docsify-copy-code/styles.css">
 </head>
 <body>
   <div id="app">Loading ...</div>
 </body>
+
+<script src="//unpkg.com/docsify-edit-on-github@1.0.1/index.js"></script>
+<script src="//unpkg.com/docsify-copy-code/index.js"></script>
+
 <script>
   window.$docsify = {
     name: 'Last Prop Standing',
     repo: 'gluaws/lastprop',
     loadSidebar: true,
+    executeScript: true,
     maxLevel: 4,
     subMaxLevel: 3,
     coverpage: true,
-    plugins: [
-      function(hook, vm) {
-        hook.beforeEach(function (html) {
-          var url = 'https://github.com/gluaws/lastprop/blob/master/docs/' + vm.route.file
-          var editHtml = '[:memo: Edit Document](' + url + ')\n'
-
-          return editHtml
-            + html
-            + '\n----\n'
-            + 'Last modified {docsify-updated} '
-        })
+    search: {
+      paths: 'auto',
+      noData: {
+        '/': 'No results!'
+      },
+      placeholder: {
+        '/': 'Search'
       }
+    },
+    plugins: [
+      EditOnGithubPlugin.create('https://github.com/gluaws/lastprop/tree/master/docs/'),
+      DocsifyCopyCodePlugin.init()
     ]
   }
 </script>
+
 <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+<script src="//unpkg.com/docsify/lib/plugins/search.min.js"></script>
+<script src="//unpkg.com/docsify/lib/plugins/zoom-image.min.js"></script>
 </html>
