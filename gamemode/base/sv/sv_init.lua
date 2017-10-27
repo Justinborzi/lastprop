@@ -28,7 +28,7 @@ function GM:Initialize()
         elseif (type(value) == 'boolean') then
             value = (value == true) and '1' or '0'
         end
-        CreateConVar('lps_' .. var, value, { FCVAR_ARCHIVE + FCVAR_NOTIFY })
+        CreateConVar('lps_' .. var, value, { FCVAR_SERVER_CAN_EXECUTE + FCVAR_REPLICATED + FCVAR_NOTIFY })
     end
 
     self:DisguiseDelay(self:GetConfig('prop_disguise_delay'))
