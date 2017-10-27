@@ -1,10 +1,10 @@
 
 
 --[[---------------------------------------------------------
-	Name: gamemode:PlayerSpawnAsSpectator( )
+	Name: gamemode:PlayerSpawnAsSpectator()
 	Desc: Player spawns as a spectator
 -----------------------------------------------------------]]
-function GM:PlayerSpawnAsSpectator( ply )
+function GM:PlayerSpawnAsSpectator(ply)
 	ply:StripWeapons()
 	ply:SetTeam(TEAM.SPECTATORS)
 	ply:Spectate(OBS_MODE_ROAMING)
@@ -17,7 +17,7 @@ end
 ---------------------------------------------------------]]--
 function GM:GetValidSpectatorModes(ply)
     -- Note: Override this and return valid modes per player/team
-    if (team.NumPlayers(ply:Team()) > 1 and not ply:IsSpec() ) then
+    if (team.NumPlayers(ply:Team()) > 1 and not ply:IsSpec()) then
         return {OBS_MODE_CHASE, OBS_MODE_IN_EYE, OBS_MODE_ROAMING}
     else
         return {OBS_MODE_ROAMING}

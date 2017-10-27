@@ -150,7 +150,7 @@ function lps.input:CheckKeys()
             self.mice[i][3] = true
         end
 
-        if (not input.IsMouseDown( self.mice[i][1]) and self.mice[i][3] == true) then
+        if (not input.IsMouseDown(self.mice[i][1]) and self.mice[i][3] == true) then
             safecall(function() hook.Call('KeyUp', GAMEMODE, self.mice[i][1], self.mice[i][2], self.mice[i][4], INPUT.MOUSE, busy, cursor) end)
             self.mice[i][3] = false
         end

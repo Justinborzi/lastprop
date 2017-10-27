@@ -194,7 +194,7 @@ end
 function meta:CanDisguise()
     if not self:Alive() then return false end
     if self:Team() ~= TEAM.PROPS then return false end
-    if self:GetVar('lastDisguise', 0) + GAMEMODE:GetConfig('prop_disguise_delay') > CurTime() then return false end
+    if self:GetVar('lastDisguise', 0) + GAMEMODE:DisguiseDelay() > CurTime() then return false end
     return self:GetVar('canDisguise', false)
 end
 

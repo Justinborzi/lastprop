@@ -26,7 +26,7 @@ end
 ---------------------------------------------------------]]--
 function GM:PlayerCanJoinTeam(ply, teamID)
 
-    local timeBetweenSwitches, lastTeamChange = self:GetConfig('team_switch_delay'), ply:GetVar('lastTeamChange', 0)
+    local timeBetweenSwitches, lastTeamChange = self:TeamSwitchDelay(), ply:GetVar('lastTeamChange', 0)
     if (timeBetweenSwitches > 0 and lastTeamChange and (CurTime() - lastTeamChange < timeBetweenSwitches)) then
         return false, string.format('Please wait %i more seconds before trying to change team again.', (timeBetweenSwitches - (CurTime() - lastTeamChange)) + 1)
     end
@@ -41,7 +41,7 @@ function GM:PlayerCanJoinTeam(ply, teamID)
     end
 
     local maxTeamSwitch = hook.Call('PlayerMaxTeamSwitch', self, ply, teamID)
-    if ( maxTeamSwitch > 0 and maxTeamSwitch <= ply:GetVar('teamChanges', 0) ) then
+    if (maxTeamSwitch > 0 and maxTeamSwitch <= ply:GetVar('teamChanges', 0)) then
         return false, 'You have reached the team switch limit!'
     end
 
@@ -50,7 +50,7 @@ function GM:PlayerCanJoinTeam(ply, teamID)
     end
 
     -- Don't let them join a team if it has more players than another team
-    if (self:GetConfig('team_force_balance')) then
+    if (self:ForceTeamBalance()) then
         for id, tm in pairs(team.GetAllTeams()) do
             if (id > 0 and id < 1000 and team.NumPlayers(id) <  team.NumPlayers(teamID) and team.Joinable(id)) then
                 return false, 'That team is full!'

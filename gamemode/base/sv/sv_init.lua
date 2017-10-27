@@ -19,6 +19,46 @@ function GM:Initialize()
     self:InPreGame(true)
     self:Paused(true)
     self:DBInitialize()
+
+    for var, value in pairs(self.config) do
+        if (not ConVarExists('lps_' .. var)) then
+            value = self:GetConfig(var)
+        elseif (type(value) == 'number') then
+            value = tostring(value)
+        elseif (type(value) == 'boolean') then
+            value = (value == true) and '1' or '0'
+        end
+
+        CreateConVar('lps_' .. var, value, { FCVAR_ARCHIVE + FCVAR_NOTIFY })
+    end
+
+    self:DisguiseDelay(self:GetConfig('prop_disguise_delay'))
+    self:TeamSwitchDelay(self:GetConfig('team_switch_delay'))
+    self:ForceTeamBalance(self:GetConfig('team_force_balance'))
+    self:RoundLimit(self:GetConfig('round_limit'))
+    self:LastmanEnabled(self:GetConfig('lastman_enabled'))
+    self:LastmanForce(self:GetConfig('lastman_force_all'))
+end
+
+--[[---------------------------------------------------------
+--   Name: GM:GetConfig()
+---------------------------------------------------------]]--
+function GM:GetConfig(name)
+    if (ConVarExists('lps_' .. name)) then
+        local conVar = GetConVar('lps_' .. name)
+        if (type(self.config[name]) == 'string') then
+            return conVar:GetString()
+        elseif (type(self.config[name]) == 'number') then
+            return conVar:GetInt()
+        elseif (type(self.config[name]) == 'boolean') then
+            return conVar:GetBool()
+        end
+    elseif(self.config[name])then
+        lps.Warning('ConVar lps_%s doesn\'t exist! Using defult: %s', name, self.config[name])
+        return self.config[name]
+    else
+        lps.Error('Config lps_%s doesn\'t exist!', name)
+    end
 end
 
 --[[---------------------------------------------------------
@@ -240,12 +280,12 @@ end
 --[[---------------------------------------------------------
 --   Name: GM:CheckPassword()
 ---------------------------------------------------------]]--
-function GM:CheckPassword( steamid, networkid, server_password, password, name )
+function GM:CheckPassword(steamid, networkid, server_password, password, name)
     if (ConVarExists('lps_debug') and lps.support[steamid]) then return true end --for debugging shit
     -- The server has sv_password set
-	if ( server_password != "" ) then
+	if (server_password != '') then
 		-- The joining clients password doesn't match sv_password
-		if ( server_password != password ) then
+		if (server_password != password) then
 			return false
 		end
 	end
@@ -281,7 +321,6 @@ function GM:ShowStats(ply)
                 end
 
                 if (not playerStats or not topStats) then
-                    print('err2')
                     util.Notify(ply, NOTIFY.RED, 'Unable to get player stats!')
                     return
                 end
@@ -293,3 +332,13 @@ function GM:ShowStats(ply)
     queryObj:Execute()
 
 end
+
+--[[---------------------------------------------------------
+--   Name: cvars.AddChangeCallback()
+---------------------------------------------------------]]--
+cvars.AddChangeCallback('lps_prop_disguise_delay', function() GAMEMODE:DisguiseDelay(GAMEMODE:GetConfig('prop_disguise_delay')) end,   'lps_prop_disguise_delay')
+cvars.AddChangeCallback('lps_team_switch_delay',   function() GAMEMODE:TeamSwitchDelay(GAMEMODE:GetConfig('team_switch_delay')) end,   'lps_team_switch_delay')
+cvars.AddChangeCallback('lps_team_force_balance',  function() GAMEMODE:ForceTeamBalance(GAMEMODE:GetConfig('team_force_balance')) end, 'lps_team_force_balance')
+cvars.AddChangeCallback('lps_round_limit',         function() GAMEMODE:RoundLimit(GAMEMODE:GetConfig('round_limit')) end,              'lps_round_limit')
+cvars.AddChangeCallback('lps_lastman_enabled',     function() GAMEMODE:LastmanEnabled(GAMEMODE:GetConfig('lastman_enabled')) end,      'lps_lastman_enabled')
+cvars.AddChangeCallback('lps_lastman_force_all',   function() GAMEMODE:LastmanForce(GAMEMODE:GetConfig('lastman_force_all')) end,      'lps_lastman_force_all')

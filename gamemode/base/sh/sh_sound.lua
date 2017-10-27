@@ -66,8 +66,8 @@ end)
 ---------------------------------------------------------]]--
 function GM:RegisterTaunt(pack, type, taunt)
 
-    if (not taunt.length or taunt.length < 0.3 ) then
-        lps.Warning('%s Does not have a length set! This taunt will be skipped!', taunt.name )
+    if (not taunt.length or taunt.length < 0.3) then
+        lps.Warning('%s Does not have a length set! This taunt will be skipped!', taunt.name)
         return
     end
 

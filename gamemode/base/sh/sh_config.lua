@@ -37,35 +37,14 @@ if (SERVER) then
     end
 end
 
-
 --[[---------------------------------------------------------
-   Define player teams
----------------------------------------------------------]]--
-TEAM = TEAM or {
-    CONNECTING =    TEAM_CONNECTING,
-    UNASSIGNED =    TEAM_UNASSIGNED,
-    SPECTATORS =    TEAM_SPECTATOR,
-    PROPS      =    1,
-    HUNTERS    =    2,
-}
-
-TEAM_DATA = TEAM_DATA or {
-    CONNECTING =    {id = TEAM_CONNECTING, name = 'Connecting'},
-    UNASSIGNED =    {id = TEAM_UNASSIGNED, name = 'Unassigned', color = Color(200, 200, 200), class = 'spectator', spawns = {'info_player_start',  'gmod_player_start', 'info_player_teamspawn', 'ins_spawnpoint', 'aoc_spawnpoint', 'dys_spawn_point', 'info_player_coop', 'info_player_deathmatch'}},
-    SPECTATORS =    {id = TEAM_SPECTATOR,  name = 'Spectators', color = Color(200, 200, 200), class = 'spectator', spawns = {'info_player_start',  'gmod_player_start', 'info_player_teamspawn', 'ins_spawnpoint', 'aoc_spawnpoint', 'dys_spawn_point', 'info_player_coop', 'info_player_deathmatch'}},
-    PROPS =         {id = 1,               name = 'Props',      color = Color(255, 80, 80),   class = 'prop',      spawns = {'info_player_terrorist', 'info_player_axis', 'info_player_combine', 'info_player_pirate', 'info_player_viking', 'diprip_start_team_blue', 'info_player_blue', 'info_player_human'}},
-    HUNTERS =       {id = 2,               name = 'Hunters',    color = Color(80, 150, 255),  class = 'hunter',    spawns = {'info_player_counterterrorist', 'info_player_allies', 'info_player_rebel', 'info_player_knight', 'diprip_start_team_red', 'info_player_red', 'info_player_zombie'}},
-}
-
-
---[[---------------------------------------------------------
-   Gamemode config
+Gamemode config
 ---------------------------------------------------------]]--
 GM.config = GM.config or {
-    ['pregame_time']              = 60,               -- Time to wait before starting game.
+    ['pregame_time']              = 90,               -- Time to wait before starting game.
     ['pregame_deathmatch']        = true,             -- Rocket deathmatch before game starts or while waiting for players to join
 
-    ['round_limit']               = 5,                -- Round limit
+    ['round_limit']               = 8,                -- Round limit
     ['round_time']                = 300,              -- Round time
     ['preround_time']             = 60,               -- Pre round time (This is the amount of time the hunter are blinded and props get to find a hinding spot)
     ['postround_time']            = 15,               -- Post round time
@@ -108,41 +87,27 @@ GM.config = GM.config or {
     ['hunter_jetpack_jump']       = true,             -- Jetpack jump for props
 }
 
-for var, value in pairs(GM.config) do
-    if (not ConVarExists('lps_' .. var)) then
-        if (type(value) == 'number') then
-            value = tostring(value)
-        elseif (type(value) == 'boolean') then
-            value = (value == true) and '1' or '0'
-        end
-        CreateConVar('lps_' .. var, value, { FCVAR_SERVER_CAN_EXECUTE, FCVAR_REPLICATED, FCVAR_NOTIFY })
-        lps.Info('Setting up ConVar: %s %s', 'lps_' .. var, value)
-    end
-end
-
 --[[---------------------------------------------------------
---   Name: GM:GetConfig()
+   Define player teams
 ---------------------------------------------------------]]--
-function GM:GetConfig(name)
-    if (ConVarExists('lps_' .. name)) then
-        local conVar = GetConVar('lps_' .. name)
-        if (type(self.config[name]) == 'string') then
-            return conVar:GetString()
-        elseif (type(self.config[name]) == 'number') then
-            return conVar:GetInt()
-        elseif (type(self.config[name]) == 'boolean') then
-            return conVar:GetBool()
-        end
-    elseif(self.config[name])then
-        lps.Warning('ConVar lps_%s doesn\'t exist! Using defult: %s', name, self.config[name])
-        return self.config[name]
-    else
-        lps.Error('Config lps_%s doesn\'t exist!', name)
-    end
-end
+TEAM = TEAM or {
+    CONNECTING =    TEAM_CONNECTING,
+    UNASSIGNED =    TEAM_UNASSIGNED,
+    SPECTATORS =    TEAM_SPECTATOR,
+    PROPS      =    1,
+    HUNTERS    =    2,
+}
+
+TEAM_DATA = TEAM_DATA or {
+    CONNECTING =    {id = TEAM_CONNECTING, name = 'Connecting'},
+    UNASSIGNED =    {id = TEAM_UNASSIGNED, name = 'Unassigned', color = Color(200, 200, 200), class = 'spectator', spawns = {'info_player_start',  'gmod_player_start', 'info_player_teamspawn', 'ins_spawnpoint', 'aoc_spawnpoint', 'dys_spawn_point', 'info_player_coop', 'info_player_deathmatch'}},
+    SPECTATORS =    {id = TEAM_SPECTATOR,  name = 'Spectators', color = Color(200, 200, 200), class = 'spectator', spawns = {'info_player_start',  'gmod_player_start', 'info_player_teamspawn', 'ins_spawnpoint', 'aoc_spawnpoint', 'dys_spawn_point', 'info_player_coop', 'info_player_deathmatch'}},
+    PROPS =         {id = 1,               name = 'Props',      color = Color(255, 80, 80),   class = 'prop',      spawns = {'info_player_terrorist', 'info_player_axis', 'info_player_combine', 'info_player_pirate', 'info_player_viking', 'diprip_start_team_blue', 'info_player_blue', 'info_player_human'}},
+    HUNTERS =       {id = 2,               name = 'Hunters',    color = Color(80, 150, 255),  class = 'hunter',    spawns = {'info_player_counterterrorist', 'info_player_allies', 'info_player_rebel', 'info_player_knight', 'diprip_start_team_red', 'info_player_red', 'info_player_zombie'}},
+}
 
 --[[---------------------------------------------------------
-   Gamemode Loadouts
+Gamemode Loadouts
 ---------------------------------------------------------]]--
 GM.loadouts = GM.loadouts or {}
 

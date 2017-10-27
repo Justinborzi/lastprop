@@ -21,10 +21,8 @@ local function canlog(flag)
                 return true
             end
         end
-    else
-        if (bit.band(flag, level) >= flag)then
-            return true
-        end
+    elseif (bit.band(flag, level) >= flag)then
+        return true
     end
     return false
 end
@@ -75,8 +73,8 @@ local function log(color, flag, time, format, ...)
             timeStr,
             flagStr,
             log
-       )
-   )
+        )
+    )
 end
 
 local function trace()
@@ -84,10 +82,8 @@ local function trace()
     for i, line in pairs(string.Split(debug.traceback(), '\n')) do
         if (i == 1) then
             table.insert(trace, '    ' .. line)
-        else
-            if (not string.find(line, 'sh_log.lua')) then
-                table.insert(trace, string.Replace(line,  lps.paths.lua .. '/gamemode/', '') )
-            end
+        elseif (not string.find(line, 'sh_log.lua')) then
+            table.insert(trace, string.Replace(line,  lps.paths.lua .. '/gamemode/', ''))
         end
     end
     return table.concat(trace , '\n')

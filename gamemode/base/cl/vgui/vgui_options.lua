@@ -302,7 +302,7 @@ function PANEL:DrawFrame()
         },
     }
 
-    if (GAMEMODE:GetConfig('lastman_enabled') and not GAMEMODE:GetConfig('lastman_force_all')) then
+    if (GAMEMODE:LastmanEnabled() and not GAMEMODE:LastmanForce()) then
         table.insert(settings.prop.settings,  {
             convar = 'lps_lastman',
             type = 'bool',

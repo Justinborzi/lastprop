@@ -60,7 +60,7 @@ function GM:PlayerSpawn(ply)
         return
     end
 
-    hook.Call( "PlayerSetModel", GAMEMODE, ply )
+    hook.Call('PlayerSetModel', GAMEMODE, ply)
 
     ply:SetupHands()
 
@@ -85,15 +85,15 @@ function GM:PlayerSpawn(ply)
     hook.Call('PlayerLoadout', self, ply)
 end
 
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
 	ply:ClassCall('Loadout')
 end
 
 --[[---------------------------------------------------------
-	Name: gamemode:PlayerSetModel( )
+	Name: gamemode:PlayerSetModel()
 	Desc: Set the player's model
 -----------------------------------------------------------]]
-function GM:PlayerSetModel( ply )
+function GM:PlayerSetModel(ply)
         local models = {
         'male01',
         'male02',
@@ -132,10 +132,10 @@ function GM:PlayerSetModel( ply )
 end
 
 --[[---------------------------------------------------------
-    Name: gamemode:PlayerSetHandsModel( )
+    Name: gamemode:PlayerSetHandsModel()
     Desc: Sets the player's view model hands model
 -----------------------------------------------------------]]
-function GM:PlayerSetHandsModel( ply, ent )
+function GM:PlayerSetHandsModel(ply, ent)
     local info = ply:ClassCall('GetHandsModel')
     if (not info) then
         info = player_manager.TranslatePlayerHands(player_manager.TranslateToPlayerModelName(ply:GetModel()))
@@ -148,12 +148,12 @@ function GM:PlayerSetHandsModel( ply, ent )
 end
 
 --[[---------------------------------------------------------
-   Name: gamemode:SetPlayerSpeed( )
+   Name: gamemode:SetPlayerSpeed()
    Desc: Sets the player's run/walk speed
 -----------------------------------------------------------]]
-function GM:SetPlayerSpeed( ply, walk, run )
-	ply:SetWalkSpeed( walk )
-	ply:SetRunSpeed( run )
+function GM:SetPlayerSpeed(ply, walk, run)
+	ply:SetWalkSpeed(walk)
+	ply:SetRunSpeed(run)
 end
 
 --[[---------------------------------------------------------
@@ -444,7 +444,7 @@ end
 --[[---------------------------------------------------------
 --   Name: GM:PlayerCanSeePlayersChat()
 ---------------------------------------------------------]]--
-function GM:PlayerCanSeePlayersChat( text, teamOnly, listener, speaker )
+function GM:PlayerCanSeePlayersChat(text, teamOnly, listener, speaker)
 
     -- Generic Checks
     if (not IsValid(speaker) or not IsValid(listener)) then return end

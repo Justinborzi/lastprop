@@ -20,7 +20,7 @@ function PANEL:Init()
         self:DoClick()
     end
 
-    if (lps.mapvote.config.allowForce and LocalPlayer():IsAdmin() ) then
+    if (lps.mapvote.config.allowForce and LocalPlayer():IsAdmin()) then
         self.force = vgui.Create('LPSButton', self.image)
         self.force:SetText('Force Map')
         self.force:Dock(BOTTOM)

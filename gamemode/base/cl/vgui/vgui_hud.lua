@@ -149,23 +149,23 @@ function PANEL:PerformLayout()
     end
 end
 
-derma.DefineControl("DHudLayout", "A HUD Layout Base", PANEL, "Panel")
+derma.DefineControl('DHudLayout', 'A HUD Layout Base', PANEL, 'Panel')
 
 --[[---------------------------------------------------------
 --   Name: HudBase
 ---------------------------------------------------------]]--
 local PANEL = {}
 
-AccessorFunc(PANEL, "partOfBar",     "PartOfBar")
-AccessorFunc(PANEL, "showBack",     "ShowBackground")
+AccessorFunc(PANEL, 'partOfBar',    'PartOfBar')
+AccessorFunc(PANEL, 'showBack',     'ShowBackground')
 
 --[[---------------------------------------------------------
 --   Name: PANEL:Init()
 ---------------------------------------------------------]]--
 function PANEL:Init()
-    self:SetText("-")
+    self:SetText('-')
     self:SetTextColor(self:GetDefaultTextColor())
-    self:SetFont("LPS30")
+    self:SetFont('LPS30')
     self:ChooseParent()
     self:SetShowBackground(true)
     self.margins = {10, 10, 10, 10}
@@ -219,7 +219,7 @@ end
 --   Name: PANEL:GetTextLabelFont()
 ---------------------------------------------------------]]--
 function PANEL:GetTextLabelFont()
-    return "LPS16"
+    return 'LPS16'
 end
 
 --[[---------------------------------------------------------
@@ -231,16 +231,16 @@ function PANEL:Paint(w, h)
     end
 end
 
-derma.DefineControl("HudBase", "A HUD Base Element (override to change the style)", PANEL, "DLabel")
+derma.DefineControl('HudBase', 'A HUD Base Element (override to change the style)', PANEL, 'DLabel')
 
 
 local PANEL = {}
 
-AccessorFunc(PANEL, "items",     "Items")
-AccessorFunc(PANEL, "horizontal","Horizontal")
-AccessorFunc(PANEL, "spacing",     "Spacing")
-AccessorFunc(PANEL, "alignBottom", "AlignBottom")
-AccessorFunc(PANEL, "alignCenter", "AlignCenter")
+AccessorFunc(PANEL, 'items',       'Items')
+AccessorFunc(PANEL, 'horizontal',  'Horizontal')
+AccessorFunc(PANEL, 'spacing',     'Spacing')
+AccessorFunc(PANEL, 'alignBottom', 'AlignBottom')
+AccessorFunc(PANEL, 'alignCenter', 'AlignCenter')
 
 --[[---------------------------------------------------------
 --   Name: PANEL:Init()
@@ -248,7 +248,7 @@ AccessorFunc(PANEL, "alignCenter", "AlignCenter")
 function PANEL:Init()
     self.items = {}
     self:SetHorizontal(true)
-    self:SetText("")
+    self:SetText('')
     self:SetAlignCenter(true)
     self:SetSpacing(8)
     self.margins = { 10, 10, 10, 10}
@@ -299,7 +299,7 @@ function PANEL:PerformLayout()
     end
 end
 
-derma.DefineControl("DHudBar", "", PANEL, "HudBase")
+derma.DefineControl('DHudBar', '', PANEL, 'HudBase')
 
 --[[---------------------------------------------------------
 --   Name: DHudElement
@@ -354,7 +354,7 @@ end
 --   Name: PANEL:SetLabel()
 ---------------------------------------------------------]]--
 function PANEL:SetLabel(text)
-    self.labelPanel = vgui.Create("DLabel", self)
+    self.labelPanel = vgui.Create('DLabel', self)
     self.labelPanel:SetText(text)
     self.labelPanel:SetTextColor(self:GetTextLabelColor())
     self.labelPanel:SetFont(self:GetTextLabelFont())
@@ -389,7 +389,7 @@ function PANEL:PerformLayout()
     end
 end
 
-derma.DefineControl("DHudElement", "A HUD Element", PANEL, "HudBase")
+derma.DefineControl('DHudElement', 'A HUD Element', PANEL, 'HudBase')
 
 --[[---------------------------------------------------------
 --   Name: DHudUpdater
@@ -397,8 +397,8 @@ derma.DefineControl("DHudElement", "A HUD Element", PANEL, "HudBase")
 
 local PANEL = {}
 
-AccessorFunc(PANEL, "valueFunction",     "ValueFunction")
-AccessorFunc(PANEL, "colorFunction",     "ColorFunction")
+AccessorFunc(PANEL, 'valueFunction',     'ValueFunction')
+AccessorFunc(PANEL, 'colorFunction',     'ColorFunction')
 
 --[[---------------------------------------------------------
 --   Name: PANEL:Init()
@@ -425,7 +425,7 @@ end
 --   Name: PANEL:GetTextValueFromFunction()
 ---------------------------------------------------------]]--
 function PANEL:GetTextValueFromFunction()
-    if (not self.valueFunction) then return "-" end
+    if (not self.valueFunction) then return '-' end
     return tostring(self:valueFunction())
 end
 
@@ -445,7 +445,7 @@ function PANEL:Think()
     self:SetText(self:GetTextValueFromFunction())
 end
 
-derma.DefineControl("DHudUpdater", "A HUD Element", PANEL, "DHudElement")
+derma.DefineControl('DHudUpdater', 'A HUD Element', PANEL, 'DHudElement')
 
 --[[---------------------------------------------------------
 --   Name: DHudCountdown
@@ -453,7 +453,7 @@ derma.DefineControl("DHudUpdater", "A HUD Element", PANEL, "DHudElement")
 
 local PANEL = {}
 
-AccessorFunc(PANEL, "m_Function",     "Function")
+AccessorFunc(PANEL, 'm_Function',     'Function')
 
 --[[---------------------------------------------------------
 --   Name: PANEL:Init()
@@ -475,7 +475,7 @@ function PANEL:Think()
     if (endTime == -1) then return end
 
     if (not endTime or endTime < CurTime()) then
-        self:SetText("00:00")
+        self:SetText('00:00')
         return
     end
 
@@ -484,4 +484,4 @@ function PANEL:Think()
 
 end
 
-derma.DefineControl("DHudCountdown", "A HUD Element", PANEL, "DHudUpdater")
+derma.DefineControl('DHudCountdown', 'A HUD Element', PANEL, 'DHudUpdater')

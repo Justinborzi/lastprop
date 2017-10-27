@@ -4,7 +4,7 @@ function PANEL:Init()
 
     local scale = math.Clamp(ScrW() / 1920.0, 0.5, 1.0)
 
-    self:SetSize(1024 * scale, 256 * scale )
+    self:SetSize(1024 * scale, 256 * scale)
     self:SetImage('vgui/lps/banner')
     self:SetKeepAspect(true)
     self:SetVisible(false)

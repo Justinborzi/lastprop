@@ -123,7 +123,7 @@ function GM:CheckRoundEnd()
         return
     end
 
-    if(self:GetConfig('lastman_enabled')) then
+    if(self:LastmanEnabled()) then
         for teamID, num in pairs(teams) do
             if (num == 1 and team.NumPlayers(teamID) > 1) then
                 local lastMan = util.GetLastMan(teamID)
@@ -159,7 +159,7 @@ end
 ---------------------------------------------------------]]--
 function GM:RoundLastMan(ply)
     if (not IsValid(ply)) then return end
-    if (ply:Team() == TEAM.PROP and ply:GetInfoNum('lps_lastman', 1) == 0 and not self:GetConfig('lastman_force_all')) then return end
+    if (ply:Team() == TEAM.PROP and ply:GetInfoNum('lps_lastman', 1) == 0 and not self:LastmanForce()) then return end
 
     self:LastMan(ply:Team(), ply)
 

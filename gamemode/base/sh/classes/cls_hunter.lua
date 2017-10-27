@@ -305,7 +305,7 @@ function CLASS:OnCausedDamage(ply, ent, dmgInfo)
 
     if (GAMEMODE:GetConfig('hunter_crowbar_nopenalty')) then
         local swep = ply:GetActiveWeapon()
-        if ( IsValid(swep) and swep:GetClass() == 'weapon_crowbar') then return end
+        if (IsValid(swep) and swep:GetClass() == 'weapon_crowbar') then return end
     end
 
     if (GAMEMODE:GetConfig('hunter_damage_penalty') > 0 and table.HasValue({'prop_physics', 'prop_physics_multiplayer'}, ent:GetClass())) then

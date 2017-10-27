@@ -338,13 +338,13 @@ function meta:UnStick()
         local up = angle:Up()
 
         local searchScale = 1 -- Increase and it will unstuck you from even harder places but with lost accuracy. Please, don't try higher values than 12
-        if (not FindPassableSpace( forward, searchScale)) then
-            if (not FindPassableSpace( right, searchScale)) then
-                if (not FindPassableSpace( right, -searchScale)) then --Left
-                        if (not FindPassableSpace( up, searchScale)) then -- up
-                            if (not FindPassableSpace( up, -searchScale)) then -- down
-                                if (not FindPassableSpace( forward, -searchScale)) then -- back
-                                local spawn = GAMEMODE:PlayerSelectTeamSpawn( self:Team(), self )
+        if (not FindPassableSpace(forward, searchScale)) then
+            if (not FindPassableSpace(right, searchScale)) then
+                if (not FindPassableSpace(right, -searchScale)) then --Left
+                        if (not FindPassableSpace(up, searchScale)) then -- up
+                            if (not FindPassableSpace(up, -searchScale)) then -- down
+                                if (not FindPassableSpace(forward, -searchScale)) then -- back
+                                local spawn = GAMEMODE:PlayerSelectTeamSpawn(self:Team(), self)
                                 if (IsValid(spawn)) then
                                     newPos = spawn:GetPos() -- spawn if cant find spot
                                 else

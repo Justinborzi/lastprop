@@ -56,7 +56,7 @@ function GM:PlayerJoinTeam(ply, newTeam)
 
     lps.Log('Player %s joined %s team from %s team', ply:Nick(), team.GetName(newTeam) or 'None', team.GetName(oldTeam) or 'None')
 
-    util.Notify(nil, string.format('%s joined ', ply:Nick()), team.GetColor(newTeam), team.GetName(newTeam), NOTIFY.DEFAULT, '.' )
+    util.Notify(nil, string.format('%s joined ', ply:Nick()), team.GetColor(newTeam), team.GetName(newTeam), NOTIFY.DEFAULT, '.')
 
     gamemode.Call('OnPlayerChangedTeam', ply, oldTeam, newTeam)
 end

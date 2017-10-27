@@ -201,7 +201,7 @@ function PANEL:Think()
     self.teamLabel:SetText(team.GetName(self.teamID))
     self.teamLabel:SizeToContents()
 
-    self.scoreLabel:SetText(string.format('Wins: %s/%s', team.GetScore(self.teamID), GAMEMODE:GetConfig('round_limit')))
+    self.scoreLabel:SetText(string.format('Wins: %s/%s', team.GetScore(self.teamID), GAMEMODE:RoundLimit()))
     self.scoreLabel:SizeToContents()
 
     self:CleanLines()

@@ -189,7 +189,7 @@ hook.Add('HUDUpdate', 'HUDUpdate:Rounds', function(ply, hud)
             bar:AddItem(roundEnd)
 
             hud:AddItem(bar, 2)
-        elseif (inPostRound and (GAMEMODE:Round() + 1) < GAMEMODE:GetConfig('round_limit')) then
+        elseif (inPostRound and (GAMEMODE:Round() + 1) < GAMEMODE:RoundLimit()) then
             local nextRound = vgui.Create('DHudCountdown')
             nextRound:SetValueFunction(function() return GAMEMODE:NextRoundTime() end)
             nextRound:SetLabel('NEXT ROUND IN')

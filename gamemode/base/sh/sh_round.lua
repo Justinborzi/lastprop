@@ -102,6 +102,17 @@ function GM:RoundWinner(int)
 end
 
 --[[---------------------------------------------------------
+--   Name: GM:RoundLimit()
+---------------------------------------------------------]]--
+function GM:RoundLimit(int)
+    if (int ~= nil and SERVER) then
+        SetGlobalInt('RoundLimit', int)
+    else
+        return GetGlobalInt('RoundLimit', self.config['round_limit'])
+    end
+end
+
+--[[---------------------------------------------------------
 --   Name: GM:LastMan()
 ---------------------------------------------------------]]--
 function GM:LastMan(teamID, ent)
