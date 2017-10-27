@@ -156,8 +156,8 @@ derma.DefineControl('DHudLayout', 'A HUD Layout Base', PANEL, 'Panel')
 ---------------------------------------------------------]]--
 local PANEL = {}
 
-AccessorFunc(PANEL, 'partOfBar',    'PartOfBar')
-AccessorFunc(PANEL, 'showBack',     'ShowBackground')
+AccessorFunc(PANEL, 'partOfBar', 'PartOfBar')
+AccessorFunc(PANEL, 'showBack',  'ShowBackground')
 
 --[[---------------------------------------------------------
 --   Name: PANEL:Init()
@@ -397,8 +397,8 @@ derma.DefineControl('DHudElement', 'A HUD Element', PANEL, 'HudBase')
 
 local PANEL = {}
 
-AccessorFunc(PANEL, 'valueFunction',     'ValueFunction')
-AccessorFunc(PANEL, 'colorFunction',     'ColorFunction')
+AccessorFunc(PANEL, 'valueFunction', 'ValueFunction')
+AccessorFunc(PANEL, 'colorFunction', 'ColorFunction')
 
 --[[---------------------------------------------------------
 --   Name: PANEL:Init()
@@ -453,7 +453,7 @@ derma.DefineControl('DHudUpdater', 'A HUD Element', PANEL, 'DHudElement')
 
 local PANEL = {}
 
-AccessorFunc(PANEL, 'm_Function',     'Function')
+AccessorFunc(PANEL, 'm_Function', 'Function')
 
 --[[---------------------------------------------------------
 --   Name: PANEL:Init()
