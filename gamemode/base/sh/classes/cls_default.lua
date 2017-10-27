@@ -1,24 +1,27 @@
 local CLASS = {}
-CLASS.name                    = 'Default Class'
-CLASS.playerModel            = 'models/player.mdl'
+CLASS.name                  = 'Default Class'
+
+CLASS.playerModel           = { 'combine'}
+CLASS.suicideString         = { 'suicided!' }
+CLASS.killString            = { 'murdered' }
 
 CLASS.walkSpeed             = 250   --
 CLASS.crouchedWalkSpeed     = 0.4   --
-CLASS.runSpeed                = 350   --
-CLASS.duckSpeed                = 0.4   --
-CLASS.jumpPower                = 200   --
-CLASS.gravity                = 0   --
+CLASS.runSpeed              = 350   --
+CLASS.duckSpeed             = 0.4   --
+CLASS.jumpPower             = 200   --
+CLASS.gravity               = 0   --
 
-CLASS.maxHealth                = 100   --
-CLASS.startHealth            = 100   --
+CLASS.maxHealth             = 100   --
+CLASS.startHealth           = 100   --
 CLASS.startArmor            = 0        --
 
-CLASS.drawViewModel            = true  --
+CLASS.drawViewModel         = true  --
 CLASS.canUseFlashlight      = true  --
-CLASS.dropWeaponOnDie        = false    --
+CLASS.dropWeaponOnDie       = false    --
 CLASS.teammateNoCollide     = true    --
-CLASS.avoidPlayers            = true     -- Automatically avoid players that we're no colliding
-CLASS.fullRotation            = false -- Allow the player's model to rotate upwards, etc etc
+CLASS.avoidPlayers          = true     -- Automatically avoid players that we're no colliding
+CLASS.fullRotation          = false -- Allow the player's model to rotate upwards, etc etc
 
 --[[---------------------------------------------------------
                         CLIENT HOOKS

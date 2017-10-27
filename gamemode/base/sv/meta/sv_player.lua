@@ -134,7 +134,7 @@ function meta:Disguise(ent)
         self:SetColor(Color(255, 255, 255, 0))
         self:SetBloodColor(BLOOD_COLOR_MECH)
         self:SetRenderMode(RENDERMODE_NONE)
-        self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
+        self:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
         self:SetNoDraw(true)
         self:DrawShadow(false)
 

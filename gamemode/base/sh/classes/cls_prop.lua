@@ -314,7 +314,7 @@ function CLASS:Loadout(ply)
         end
 
         timer.Simple(0.4, function ()
-            if (not IsValid(ply) and not ply:Alive()) then return end
+            if (not IsValid(ply) or not ply:Alive()) then return end
             if (ply:HasWeapon(default)) then
                 ply:SelectWeapon(default)
             end

@@ -76,7 +76,7 @@ function CLASS:HUDDrawTargetID(ply)
     if (ply:GetVar('blinded', false)) then return end
     local tr = ply:GetEyeTrace()
     if (not IsValid(tr.Entity)) then return end
-    if (tr.Entity:IsPlayer()) and ((tr.Entity:Team() == TEAM.HUNTERS) or (tr.Entity:Team() == TEAM.PROPS and not tr.Entity:IsDisguised())) then
+    if ((tr.Entity:IsPlayer()) and table.HasValue({TEAM.HUNTERS, TEAM.PROPS}, tr.Entity:Team())) then
         surface.SetFont('LPS30')
         local text = tr.Entity :Nick()
         local w, h = surface.GetTextSize(text)
@@ -182,7 +182,7 @@ function CLASS:Loadout(ply)
         end
 
         timer.Simple(0.4, function ()
-            if (not IsValid(ply) and not ply:Alive()) then return end
+            if (not IsValid(ply) or not ply:Alive()) then return end
             if (ply:HasWeapon(default)) then
                 ply:SelectWeapon(default)
             end
