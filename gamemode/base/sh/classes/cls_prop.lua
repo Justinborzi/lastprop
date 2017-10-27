@@ -422,10 +422,9 @@ function CLASS:OnRoundEnd(ply, teamID, num)
     ply:StripWeapons()
 
     if (GAMEMODE:GetConfig('postround_deathmatch')) then
-        timer.Simple(2, function ()
-            if (IsValid(ply) and ply:Alive()) then
-                GAMEMODE:GiveLoadoutRandom(ply, 'POSTROUND')
-            end
+        timer.Simple(1, function ()
+            if (not IsValid(ply) or not ply:Alive() or not GAMEMODE:InPostRound()) then return end
+            GAMEMODE:GiveLoadoutRandom(ply, 'POSTROUND')
         end)
     end
 end
@@ -466,17 +465,19 @@ function CLASS:Use(ply, ent)
         end
     end
 
-    if (ply:CanDisguiseFit(ent)) then
-        if (ply:GetVar('replaceProp', false)) then
-            local angles = ent:GetAngles()
-            ply:DisguiseAs(ent)
-            local disguise = ply:GetDisguise()
-            if (IsValid(disguise)) then
-                disguise:SetLocked(angles)
-            end
-        else
-            ply:Disguise(ent)
+    if (ply:GetVar('replaceProp', false)) then
+        local angles = ent:GetAngles()
+        local pos = ent:GetPos()
+
+        ply:DisguiseAs(ent)
+        ply:SetPos(pos)
+
+        local disguise = ply:GetDisguise()
+        if (IsValid(disguise)) then
+            disguise:SetLocked(angles)
         end
+    elseif (ply:CanDisguiseFit(ent)) then
+        ply:Disguise(ent)
         ply:SetVar('lastUse', CurTime())
         return false
     else

@@ -273,10 +273,9 @@ function CLASS:OnRoundEnd(ply, teamID, num)
     end
 
     if (GAMEMODE:GetConfig('postround_deathmatch')) then
-        timer.Simple(2, function ()
-            if (IsValid(ply) and ply:Alive()) then
-                GAMEMODE:GiveLoadoutRandom(ply, 'POSTROUND')
-            end
+        timer.Simple(1, function ()
+            if (not IsValid(ply) or not ply:Alive() or not GAMEMODE:InPostRound()) then return end
+            GAMEMODE:GiveLoadoutRandom(ply, 'POSTROUND')
         end)
     end
 end
