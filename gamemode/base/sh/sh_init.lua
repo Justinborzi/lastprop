@@ -3,11 +3,12 @@ DeriveGamemode('base')
 --[[---------------------------------------------------------
    Gamemode info
 ---------------------------------------------------------]]--
-GM.Name      = 'Last Prop Standing'
-GM.Author    = 'Nerdism'
-GM.Email     = 'nerdism.io@gmail.com'
-GM.Website   = 'https://github.com/wsglua/lastprop/'
-GM.TeamBased = true
+GM.Name       = 'Last Prop Standing'
+GM.Author     = 'Nerdism'
+GM.Email      = 'nerdism.io@gmail.com'
+GM.Website    = 'https://github.com/wsglua/lastprop/'
+GM.TeamBased  = true
+GM.isLastProp = true
 
 --[[---------------------------------------------------------
    Include Shared

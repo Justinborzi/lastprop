@@ -28,7 +28,6 @@ function GM:Initialize()
         elseif (type(value) == 'boolean') then
             value = (value == true) and '1' or '0'
         end
-
         CreateConVar('lps_' .. var, value, { FCVAR_ARCHIVE + FCVAR_NOTIFY })
     end
 
