@@ -130,18 +130,21 @@ function meta:Disguise(ent)
     local disguise = self:GetDisguise()
 
     if not IsValid(disguise) then
-        disguise = ents.Create('lps_disguise')
-        disguise:SetParent(self)
-        disguise:SetOwner(self)
-        disguise:Spawn()
-        self:SetDisguise(disguise)
         self:SetModel('models/shells/shell_9mm.mdl')
         self:SetColor(Color(255, 255, 255, 0))
         self:SetBloodColor(BLOOD_COLOR_MECH)
         self:SetRenderMode(RENDERMODE_NONE)
-        self:SetCollisionGroup(COLLISION_GROUP_PLAYER)
+        self:SetCollisionGroup(COLLISION_GROUP_WEAPON)
         self:SetNoDraw(true)
         self:DrawShadow(false)
+
+        disguise = ents.Create('lps_disguise')
+        disguise:SetOwner(self)
+        disguise:SetParent(self)
+        disguise:SetPlayer(self)
+        disguise:Spawn()
+
+        self:SetDisguise(disguise)
     end
 
     local hullxy_max, hullxy_min, hullz, duckz, obb
@@ -253,7 +256,7 @@ function meta:IsStuck()
 
     if (IsValid(disguise)) then
         t.filter = function(ent)
-            if (ent:GetClass() == 'lps_disguise' and ent:GetOwner() == self) then return false end
+            if (ent:GetClass() == 'lps_disguise' and ent:GetPlayer() == self) then return false end
             if ent == self then return false end
             return true
         end
@@ -296,7 +299,7 @@ function meta:UnStick()
 
         if (IsValid(disguise)) then
             t.filter = function(ent)
-                if (ent:GetClass() == 'lps_disguise' and ent:GetOwner() == self) then return false end
+                if (ent:GetClass() == 'lps_disguise' and ent:GetPlayer() == self) then return false end
                 if ent == self then return false end
                 return true
             end

@@ -181,7 +181,7 @@ function meta:GetEyeTrace()
     tr.mask = MASK_ALL
     tr.filter = function(ent)
         if (not IsValid(ent)) then return false end
-        if (ent:GetClass() == 'lps_disguise' and ent:GetOwner() == self) then return false end
+        if (ent:GetClass() == 'lps_disguise' and ent:GetPlayer() == self) then return false end
         if ent == self then return false end
         return true
     end
@@ -235,7 +235,7 @@ function meta:CanDisguiseFit(ent)
     trace.mins = Vector(hullxy_min, hullxy_min, 0)
     trace.mask = MASK_SHOT
     trace.filter = function(ent)
-        if (ent:GetClass() == 'lps_disguise' and ent:GetOwner() == self) or (ent == self) then return false end
+        if (ent:GetClass() == 'lps_disguise' and ent:GetPlayer() == self) or (ent == self) then return false end
         return true
     end
     local tr = util.TraceHull(trace)

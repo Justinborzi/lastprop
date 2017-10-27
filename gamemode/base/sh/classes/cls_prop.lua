@@ -106,7 +106,7 @@ function CLASS:HUDDrawTargetID(ply)
 
     if (tr.Entity:GetClass() == 'lps_disguise') or
        ((tr.Entity:IsPlayer()) and table.HasValue({TEAM.HUNTERS, TEAM.PROPS}, tr.Entity:Team())) then
-        local ply = tr.Entity:GetClass() == 'lps_disguise' and tr.Entity:GetOwner() or tr.Entity
+        local ply = tr.Entity:GetClass() == 'lps_disguise' and tr.Entity:GetPlayer() or tr.Entity
         if (not IsValid(ply)) then return end
         surface.SetFont('LPS30')
         local text = ply:Nick()
