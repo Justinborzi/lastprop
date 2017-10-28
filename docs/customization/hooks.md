@@ -1,5 +1,6 @@
 # Gamemode Hooks
-This documentation is incomplete! Just an FYI!
+---
+*This documentation is incomplete! Just an FYI!*
 
 ## Keybinds/Input
 

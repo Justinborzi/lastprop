@@ -1,4 +1,5 @@
-#Gamemode Configuration
+# Gamemode Configuration
+---
 
 ## Convars
 

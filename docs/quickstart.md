@@ -1,5 +1,3 @@
-# Quick Start
-
 ## Downloading & Installing
 > 1. Download and extract the [latest stable version](https://github.com/gluaws/lastprop/releases/latest).
 > 2. Put the gamemode in `garrysmod/gamemodes`
@@ -10,7 +8,7 @@
 
 Below is the default configuration, go to [configuration](configuration.md) to read more about the convars.
 ```
-lps_pregame_time              60
+lps_pregame_time              90
 lps_pregame_deathmatch        1
 
 lps_round_limit               8
@@ -31,6 +29,7 @@ lps_falldamage                0
 lps_falldamage_realistic      1
 
 lps_lastman_enabled           1
+lps_lastman_force_all         0
 lps_lastman_round_time        60
 
 lps_prop_maxhealth            250
