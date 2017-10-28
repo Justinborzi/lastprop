@@ -125,6 +125,16 @@ function GM:StartGame()
                 deathsPly = v
             end
             util.Notify(v, NOTIFY.YELLOW, string.format('You got %s Kills and died %s times in the preround!', v:GetVar('preroundKills', 0), v:GetVar('preroundDeaths', 0)))
+
+            v:SetVar('preroundKills', 0)
+            v:SetVar('preroundDeaths', 0)
+
+            v:SetFrags(0)
+            v:SetDeaths(0)
+        end
+
+        for _, t in pairs(team.GetAllTeams()) do
+            team.SetScore(t, 0)
         end
 
         if (IsValid(killsPly) and kills > 0) then
