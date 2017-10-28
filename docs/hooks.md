@@ -1,3 +1,0 @@
-# Gamemode Hooks
-
-Coming Soon!

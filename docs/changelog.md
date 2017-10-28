@@ -5,7 +5,7 @@
 This is a kinda big update but most of it is vgui, have fun!
 
 ### Changes:
-* Improved gamemode sability
+* Improved gamemode stability
 * Last prop now get an RPG with one rocket
 * Scoreboard rewrite
 * Mapvote rewrite
@@ -23,9 +23,9 @@ This is a kinda big update but most of it is vgui, have fun!
 * Fixed pressing 'E' on props (for sound FX) not wokring for bigger props
 
 ### New Features:
-* `PlayerMaxTeamSwitch` hook allows you to limit players from team swithing
+* `PlayerMaxTeamSwitch` hook allows you to limit players from team switching
 * New Scoreboard! You can now add icons for each player!
-* New Mapvote system, you can now extend, and force (for admins) maps durring a mapvote, config is located `garrysmod/lastprop/mapvote.txt`
+* New Mapvote system, you can now extend, and force (for admins) maps during a mapvote, config is located `garrysmod/lastprop/mapvote.txt`
 * New "Person is the last prop standing" screen!
 * New pregame deathmatch not spawns in random sweps
 * Lastprop gun is now an insta kill

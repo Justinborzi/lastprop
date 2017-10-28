@@ -1,15 +1,17 @@
 - Getting started
   - [Quick start](quickstart.md)
-  - [Configuration](configuration.md)
-
-- [Playing Last Prop](players.md)
+  - [Gammode Modules](modules.md)
+  - [Playing Last Prop](tutorials/players.md)
+  - [Converting to Prop Hunt](tutorials/prophunt.md)
 
 - Customization
-  - [Adding Taunt Packs](taunts.md)
-  - [Gamemode Hooks](hooks.md)
-  - [Gammode Modules](modules.md)
+  - [Gamemode Configuration](customization/configuration.md)
+  - [Gamemode Hooks](customization/hooks.md)
+  - [Gamemode Functions](customization/functions.md)
+  - [Gamemode Globals](customization/globals.md)
+  - [Adding Taunt Packs](customization/adding-taunts.md)
+  - [Making a Module](customization/making-modules.md)
 
-- [Converting to Prop Hunt](prophunt.md)
-
+- [FAQ](faq.md)
 - [Known Issues](issues.md)
 - [Changelog](changelog.md)

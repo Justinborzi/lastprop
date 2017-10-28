@@ -1,6 +1,6 @@
 ![logo](_media/icon.png)
 
-# Last Prop Standing <small>1.0.2</small>
+# Last Prop Standing <small>1.1.0</small>
 
 > A kickass Garry's Mod gamemode!
 

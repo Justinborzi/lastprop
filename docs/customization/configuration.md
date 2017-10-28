@@ -104,6 +104,12 @@
 >
 > default: 1
 
+### lps_lastman_force_all
+
+> Forces all players to be last prop, ignores client settings
+>
+> default: 0
+
 ### lps_lastman_round_time
 
 > The time the last prop has to hide or kill all hunters before the round ends
@@ -226,7 +232,7 @@
 
 ## Example Config
 ```cfg
-lps_pregame_time              60
+lps_pregame_time              90
 lps_pregame_deathmatch        1
 
 lps_round_limit               8
@@ -247,6 +253,7 @@ lps_falldamage                0
 lps_falldamage_realistic      1
 
 lps_lastman_enabled           1
+lps_lastman_force_all         0
 lps_lastman_round_time        60
 
 lps_prop_maxhealth            250
