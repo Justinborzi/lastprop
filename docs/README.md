@@ -23,7 +23,7 @@ Last Prop Standing is a twist on the popular game mode Prop Hunt. The main diffe
 * Prop Halos! (Toggleable)
 * Random death/suicide strings!
 * Very moddable! (Docs coming soon!)
-* Working hitboxes! (Maybe, need more play testing)
+* Working hitboxes!
 * Taunt Menu
 * Pointshop 2 Integration
 * ULX Support
@@ -62,7 +62,6 @@ When reporting an issue please provide detailed information so we can find out w
 * [Gamemode](https://steamcommunity.com/sharedfiles/filedetails/?id=1150837716) *Only major releases and critical hotfixes*
 
 ### Shoutouts:
-* [Lythos Mapvote](https://github.com/Lyth0/Lythos-Mapvote), [Lyth0](https://github.com/Lyth0)
 * [NetStream](https://github.com/alexgrist/NetStream), [Alex Grist-Hucker](https://github.com/alexgrist)
 * [MySQL Wrapper](https://github.com/alexgrist/GLua-MySQL-Wrapper), [Alex Grist-Hucker](https://github.com/alexgrist)
 * [PoN](https://github.com/thelastpenguin/gLUA-Library/tree/master/pON), [TheLastPenguin™](https://github.com/thelastpenguin)

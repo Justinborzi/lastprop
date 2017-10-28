@@ -18,6 +18,9 @@ This is a kinda big update but most of it is vgui, have fun!
 * Fixed taunt menu order
 * Keybinds not saving
 * Input lib improvements, `IsBusy` hook now returns true if chat is open
+* Prop hitboxes work *amazingly* now
+* Fixed !stuck command
+* Fixed pressing 'E' on props (for sound FX) not wokring for bigger props
 
 ### New Features:
 * `PlayerMaxTeamSwitch` hook allows you to limit players from team swithing
