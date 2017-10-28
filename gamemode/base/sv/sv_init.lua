@@ -153,6 +153,7 @@ function GM:StartGame()
     self:InGame(true)
 
     hook.Call('OnStartGame', self)
+    lps.net.Start(nil, 'OnStartGame', {true})
 
     self:CleanMap()
     util.ForceSpawnAll()

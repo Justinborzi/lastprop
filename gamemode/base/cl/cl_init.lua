@@ -134,6 +134,14 @@ function GM:InitPostEntity()
 end
 
 --[[---------------------------------------------------------
+--   Name: GM:OnStartGame()
+---------------------------------------------------------]]--
+function GM:OnStartGame()
+
+end
+lps.net.Hook('OnStartGame', function(data) hook.Call('OnStartGame', GAMEMODE) end)
+
+--[[---------------------------------------------------------
 --   Name: GM:Think()
 ---------------------------------------------------------]]--
 function GM:Think()
