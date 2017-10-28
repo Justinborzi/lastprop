@@ -52,7 +52,7 @@ Visit the **[wiki](https://github.com/gluaws/lastprop/wiki)** for some usefull i
 You can also join us on [discord](https://discord.gg/hF7Cqe9)!
 
 ### Reporting an Issue:
-When reporting an issue please provide detailed information so we can find out what's going on. Provide your console logs and you game configuration. Issues opened with little to no information will be closed. All issues should be submitted [here](https://github.com/gluaws/lastprop/issues).
+When reporting an issue please provide detailed information so we can find out what's going on. Provide your console logs and your game configuration. Issues opened with little to no information will be closed. All issues should be submitted [here](https://github.com/gluaws/lastprop/issues).
 
 ### Test Server:
  * **US/CA** [*66.70.128.24:27016*](steam://connect/66.70.128.24:27016)

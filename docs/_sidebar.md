@@ -13,6 +13,7 @@
   - [Gamemode Libraries](customization/libraries.md)
   - [Gamemode Globals](customization/globals.md)
   - [Gamemode Constants](customization/constants.md)
+  - [Gamemode Meta](customization/meta.md)
 
 - [FAQ](faq.md)
 - [Gammode Modules](modules.md)

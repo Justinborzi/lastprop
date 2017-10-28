@@ -6,32 +6,34 @@ Note: Globals can *ONLY* be set server side!
 > To set a global `GAMEMODE:Global(any)` </br>
 > To get a global `GAMEMODE:Global()`
 
+All globals are `shared`
+
 *This documentation is incomplete! Just an FYI!*
 
 ## Game Globals
 
 ---
 
-### GM:InPreGame(bool)
-If the game is in pre-game state ans has not started.
+### ![shared](_media/sh.png) GM:InPreGame(bool)
+If the game is in pre-game state and has not started.
 
 > @returns, bool
 
-### GM:InGame(bool)
+### ![shared](_media/sh.png) GM:InGame(bool)
 If the game is started.
 
 > @returns bool
 
-### GM:InPostGame(bool)
+### ![shared](_media/sh.png) GM:InPostGame(bool)
 If the game has ended and is in post-game state.
 
 > @returns, bool
 
-### GM:GameStartTime(float)
+### ![shared](_media/sh.png) GM:GameStartTime(float)
 
 > @returns, float
 
-### GM:Paused(bool)
+### ![shared](_media/sh.png) GM:Paused(bool)
 
 > @returns, bool
 
@@ -39,11 +41,11 @@ If the game has ended and is in post-game state.
 
 ---
 
-### GM:LastmanEnabled(bool)
+### ![shared](_media/sh.png) GM:LastmanEnabled(bool)
 
 > @returns, bool
 
-### GM:LastmanForce(bool)
+### ![shared](_media/sh.png) GM:LastmanForce(bool)
 
 > @returns, bool
 
@@ -51,7 +53,7 @@ If the game has ended and is in post-game state.
 
 ---
 
-### GM:DisguiseDelay(float)
+### ![shared](_media/sh.png) GM:DisguiseDelay(float)
 
 > @returns, float
 
@@ -59,11 +61,11 @@ If the game has ended and is in post-game state.
 
 ---
 
-### GM:TeamSwitchDelay(float)
+### ![shared](_media/sh.png) GM:TeamSwitchDelay(float)
 
 > @returns, float
 
-### GM:ForceTeamBalance(bool)
+### ![shared](_media/sh.png) GM:ForceTeamBalance(bool)
 
 > @returns, bool
 
@@ -71,44 +73,44 @@ If the game has ended and is in post-game state.
 
 ---
 
-### GM:Round(int)
+### ![shared](_media/sh.png) GM:Round(int)
 The current round number.
 
 > @returns, int
 
-### GM:InPreRound(bool)
+### ![shared](_media/sh.png) GM:InPreRound(bool)
 
 > @returns, bool
 
-### GM:InRound(bool)
+### ![shared](_media/sh.png) GM:InRound(bool)
 
 > @returns, bool
 
-### GM:InPostRound(bool)
+### ![shared](_media/sh.png) GM:InPostRound(bool)
 
 > @returns, bool
 
-### GM:RoundStartTime(float)
+### ![shared](_media/sh.png) GM:RoundStartTime(float)
 
 > @returns, float
 
-### GM:RoundEndTime(float)
+### ![shared](_media/sh.png) GM:RoundEndTime(float)
 
 > @returns, float
 
-### GM:NextRoundTime(float)
+### ![shared](_media/sh.png) GM:NextRoundTime(float)
 
 > @returns, float
 
-### GM:RoundWinner(int)
+### ![shared](_media/sh.png) GM:RoundWinner(int)
 
 > @returns, int
 
-### GM:RoundLimit(int)
+### ![shared](_media/sh.png) GM:RoundLimit(int)
 
 > @returns, int
 
-### GM:LastMan(teamID, ent)
+### ![shared](_media/sh.png) GM:LastMan(teamID, ent)
 Gets the last man for a team, must provide teamID to get global.
 
 > @returns, Player or nil

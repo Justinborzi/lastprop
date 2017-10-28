@@ -3,26 +3,26 @@
 
 *This documentation is incomplete! Just an FYI!*
 
-## lps.bindings
+## ![client](_media/cl.png) lps.bindings
 ---
 
-## lps.input
+## ![client](_media/cl.png) lps.input
 ---
 
-## lps.class
+## ![shared](_media/sh.png) lps.class
 ---
 
-## lps.fs
+## ![shared](_media/sh.png) lps.fs
 ---
 
-## lps.load
+## ![shared](_media/sh.png) lps.load
 ---
 
-## lps.net
+## ![shared](_media/sh.png) lps.net
 ---
 
-## lps.sql
+## ![server](_media/sv.png) lps.sql
 ---
 
-## logging
+## ![shared](_media/sh.png) logging
 
