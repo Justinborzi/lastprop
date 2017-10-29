@@ -249,10 +249,17 @@ end
 --   Name: meta:IsStuck()
 ---------------------------------------------------------]]--
 function meta:IsStuck()
+
+    if (not self:IsInWorld()) then return true end
+
     local pos = self:GetPos()
     local disguise = self:GetDisguise()
 
-    local t = {}
+    local t = {
+        start = pos,
+        endpos = pos,
+        mask = MASK_PLAYERSOLID
+    }
 
     if (IsValid(disguise)) then
         t.filter = function(ent)
@@ -260,11 +267,9 @@ function meta:IsStuck()
             if ent == self then return false end
             return true
         end
-        t.start = pos
-        t.endpos = pos
+
         t.mins = disguise:OBBMins()
         t.maxs = disguise:OBBMaxs()
-        t.mask = MASK_PLAYERSOLID
 
         local tr = util.TraceHull(t)
         if (tr.Entity and (tr.Entity:IsWorld() or tr.Entity:IsValid())) then
@@ -288,15 +293,32 @@ end
 --   Name: meta:UnStick()
 ---------------------------------------------------------]]--
 function meta:UnStick()
+    local newPos = self:GetPos()
+    local oldPos = newPos
 
-    local t = { start = nil, endpos = nil, mask = MASK_PLAYERSOLID, filter = nil }
-    local function PlayerNotStuck()
+    local angle = self:GetAngles()
+    local forward = angle:Forward()
+    local right = angle:Right()
+    local up = angle:Up()
+
+    local scale = 1 -- Increase and it will unstuck you from even harder places but with lost accuracy. Please, don't try higher values than 12
+    local search = {
+        {forward, scale},   -- forward
+        {right, scale},     -- right
+        {right, -scale},    -- left
+        {up, scale},        -- up
+        {up, -scale},       -- down
+        {forward, -scale},  -- back
+    }
+
+    local function NotStuck()
+        local t = {
+            mask = MASK_PLAYERSOLID,
+            start = self:GetPos(),
+            endpos = self:GetPos(),
+        }
+
         local disguise = self:GetDisguise()
-        local t = {}
-
-        t.start = self:GetPos()
-        t.endpos = t.start
-
         if (IsValid(disguise)) then
             t.filter = function(ent)
                 if (ent:GetClass() == 'lps_disguise' and ent:GetPlayer() == self) then return false end
@@ -314,61 +336,43 @@ function meta:UnStick()
         return util.TraceEntity(t, self).StartSolid == false
     end
 
-    local newPos = nil
-    local function FindPassableSpace(direction, step)
-        local i = 0
-        while (i < 100) do
+    newPos = self:GetPos()
+    oldPos = newPos
+
+    if (NotStuck()) then return true end
+
+    local stuck = true
+    for i=1, 6 do
+        if (stuck == false) then break end
+        for j=1, 100 do
             local origin = self:GetPos()
-            origin = origin + step * direction
+            origin = origin + search[i][2] * search[i][1]
 
             self:SetPos(origin)
-            if (PlayerNotStuck()) then
-                newPos = self:GetPos()
-                return true
-            end
-            i = i + 1
-        end
-        return false
-    end
 
-    newPos = self:GetPos()
-    local oldPos = newPos
+            if (not NotStuck()) then continue end
 
-    if (not PlayerNotStuck()) then
-        local angle = self:GetAngles()
-        local forward = angle:Forward()
-        local right = angle:Right()
-        local up = angle:Up()
-
-        local searchScale = 1 -- Increase and it will unstuck you from even harder places but with lost accuracy. Please, don't try higher values than 12
-        if (not FindPassableSpace(forward, searchScale)) then
-            if (not FindPassableSpace(right, searchScale)) then
-                if (not FindPassableSpace(right, -searchScale)) then --Left
-                        if (not FindPassableSpace(up, searchScale)) then -- up
-                            if (not FindPassableSpace(up, -searchScale)) then -- down
-                                if (not FindPassableSpace(forward, -searchScale)) then -- back
-                                local spawn = GAMEMODE:PlayerSelectTeamSpawn(self:Team(), self)
-                                if (IsValid(spawn)) then
-                                    newPos = spawn:GetPos() -- spawn if cant find spot
-                                else
-                                    return false
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end
-
-        if oldPos == newPos then
-            return true -- Not stuck?
-        else
-            self:SetPos(newPos)
-            if (self:GetPhysicsObject():IsValid()) then
-                self:SetVelocity(vector_origin)
-                self:GetPhysicsObject():SetVelocity(vector_origin) -- prevents bugs :s
-            end
-            return true
+            newPos = self:GetPos()
+            stuck = false
+            break
         end
     end
+
+    if (stuck or not self:IsInWorld()) then
+        local spawn = GAMEMODE:PlayerSelectTeamSpawn(self:Team(), self)
+        if (IsValid(spawn)) then
+            newPos = spawn:GetPos() -- spawn if cant find spot
+        end
+    end
+
+    if oldPos == newPos then return true end
+
+    self:SetPos(newPos)
+
+    if (self:GetPhysicsObject():IsValid()) then
+        self:SetVelocity(vector_origin)
+        self:GetPhysicsObject():SetVelocity(vector_origin) -- prevents bugs
+    end
+
+    return true
 end

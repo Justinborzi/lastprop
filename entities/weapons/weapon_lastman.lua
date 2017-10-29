@@ -48,6 +48,7 @@ SWEP.Primary.ClipSize       = 20
 SWEP.Primary.DefaultClip    = 20
 SWEP.Primary.Automatic      = false
 SWEP.Primary.Ammo           = 'none'
+SWEP.Primary.Dammage        = 1000
 
 SWEP.Secondary.ClipSize     = -1
 SWEP.Secondary.DefaultClip  = -1
@@ -112,7 +113,7 @@ function SWEP:PrimaryAttack()
 
         if (tr.Entity and IsValid(tr.Entity) and tr.Entity:IsPlayer()) then
             local dmgInfo = DamageInfo()
-            dmgInfo:SetDamage(1000)
+            dmgInfo:SetDamage(SWEP.Primary.Dammage)
             dmgInfo:SetAttacker(ply)
             dmgInfo:SetInflictor(self)
 
@@ -131,7 +132,7 @@ function SWEP:PrimaryAttack()
             Tracer = 0,
             TracerName = '',
             Force = 1000,
-            Damage = 1000,
+            Damage = SWEP.Primary.Dammage,
             AmmoType = '',
         })
 

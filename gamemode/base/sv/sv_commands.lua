@@ -31,6 +31,27 @@ concommand.Add('stuck', function(ply, cmd, args)
 end)
 
 --[[---------------------------------------------------------
+--   concommand: stats
+---------------------------------------------------------]]--
+concommand.Add('stats', function(ply, cmd, args)
+    GAMEMODE:ShowStats(ply)
+end)
+
+--[[---------------------------------------------------------
+--   concommand: options
+---------------------------------------------------------]]--
+concommand.Add('options', function(ply, cmd, args)
+    ply:ConCommand('lps_show_options')
+end)
+
+--[[---------------------------------------------------------
+--   concommand: bindings
+---------------------------------------------------------]]--
+concommand.Add('bindings', function(ply, cmd, args)
+    ply:ConCommand('lps_show_bindings')
+end)
+
+--[[---------------------------------------------------------
 --   concommand: togglelock
 ---------------------------------------------------------]]--
 concommand.Add('togglelock', function(ply, cmd, args)
@@ -171,11 +192,3 @@ concommand.Add('banprop', function(ply, cmd, args)
         end
     end
 end)
-
---[[---------------------------------------------------------
---   concommand: lps_stats
----------------------------------------------------------]]--
-concommand.Add('lps_stats', function(ply, cmd, args)
-    GAMEMODE:ShowStats(ply)
-end)
-

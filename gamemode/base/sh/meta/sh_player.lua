@@ -83,7 +83,7 @@ end
 --   Name: meta:GetVar()
 ---------------------------------------------------------]]--
 function meta:GetVar(name, default)
-    local id = self:UniqueID()
+    local id = self:SteamID()
     if (not lps.player[id]) then
         return default
     end
@@ -94,7 +94,7 @@ end
 --   Name: meta:SetVar()
 ---------------------------------------------------------]]--
 function meta:SetVar(name, data, sync)
-    local id = self:UniqueID()
+    local id = self:SteamID()
     if (not lps.player[id]) then
         lps.player[id] = {}
     end
