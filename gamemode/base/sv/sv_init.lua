@@ -115,22 +115,26 @@ function GM:StartGame()
         local killsPly, deathsPly = nil, nil
 
         for _,v in pairs(player.GetAll()) do
-            if (v:GetVar('preroundKills', 0) > kills) then
-                kills = v:GetVar('preroundKills', 0)
-                killsPly = v
-            end
-
-            if (v:GetVar('preroundDeaths', 0) > deaths) then
-                deaths = v:GetVar('preroundDeaths', 0)
-                deathsPly = v
-            end
-            util.Notify(v, NOTIFY.YELLOW, string.format('You got %s Kills and died %s times in the preround!', v:GetVar('preroundKills', 0), v:GetVar('preroundDeaths', 0)))
-
-            v:SetVar('preroundKills', 0)
-            v:SetVar('preroundDeaths', 0)
 
             v:SetFrags(0)
             v:SetDeaths(0)
+
+            local k, d = v:GetVar('preroundKills', 0), v:GetVar('preroundDeaths', 0)
+            if (k <= 0 and d <= 0) then continue end
+
+            if (k > kills) then
+                kills = k
+                killsPly = v
+                v:SetVar('preroundKills', 0)
+            end
+
+            if (d > deaths) then
+                deaths = d
+                deathsPly = v
+                v:SetVar('preroundDeaths', 0)
+            end
+
+            util.Notify(v, NOTIFY.YELLOW, string.format('You got %s Kills and died %s times in the preround!', k, d))
         end
 
         for _, t in pairs(team.GetAllTeams()) do
