@@ -75,3 +75,17 @@ function GM:GetLoadout(ply, id)
         return self.loadouts[id]
     end
 end
+
+--[[---------------------------------------------------------
+--   Name: GM:ShouldCollide()
+---------------------------------------------------------]]--
+function GM:ShouldCollide( ent1, ent2 )
+	if (not IsValid(ent1) and not IsValid(ent2)) then return false end
+
+    if (table.HasValue({ent1:GetClass(), ent2:GetClass()}, 'lps_disguise') and ent1:GetOwner() == ent2:GetOwner()) then
+        return false
+    end
+
+	-- We must call this because anything else should return true.
+	return true
+end
