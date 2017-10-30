@@ -26,7 +26,6 @@ if (SERVER) then
     function ENT:Initialize()
         self:SetMoveType(MOVETYPE_NONE)
         self:SetSolid(SOLID_VPHYSICS)
-        self:SetCollisionGroup(COLLISION_GROUP_NONE)
         self:SetLocked(false)
         self:SetUseType(SIMPLE_USE)
         self:SetCustomCollisionCheck(true)

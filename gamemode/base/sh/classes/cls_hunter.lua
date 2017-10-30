@@ -76,7 +76,7 @@ function CLASS:HUDDrawTargetID(ply)
     if (ply:GetVar('blinded', false)) then return end
     local tr = ply:GetEyeTrace()
     if (not IsValid(tr.Entity)) then return end
-    if ((tr.Entity:IsPlayer()) and table.HasValue({TEAM.HUNTERS, TEAM.PROPS}, tr.Entity:Team())) then
+    if ((tr.Entity:IsPlayer()) and table.HasValue({TEAM.HUNTERS, TEAM.PROPS}, tr.Entity:Team()) and not tr.Entity:IsDisguised()) then
         surface.SetFont('LPS30')
         local text = tr.Entity :Nick()
         local w, h = surface.GetTextSize(text)
@@ -222,7 +222,7 @@ function CLASS:OnKill(ply, victim, inflictor)
     if (GAMEMODE:GetConfig('hunter_kill_bonus_health') > 0 and not GAMEMODE:GetConfig('hunter_steal_health')) then
         ply:SetHealth(math.Clamp(ply:Health() + GAMEMODE:GetConfig('hunter_kill_bonus_health'), 10, ply:GetMaxHealth()))
     end
-    if (victim:IsPlayer() and victim:Team() == TEAM.PROPS and GAMEMODE:GetConfig('hunter_kill_bonus_nade') > 0) then
+    if (victim:IsPlayer() and victim:Team() == TEAM.PROPS and not victim:IsLastMan() and GAMEMODE:GetConfig('hunter_kill_bonus_nade') > 0) then
         ply:GiveAmmo(GAMEMODE:GetConfig('hunter_kill_bonus_nade'), 'SMG1_Grenade', true)
         util.Notify(ply, string.format('You caught %s, you get a free SMG Grenade!', victim:Nick()))
     end

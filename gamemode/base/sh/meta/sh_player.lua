@@ -174,12 +174,12 @@ end
 --[[---------------------------------------------------------
 --   Name: meta:GetEyeTrace()
 ---------------------------------------------------------]]--
-function meta:GetEyeTrace()
-    local tr = {}
-    tr.start = self:GetShootPos()
-    tr.endpos = tr.start + (self:GetAimVector() * (4096 * 8))
-    tr.mask = MASK_ALL
-    tr.filter = function(ent)
+function meta:GetEyeTrace(tr)
+    local tr = tr or {}
+    tr.start = tr.start or self:GetShootPos()
+    tr.endpos = tr.endpos or tr.start + (self:GetAimVector() * (4096 * 8))
+    tr.mask = tr.mask or MASK_ALL
+    tr.filter = tr.filter or function(ent)
         if (not IsValid(ent)) then return false end
         if (ent:GetClass() == 'lps_disguise' and ent:GetPlayer() == self) then return false end
         if ent == self then return false end

@@ -82,8 +82,24 @@ end
 function GM:ShouldCollide( ent1, ent2 )
 	if (not IsValid(ent1) and not IsValid(ent2)) then return false end
 
-    if (table.HasValue({ent1:GetClass(), ent2:GetClass()}, 'lps_disguise') and ent1:GetOwner() == ent2:GetOwner()) then
+    local class1, class2 = ent1:GetClass(), ent2:GetClass()
+
+    if (class1 == 'Player' and class2 == 'Player') then
+        if (ent1:Team() == TEAM.PROPS or ent2:Team() == TEAM.PROPS) then
+            return false
+        elseif (ent1 == ent2) then
+            return false
+        end
+    end
+
+    if (class1 == 'lps_disguise' and class2 == 'lps_disguise') then
         return false
+    end
+
+    if (class1 == 'lps_disguise' or class2 == 'lps_disguise') then
+        if (ent1:GetOwner() == ent2:GetOwner()) then
+            return false
+        end
     end
 
 	-- We must call this because anything else should return true.
