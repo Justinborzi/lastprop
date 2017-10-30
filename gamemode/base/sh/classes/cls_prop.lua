@@ -330,7 +330,7 @@ function CLASS:Think(ply)
 
     local time = CurTime()
 
-    if (ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:Alive() and not ply:IsSpec() and not ply:IsInWorld()) then
+    --[[if (ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:Alive() and not ply:IsSpec() and not ply:IsInWorld()) then
         local spawn = GAMEMODE:PlayerSelectTeamSpawn(ply:Team(), ply)
         if (IsValid(spawn)) then
             ply:SetPos(spawn:GetPos())
@@ -342,7 +342,7 @@ function CLASS:Think(ply)
 
             util.Notify(ply, 'Oops, loops like you fell out of the world? Let me help you with that!')
         end
-    end
+    end]]-- Not working
 
     if (not GAMEMODE:InRound()) or
        (not GAMEMODE:GetConfig('prop_autotaunt')) or
