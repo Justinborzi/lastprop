@@ -23,6 +23,15 @@ function meta:IsLastMan()
 end
 
 --[[---------------------------------------------------------
+--   Name: meta:CanTaunt()
+---------------------------------------------------------]]--
+function meta:CanTaunt()
+    if (not GAMEMODE:InRound()) then return false end
+    if (self:Team() == TEAM.PROPS and self:IsLastMan()) then return false end
+    return true
+end
+
+--[[---------------------------------------------------------
 --   Name: meta:GetTauntType()
 ---------------------------------------------------------]]--
 function meta:GetTauntType()
@@ -191,11 +200,56 @@ end
 --[[---------------------------------------------------------
 --   Name: meta:CanDisguise()
 ---------------------------------------------------------]]--
-function meta:CanDisguise()
-    if not self:Alive() then return false end
-    if self:Team() ~= TEAM.PROPS then return false end
-    if self:GetVar('lastDisguise', 0) + GAMEMODE:DisguiseDelay() > CurTime() then return false end
-    return self:GetVar('canDisguise', false)
+function meta:CanDisguise(ent)
+
+    if (not self:Alive() or self:IsSpec()) then
+        print('alive')
+        return false
+    end
+
+    if (self:Team() ~= TEAM.PROPS) then
+        print('Team')
+        return false
+    end
+
+    if (not GAMEMODE:InGame()) then
+        print('InGame')
+        return false
+    end
+
+    if (GAMEMODE:InPostRound()) then
+        print('InPostRound')
+        return false
+    end
+
+    if (self:IsDisguised() and self:DisguiseLocked()) then
+        print('IsDisguised')
+        return false, 'Your locked! Unlock to change props!'
+    end
+
+    local delay =  self:GetVar('lastDisguise', 0) + GAMEMODE:DisguiseDelay()
+    if (delay > CurTime()) then
+        return false, string.format('You have to wait %s before you can disguise again.', string.ToMinutesSeconds(delay - CurTime()))
+    end
+
+    if (ent and not IsValid(ent)) then
+        print('IsValid')
+        return false
+    end
+
+    if (not self:GetVar('replaceProp', false) and ent and not self:CanDisguiseFit(ent)) then
+        return false, 'You can\'t fit in that area!'
+    end
+
+    if (self:IsDisguised() and not self:GetVar('replaceProp', false) and ent and ent:GetModel() == self:GetVar('disguiseModel', '')) then
+        return false, 'Your already that model!'
+    end
+
+    if (ent and not ent:IsValidDisguise()) then
+        return false, 'That prop is banned form this server!'
+    end
+
+    return true
 end
 
 --[[---------------------------------------------------------

@@ -108,19 +108,11 @@ function meta:SetDisguise(ent)
 end
 
 --[[---------------------------------------------------------
---   Name: meta:DisguiseAs()
----------------------------------------------------------]]--
-function meta:DisguiseAs(ent)
-    self:Disguise(ent)
-    self:SetPos(ent:GetPos())
-    ent:Remove()
-end
-
---[[---------------------------------------------------------
 --   Name: meta:Disguise()
 ---------------------------------------------------------]]--
 function meta:Disguise(ent)
     if (not self:CanDisguise()) then return end
+
     if (not self:IsDisguised()) then
         self:SetVar('model', self:GetModel(), true)
         self:SetVar('collisionGroup', self:GetCollisionGroup(), true)
@@ -190,6 +182,20 @@ function meta:Disguise(ent)
     self:CalculateHealth()
 
     hook.Call('PlayerDisguise', GAMEMODE, self, ent)
+
+    if (self:GetVar('replaceProp', false) and IsValid(ent)) then
+        local angles = ent:GetAngles()
+        local pos = ent:GetPos()
+        ent:Remove()
+
+        self:SetPos(pos)
+        disguise:SetLocked(angles)
+
+        if (self:GetPhysicsObject():IsValid()) then
+            self:SetVelocity(vector_origin)
+            self:GetPhysicsObject():SetVelocity(vector_origin) -- prevents bugs
+        end
+    end
 end
 
 --[[---------------------------------------------------------

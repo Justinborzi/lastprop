@@ -79,7 +79,7 @@ end
 --[[---------------------------------------------------------
 --   Name: GM:ShouldCollide()
 ---------------------------------------------------------]]--
-function GM:ShouldCollide( ent1, ent2 )
+function GM:ShouldCollide(ent1, ent2)
 	if (not IsValid(ent1) and not IsValid(ent2)) then return false end
 
     local class1, class2 = ent1:GetClass(), ent2:GetClass()

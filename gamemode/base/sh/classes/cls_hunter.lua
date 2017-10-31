@@ -58,6 +58,7 @@ end
 
 function CLASS:PreDrawHalos(ply)
     if (ply:GetVar('blinded', false)) then return end
+
     local tr = ply:GetEyeTrace()
     if (not IsValid(tr.Entity)) then return end
     if (tr.HitPos:Distance(tr.StartPos) < 150) then
@@ -74,6 +75,7 @@ end
 
 function CLASS:HUDDrawTargetID(ply)
     if (ply:GetVar('blinded', false)) then return end
+
     local tr = ply:GetEyeTrace()
     if (not IsValid(tr.Entity)) then return end
     if ((tr.Entity:IsPlayer()) and table.HasValue({TEAM.HUNTERS, TEAM.PROPS}, tr.Entity:Team()) and not tr.Entity:IsDisguised()) then
@@ -96,7 +98,7 @@ function CLASS:OnKeyDown(ply, key, keycode, char, keytype, busy, cursor)
 
     local taunt = lps.bindings:GetKey('hunter', 'taunt')
     if (key == taunt.key and keytype == taunt.type) then
-        if (ply:GetVar('canTaunt', false)) then
+        if (ply:CanTaunt()) then
             RunConsoleCommand('randomtaunt')
         else
             util.Notify(ply, 'You can\'t taunt right now!')
@@ -154,10 +156,6 @@ function CLASS:Cleanup(ply)
 
     if (ply:GetVar('blinded', false)) then
         ply:SetVar('blinded', false, true)
-    end
-
-    if (ply:GetVar('canTaunt', false)) then
-        ply:SetVar('canTaunt', false, true)
     end
 
     if (ply:IsFrozen()) then
@@ -245,9 +243,6 @@ function CLASS:OnPreRoundStart(ply, num)
 end
 
 function CLASS:OnRoundStart(ply, num)
-    if (not ply:GetVar('canTaunt', false)) then
-        ply:SetVar('canTaunt', true, true)
-    end
 
     if (ply:GetVar('blinded', false)) then
         ply:SetVar('blinded', false, true)

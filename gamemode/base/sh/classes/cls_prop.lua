@@ -89,13 +89,13 @@ function CLASS:PreDrawHalos(ply)
 
     local tr = ply:GetEyeTrace()
     if (not IsValid(tr.Entity)) then return end
-    local ent = tr.Entity
-    if  (ply:CanDisguise() and (not ply:DisguiseLocked()) and tr.HitPos:Distance(tr.StartPos) < 150) and
-        (table.HasValue({'prop_physics', 'prop_physics_multiplayer'}, ent:GetClass())) then
-        if (ent:IsValidDisguise() and ent:GetModel() ~= ply:GetVar('disguiseModel', '')) then
-            halo.Add({ent}, Color(50, 220, 50), 2, 2, 2, true, true)
+
+    if  (ply:CanDisguise() and not ply:DisguiseLocked() and tr.HitPos:Distance(tr.StartPos) < 150) and
+        (table.HasValue({'prop_physics', 'prop_physics_multiplayer'}, tr.Entity:GetClass())) then
+        if (tr.Entity:IsValidDisguise() and tr.Entity:GetModel() ~= ply:GetVar('disguiseModel', '')) then
+            halo.Add({tr.Entity}, Color(50, 220, 50), 2, 2, 2, true, true)
         else
-            halo.Add({ent}, Color(220, 50, 50), 2, 2, 2, true, true)
+            halo.Add({tr.Entity}, Color(220, 50, 50), 2, 2, 2, true, true)
         end
     end
 end
@@ -122,12 +122,8 @@ function CLASS:HUDShouldDraw(ply, name)
     if (name == 'CHudWeaponSelection' and not IsValid(ply:GetActiveWeapon())) then return false end
 end
 
-function CLASS:HUDPaint(ply)
-    -- todo: Prop dial maybe?
-end
-
 function CLASS:OnKeyDown(ply, key, keycode, char, keytype, busy, cursor)
-    if (busy or cursor or ply:GetVar('lastMan', false) or not ply:Alive() or ply:IsLastMan()) then return end
+    if (busy or cursor or not ply:Alive() or ply:IsLastMan()) then return end
 
     local tauntLong = lps.bindings:GetKey('prop', 'tauntLong')
     local tauntMedium = lps.bindings:GetKey('prop', 'tauntMedium')
@@ -135,7 +131,7 @@ function CLASS:OnKeyDown(ply, key, keycode, char, keytype, busy, cursor)
     local taunt = lps.bindings:GetKey('prop', 'taunt')
 
     local function DoTaunt(min, max)
-        if (ply:GetVar('canTaunt', false)) then
+        if (ply:CanTaunt()) then
             RunConsoleCommand('randomtaunt', min, max)
         else
             util.Notify(ply, 'You can\'t taunt right now!')
@@ -264,28 +260,12 @@ function CLASS:Cleanup(ply)
 
     if (not IsValid(ply)) then return end
 
-    if ply:IsDisguised() then
+    if (ply:IsDisguised()) then
         ply:UnDisguise()
     end
 
-    if ply:IsStuck() then
+    if (ply:IsStuck()) then
         ply:UnStick()
-    end
-
-    if (ply:GetVar('allowPickup', false)) then
-        ply:SetVar('allowPickup', false, true)
-    end
-
-    if (ply:GetVar('canTaunt', false)) then
-        ply:SetVar('canTaunt', false, true)
-    end
-
-    if (ply:GetVar('canDisguise', false)) then
-        ply:SetVar('canDisguise', false, true)
-    end
-
-    if (not ply:GetVar('allowPickup', false)) then
-        ply:SetVar('allowPickup', true, true)
     end
 
     local trail = ply:GetVar('trail', nil)
@@ -330,20 +310,6 @@ function CLASS:Think(ply)
 
     local time = CurTime()
 
-    --[[if (ply:GetMoveType() ~= MOVETYPE_NOCLIP and ply:Alive() and not ply:IsSpec() and not ply:IsInWorld()) then
-        local spawn = GAMEMODE:PlayerSelectTeamSpawn(ply:Team(), ply)
-        if (IsValid(spawn)) then
-            ply:SetPos(spawn:GetPos())
-
-            if (ply:GetPhysicsObject():IsValid()) then
-                ply:SetVelocity(vector_origin)
-                ply:GetPhysicsObject():SetVelocity(vector_origin) -- prevents bugs
-            end
-
-            util.Notify(ply, 'Oops, loops like you fell out of the world? Let me help you with that!')
-        end
-    end]]-- Not working
-
     if (not GAMEMODE:InRound()) or
        (not GAMEMODE:GetConfig('prop_autotaunt')) or
        ((GAMEMODE:RoundEndTime() - time) > GAMEMODE:GetConfig('prop_autotaunt_time')) or
@@ -387,11 +353,8 @@ function CLASS:CanSpawn(ply)
 end
 
 function CLASS:OnSpawn(ply)
-    if (GAMEMODE:InPreRound()) then
-        ply:SetVar('canDisguise', true, true)
-        if (ply:GetInfoNum('lps_klinermode', 0) == 1) then
-            ply:Disguise()
-        end
+    if (GAMEMODE:InPreRound() and ply:GetInfoNum('lps_klinermode', 0) == 1) then
+        ply:Disguise()
     end
 end
 
@@ -404,29 +367,15 @@ function CLASS:OnSilentDeath(ply)
     self:Cleanup(ply)
 end
 
-function CLASS:OnPreRoundStart(ply, num)
-    ply:SetVar('canDisguise', true, true)
-end
-
-function CLASS:OnRoundStart(ply, num)
-    ply:SetVar('canTaunt', true, true)
-end
-
 function CLASS:OnLastMan(ply)
-    ply:SetVar('canDisguise', false, true)
-    ply:SetVar('canTaunt', false, true)
-
-    local disguise = ply:GetNWEntity('disguise')
+    local disguise = ply:GetDisguise()
     if (IsValid(disguise)) then
         disguise:SetLocked(false)
     end
 
     ply:StopTaunt()
-
     hook.Call('PlayerLoadout', GAMEMODE, ply)
-
     ply:SetVar('trail', util.SpriteTrail(ply, 0, Color(255, 255, 255), false, 15, 1, 1.5, 0.125, 'trails/lastman/rainbow_'..math.Rand(1, 9)..'.vmt'), true)
-
     ply:RandomTaunt()
 end
 
@@ -451,61 +400,22 @@ function CLASS:PlayerCanPickupWeapon(ply, weapon)
     return false
 end
 
-function CLASS:AllowPlayerPickup(ply, ent)
-    return ply:GetVar('allowPickup', false)
-end
-
 function CLASS:Use(ply, ent)
-
-    if ((ply:GetVar('lastUse', 0) + .5) > CurTime()) or
-       (ply:IsDisguised() and ply:DisguiseLocked()) then
+    if ((ply:GetVar('lastUse', 0) + .5) > CurTime()) then
         return
-    elseif (ply:GetVar('lastDisguise', 0) + GAMEMODE:GetConfig('prop_disguise_delay') > CurTime()) then
-        util.Notify(ply, string.format('You have to wait %s before you can disguise again.', string.ToMinutesSeconds((ply:GetVar('lastDisguise', 0) + GAMEMODE:GetConfig('prop_disguise_delay')) - CurTime())))
-        ply:SetVar('lastUse', CurTime())
-        return
-    elseif (not ply:CanDisguise()) then
-        ply:SetVar('lastUse', CurTime())
-        return
-    elseif (not ent:IsValidDisguise()) then
-        util.Notify(ply, 'That prop is banned form this server!')
-        ply:SetVar('lastUse', CurTime())
-        return
-    elseif (ply:IsDisguised()) then
-        local disguise = ply:GetDisguise()
-        if (disguise:GetModel() == ent:GetModel()) then
-            util.Notify(ply, 'You\'re already that prop!')
-            ply:SetVar('lastUse', CurTime())
-            return
-        end
-    end
-
-    if (ply:GetVar('replaceProp', false)) then
-        local angles = ent:GetAngles()
-        local pos = ent:GetPos()
-
-        ply:DisguiseAs(ent)
-        ply:SetPos(pos)
-
-        if (ply:GetPhysicsObject():IsValid()) then
-            ply:SetVelocity(vector_origin)
-            ply:GetPhysicsObject():SetVelocity(vector_origin) -- prevents bugs
-        end
-
-        local disguise = ply:GetDisguise()
-        if (IsValid(disguise)) then
-            disguise:SetLocked(angles)
-        end
-    elseif (ply:CanDisguiseFit(ent)) then
-        ply:Disguise(ent)
-        ply:SetVar('lastUse', CurTime())
-        return false
     else
-        util.Notify(ply, 'You can\'t fit in that area!')
         ply:SetVar('lastUse', CurTime())
+    end
+
+    local canDisguise, reason = ply:CanDisguise(ent)
+    if (not canDisguise) then
+        if (reason) then  util.Notify(ply, reason) end
         return
     end
 
+    ply:Disguise(ent)
+
+    return false
 end
 
 lps.class:Register('prop', CLASS)

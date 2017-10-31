@@ -116,7 +116,7 @@ end)
 --   concommand: taunt
 ---------------------------------------------------------]]--
 concommand.Add('taunt', function(ply, cmd, args)
-    if(ply:GetVar('canTaunt', false)) then
+    if(ply:CanTaunt()) then
         ply:PlayTaunt(args[1], args[2])
     end
 end)
@@ -125,7 +125,7 @@ end)
 --   concommand: randomtaunt
 ---------------------------------------------------------]]--
 concommand.Add('randomtaunt', function(ply, cmd, args)
-    if(ply:GetVar('canTaunt', false)) then
+    if(ply:CanTaunt()) then
         ply:RandomTaunt(tonumber(args[1]), tonumber(args[2]))
     end
 end)

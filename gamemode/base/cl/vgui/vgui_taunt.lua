@@ -5,7 +5,7 @@
 ---------------------------------------------------------]]--
 function GM:TauntMenu()
     local localPlayer = LocalPlayer()
-    if (not IsValid(localPlayer) or not localPlayer:GetVar('canTaunt', false)) then return end
+    if (not IsValid(localPlayer) or not localPlayer:CanTaunt()) then return end
 
     local tauntPack, tauntType = localPlayer:GetTauntPack(), localPlayer:GetTauntType()
     if (not tauntPack) or
@@ -79,7 +79,7 @@ end
 ---------------------------------------------------------]]--
 hook.Add('Think', 'Think:TauntMenu', function()
     local localPlayer = LocalPlayer()
-    if ((not IsValid(localPlayer) or not localPlayer:GetVar('canTaunt', false)) and IsValid(GAMEMODE.tauntMenu)) then
+    if ((not IsValid(localPlayer) or not localPlayer:CanTaunt()) and IsValid(GAMEMODE.tauntMenu)) then
         GAMEMODE.tauntMenu:Remove()
         GAMEMODE.tauntMenu = nil
     end

@@ -50,7 +50,7 @@ function GM:KeyDown(key, keycode, char, keytype, busy, cursor)
     end
 
     local tauntMenu = lps.bindings:GetKey('global', 'tauntMenu')
-    if (key == tauntMenu.key and keytype == tauntMenu.type and not busy and localPlayer:GetVar('canTaunt', false)) then
+    if (key == tauntMenu.key and keytype == tauntMenu.type and not busy and localPlayer:CanTaunt()) then
         self:TauntMenu()
     end
 
