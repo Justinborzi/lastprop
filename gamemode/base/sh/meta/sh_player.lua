@@ -203,27 +203,22 @@ end
 function meta:CanDisguise(ent)
 
     if (not self:Alive() or self:IsSpec()) then
-        print('alive')
         return false
     end
 
     if (self:Team() ~= TEAM.PROPS) then
-        print('Team')
         return false
     end
 
     if (not GAMEMODE:InGame()) then
-        print('InGame')
         return false
     end
 
     if (GAMEMODE:InPostRound()) then
-        print('InPostRound')
         return false
     end
 
     if (self:IsDisguised() and self:DisguiseLocked()) then
-        print('IsDisguised')
         return false, 'Your locked! Unlock to change props!'
     end
 

@@ -125,48 +125,35 @@ end
 function CLASS:OnKeyDown(ply, key, keycode, char, keytype, busy, cursor)
     if (busy or cursor or not ply:Alive() or ply:IsLastMan()) then return end
 
-    local tauntLong = lps.bindings:GetKey('prop', 'tauntLong')
-    local tauntMedium = lps.bindings:GetKey('prop', 'tauntMedium')
-    local tauntShort = lps.bindings:GetKey('prop', 'tauntShort')
-    local taunt = lps.bindings:GetKey('prop', 'taunt')
+    if (ply:CanTaunt()) then
+        local keys = {
+            {binding = lps.bindings:GetKey('prop', 'tauntLong'),    length = {11, 60}},
+            {binding = lps.bindings:GetKey('prop', 'tauntMedium'),  length = {6, 10}},
+            {binding = lps.bindings:GetKey('prop', 'tauntShort'),   length = {0, 5}},
+            {binding = lps.bindings:GetKey('prop', 'taunt')},
+        }
 
-    local function DoTaunt(min, max)
-        if (ply:CanTaunt()) then
-            RunConsoleCommand('randomtaunt', min, max)
-        else
-            util.Notify(ply, 'You can\'t taunt right now!')
+        for _, data in pairs(keys) do
+            if (key == data.binding.key and keytype == data.binding.type) then
+                RunConsoleCommand('randomtaunt', data.length and data.length[1] or nil, data.length and data.length[2] or nil)
+                break
+            end
         end
     end
 
-    if (key == tauntShort.key and keytype == tauntShort.type) then
-        DoTaunt(0, 5)
-    elseif (key == tauntMedium.key and keytype == tauntMedium.type) then
-        DoTaunt(6, 10)
-    elseif (key == tauntLong.key and keytype == tauntLong.type) then
-        DoTaunt(11, 60)
-    elseif (key == taunt.key and keytype == taunt.type) then
-        DoTaunt()
-    end
-
     if (ply:IsDisguised()) then
-        local snap = lps.bindings:GetKey('prop', 'snap')
-        local lock = lps.bindings:GetKey('prop', 'lock')
-        local unlock = lps.bindings:GetKey('prop', 'unlock')
+        local locked = ply:DisguiseLocked()
+        local keys = {
+            {binding = lps.bindings:GetKey('prop', 'snap'),   sound = lps.sounds.ui.lock,   cmd = 'locksnap', condition = not locked},
+            {binding = lps.bindings:GetKey('prop', 'lock'),   sound = lps.sounds.ui.lock,   cmd = 'lock',     condition = not locked},
+            {binding = lps.bindings:GetKey('prop', 'unlock'), sound = lps.sounds.ui.unlock, cmd = 'unlock',   condition = locked}
+        }
 
-        if (key == snap.key and keytype == snap.type) then
-            if (not ply:DisguiseLocked()) then
-                RunConsoleCommand('locksnap')
-                ply:LPSPlaySound(lps.sounds.ui.lock, SOUND.UI)
-            end
-        elseif (key == lock.key and keytype == lock.type) then
-            if (not ply:DisguiseLocked()) then
-                RunConsoleCommand('lock')
-                ply:LPSPlaySound(lps.sounds.ui.lock, SOUND.UI)
-            end
-        elseif (key == unlock.key and keytype == unlock.type) then
-            if (ply:DisguiseLocked()) then
-                RunConsoleCommand('unlock')
-                ply:LPSPlaySound(lps.sounds.ui.unlock, SOUND.UI)
+        for _, data in pairs(keys) do
+            if (key == data.binding.key and keytype == data.binding.type and data.condition) then
+                RunConsoleCommand(data.cmd)
+                ply:LPSPlaySound(data.sound, SOUND.UI)
+                break
             end
         end
     end
@@ -192,10 +179,6 @@ function CLASS:OnKeyUp(ply, key, keycode, char, keytype, busy, cursor)
     if (key == adjust.key and keytype == adjust.type) then
         ply:SetVar('lockAdjust', false)
     end
-end
-
-function CLASS:InputMouseApply(ply, cmd, x, y, angle)
-
 end
 
 function CLASS:CreateMove(ply, cmd)
@@ -257,7 +240,6 @@ function CLASS:Setup(ply)
 end
 
 function CLASS:Cleanup(ply)
-
     if (not IsValid(ply)) then return end
 
     if (ply:IsDisguised()) then
@@ -303,7 +285,6 @@ function CLASS:Loadout(ply)
 end
 
 function CLASS:Think(ply)
-
     if (GAMEMODE:GetConfig('prop_jetpack_jump') and ply:KeyDown(IN_JUMP)) then
         ply:SetVelocity(ply:GetUp() * 16)
     end
@@ -340,7 +321,6 @@ function CLASS:Think(ply)
 
     ply:SetVar('lastAutoTauntPos', ply:GetPos())
     ply:SetVar('nextAutoTaunt', time + GAMEMODE:GetConfig('prop_autotaunt_delay'))
-
 end
 
 function CLASS:CanSpawn(ply)

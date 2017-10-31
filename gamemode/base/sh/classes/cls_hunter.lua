@@ -243,7 +243,6 @@ function CLASS:OnPreRoundStart(ply, num)
 end
 
 function CLASS:OnRoundStart(ply, num)
-
     if (ply:GetVar('blinded', false)) then
         ply:SetVar('blinded', false, true)
     end
