@@ -84,7 +84,11 @@ function GM:ShouldCollide(ent1, ent2)
 
     local class1, class2 = ent1:GetClass(), ent2:GetClass()
 
-    if (class1 == 'Player' and class2 == 'Player') then
+    print('--------')
+    print('class1:' .. class1)
+    print('class2:' .. class2)
+
+    if (class1 == 'player' and class2 == 'player') then
         if (ent1:Team() == TEAM.PROPS or ent2:Team() == TEAM.PROPS) then
             return false
         elseif (ent1 == ent2) then

@@ -314,6 +314,5 @@ hook.Add('Initialize', 'DefaultSounds', function()
             {name = 't_taaaaacos', label = 'Taccccccccos', file = 'lps/taunts/lastman/t_taaaaacos.mp3', length = 59.820408163265306},
         },
     })
-
 end)
 

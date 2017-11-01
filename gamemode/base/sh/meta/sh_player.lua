@@ -35,12 +35,10 @@ end
 --   Name: meta:GetTauntType()
 ---------------------------------------------------------]]--
 function meta:GetTauntType()
-    if (self:Team() == TEAM.PROPS) then
-        if (self:IsLastMan()) then
-            return 'lastman'
-        else
-            return 'prop'
-        end
+    if (self:Team() == TEAM.PROPS and self:IsLastMan()) then
+        return 'lastman'
+    elseif (self:Team() == TEAM.PROPS) then
+        return 'prop'
     elseif (self:Team() == TEAM.HUNTERS) then
         return 'hunter'
     end
@@ -87,7 +85,6 @@ function meta:ClassCall(name, ...)
     return class[name](class, self, ...)
 end
 
-
 --[[---------------------------------------------------------
 --   Name: meta:GetVar()
 ---------------------------------------------------------]]--
@@ -124,7 +121,6 @@ if (CLIENT) then
     end
     lps.net.Hook('PlayerSetVar', SetVar)
 end
-
 
 --[[---------------------------------------------------------
 --   Name: meta:LPSEmitSound()
