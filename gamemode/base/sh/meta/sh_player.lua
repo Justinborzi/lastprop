@@ -26,6 +26,7 @@ end
 --   Name: meta:CanTaunt()
 ---------------------------------------------------------]]--
 function meta:CanTaunt()
+    if (not self:Alive() or self:IsSpec()) then return false end
     if (not GAMEMODE:InRound()) then return false end
     if (self:Team() == TEAM.PROPS and self:IsLastMan()) then return false end
     return true
