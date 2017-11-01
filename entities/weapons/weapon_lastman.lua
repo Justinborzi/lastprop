@@ -48,7 +48,7 @@ SWEP.Primary.ClipSize       = 20
 SWEP.Primary.DefaultClip    = 20
 SWEP.Primary.Automatic      = false
 SWEP.Primary.Ammo           = 'none'
-SWEP.Primary.Dammage        = 1000
+SWEP.Primary.Dammage        = 10000
 
 SWEP.Secondary.ClipSize     = -1
 SWEP.Secondary.DefaultClip  = -1
@@ -131,7 +131,7 @@ function SWEP:PrimaryAttack()
             Spread = Vector(self.Primary.Cone , self.Primary.Cone, 0),
             Tracer = 0,
             TracerName = '',
-            Force = 1000,
+            Force = self.Primary.Dammage,
             Damage = self.Primary.Dammage,
             AmmoType = '',
         })
