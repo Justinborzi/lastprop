@@ -106,7 +106,6 @@ function PANEL:AddColumn(col)
 
     local first = table.Count(self.list.Columns) == 1
     column.Header.Paint = function(self, w, h)
-
         if (first) then
             draw.RoundedBox(6, 0, 0, w, h, Color(255,255,255))
             draw.RoundedBox(0, w - 6, 0, 6, h, Color(255,255,255))
@@ -135,12 +134,11 @@ function PANEL:FindPlayerLine(ply)
     line.player = ply
     line.updateTime = {}
     line.count = table.Count(self.list.Lines)
-
     line.Paint = function(self, w, h)
          if (self.player:Alive()) then
-            draw.RoundedBox(0, 0, 0, w, h, (self.count % 2 == 0) and Color(255, 255, 255) or util.Darken(Color(255, 255, 255), 20))
+            draw.RoundedBox(0, 0, 0, w, h, self.m_bAlt and Color(235, 235, 235) or Color(255, 255, 255))
         else
-            draw.RoundedBox(0, 0, 0, w, h, (self.count % 2 == 0) and Color(255, 204, 204) or util.Darken(Color(255, 204, 204), 20))
+            draw.RoundedBox(0, 0, 0, w, h, self.m_bAlt and Color(235, 184, 184) or Color(255, 204, 204))
         end
     end
 

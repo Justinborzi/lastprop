@@ -6,7 +6,6 @@
 -----------------------------------------------------------]]
 function GM:PlayerSpawnAsSpectator(ply)
 	ply:StripWeapons()
-	ply:SetTeam(TEAM.SPECTATORS)
 	ply:Spectate(OBS_MODE_ROAMING)
 end
 

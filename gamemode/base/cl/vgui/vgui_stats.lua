@@ -93,7 +93,7 @@ function PANEL:Show(stats, top)
             panel:Dock(TOP)
             panel:DockPadding(10, 0, 10, 0)
             panel.Paint = function(self, w, h)
-                draw.RoundedBox(0, 0, 0, w, h, (i % 2 == 0) and Color(255, 255, 255) or util.Darken(Color(255, 255, 255), 20))
+                draw.RoundedBox(0, 0, 0, w, h, (i % 2 == 0) and Color(255, 255, 255) or Color(235, 235, 235))
             end
 
             local col = vgui.Create('DLabel', panel)
@@ -183,10 +183,9 @@ function PANEL:Show(stats, top)
 
     for _, data in pairs(top) do
         local line = self.list:AddLine()
-
         line.count = table.Count(self.list.Lines)
         line.Paint = function(self, w, h)
-            draw.RoundedBox(0, 0, 0, w, h, (self.count % 2 == 0) and Color(255, 255, 255) or util.Darken(Color(255, 255, 255), 20))
+            draw.RoundedBox(0, 0, 0, w, h, self.m_bAlt and Color(235, 235, 235) or Color(255, 255, 255))
         end
 
         for id, stat in pairs(data) do

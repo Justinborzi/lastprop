@@ -248,6 +248,7 @@ end
 --   Name: PANEL:OnMousePressed()
 ---------------------------------------------------------]]--
 function PANEL:OnMousePressed(keyCode)
+    if (not IsValid(LocalPlayer()) or LocalPlayer():Team() == TEAM.UNASSIGNED) then return end
     self:Remove()
 end
 
