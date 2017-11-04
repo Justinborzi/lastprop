@@ -16,7 +16,7 @@ end
 ---------------------------------------------------------]]--
 function GM:GetValidSpectatorModes(ply)
     -- Note: Override this and return valid modes per player/team
-    if (team.NumPlayers(ply:Team()) > 1 and not ply:IsSpec()) then
+    if ((team.NumPlayers(ply:Team()) > 1 and not ply:IsSpec()) or ply:IsAdmin()) then
         return {OBS_MODE_CHASE, OBS_MODE_IN_EYE, OBS_MODE_ROAMING}
     else
         return {OBS_MODE_ROAMING}
@@ -38,7 +38,7 @@ end
 ---------------------------------------------------------]]--
 function GM:IsValidSpectator(ply)
     if (not IsValid(ply)) then return false end
-    if (ply:Team() ~= TEAM.SPECTATORS and not ply:IsObserver()) then return false end
+    if (not ply:IsSpec() or not ply:IsObserver()) then return false end
     return true
 end
 

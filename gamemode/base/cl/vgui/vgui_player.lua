@@ -205,54 +205,57 @@ end)
 --   Hook: HUDUpdate:PlayerHUD
 ---------------------------------------------------------]]--
 hook.Add('HUDUpdate', 'HUDUpdate:PlayerHUD', function(ply, hud)
-    if (table.HasValue({TEAM.PROPS, TEAM.HUNTERS}, ply:Team())) then
-        if (ply:Alive()) and
-           (GAMEMODE:InPreRound() and ply:Team() ~= TEAM.HUNTERS or GAMEMODE:InRound()) then
-            hud:AddItem(vgui.Create('DInfoPlayer'), 1)
-            return
-        end
-        if (not ply:Alive()) then
-            local lbl = nil
-            local txt = nil
-            local col = Color(255, 255, 255)
 
-            local target, mode = ply:GetObserverTarget(), ply:GetObserverMode()
-            if (IsValid(target) and target:IsPlayer() and target ~= ply and mode ~= OBS_MODE_ROAMING) then
-                lbl = 'SPECTATING'
+    if (not ply:Alive()) then
+        local lbl = nil
+        local txt = nil
+        local col = Color(255, 255, 255)
+
+        local target, mode = ply:GetObserverTarget(), ply:GetObserverMode()
+        if (IsValid(target) and target:IsPlayer() and target ~= ply and mode ~= OBS_MODE_ROAMING) then
+            lbl = 'SPECTATING'
+            txt = target:Nick()
+            col = team.GetColor(target:Team())
+        end
+
+        if (table.HasValue({OBS_MODE_DEATHCAM, OBS_MODE_FREEZECAM}, mode)) then
+            if (IsValid(target) and target:IsPlayer() and target ~= ply) then
+                lbl = 'MURDERER'
                 txt = target:Nick()
                 col = team.GetColor(target:Team())
+            else
+                txt = 'You Died!'
+            end
+        end
+
+        if (txt) then
+            local txtLabel = vgui.Create('DHudElement')
+            txtLabel:SetText(txt)
+            txtLabel:SetColor(Color(255, 255, 255))
+            txtLabel:SetShowBackground(false)
+            if (lbl) then
+                txtLabel:SetLabel(lbl)
+                txtLabel:SetColor(Color(0,0,0))
+                txtLabel:SetLabelColor(col)
+                txtLabel:SetShowBackground(true)
             end
 
             if (table.HasValue({OBS_MODE_DEATHCAM, OBS_MODE_FREEZECAM}, mode)) then
-                if (IsValid(target) and target:IsPlayer() and target ~= ply) then
-                    lbl = 'KILLER'
-                    txt = target:Nick()
-                    col = team.GetColor(target:Team())
-                else
-                    txt = 'You Died!'
-                end
-            end
-
-            if (txt) then
-                local txtLabel = vgui.Create('DHudElement')
-                txtLabel:SetText(txt)
-                txtLabel:SetColor(Color(255, 255, 255))
-                txtLabel:SetShowBackground(false)
-                if (lbl) then
-                    txtLabel:SetLabel(lbl)
-                    txtLabel:SetColor(Color(0,0,0))
-                    txtLabel:SetLabelColor(col)
-                    txtLabel:SetShowBackground(true)
-                end
-
-                if (table.HasValue({OBS_MODE_DEATHCAM, OBS_MODE_FREEZECAM}, mode)) then
-                     hud:AddItem(txtLabel, 2)
-                else
-                     hud:AddItem(txtLabel, 3)
-                end
+                    hud:AddItem(txtLabel, 2)
+            else
+                    hud:AddItem(txtLabel, 3)
             end
         end
     end
+
+    if (not table.HasValue({TEAM.PROPS, TEAM.HUNTERS}, ply:Team())) then return end
+
+    if (ply:Alive()) then
+        if ((GAMEMODE:InPreRound() and ply:Team() ~= TEAM.HUNTERS) or GAMEMODE:InRound()) then
+            hud:AddItem(vgui.Create('DInfoPlayer'), 1)
+        end
+    end
+
 end)
 
 --[[---------------------------------------------------------
