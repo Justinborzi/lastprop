@@ -33,6 +33,7 @@ CreateClientConVar('lps_hunter_default', 'weapon_smg1', true, true) -- Set defau
 CreateClientConVar('lps_prop_default', 'weapon_lastman', true, true) --Set default prop SWEP (lastman)
 CreateClientConVar('lps_klinermode', '0', true, true)       --Spawn as T-Pose Kliner
 CreateClientConVar('lps_lastman', '1', true, true)          --Enable/Disable last man for player
+CreateClientConVar('lps_auto_unstuck', '0', true, true)     --Enable/Disable auto unstuck
 
 --[[---------------------------------------------------------
 --   3rd person view
@@ -78,8 +79,9 @@ function GM:ResetConvars()
         minigame = 'Snake',
         hunter_default = 'weapon_smg1',
         prop_default = 'weapon_lastman',
-        lps_klinermode = 0,
-        lps_lastman = 1,
+        klinermode = 0,
+        lastman = 1,
+        auto_unstuck = 1,
 
         tpvp = 1,
         tpvh = 0,

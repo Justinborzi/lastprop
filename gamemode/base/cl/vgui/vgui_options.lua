@@ -171,6 +171,11 @@ function PANEL:DrawFrame()
                     type = 'bool',
                     name = 'Kliner Mode',
                 },
+                {
+                    convar = 'lps_auto_unstuck',
+                    type = 'bool',
+                    name = 'Enable Auto Unstuck',
+                },
             }
         },
         loadout = {
