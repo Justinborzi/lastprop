@@ -195,6 +195,10 @@ function meta:Disguise(ent)
             self:SetVelocity(vector_origin)
             self:GetPhysicsObject():SetVelocity(vector_origin) -- prevents bugs
         end
+
+        if (self:IsStuck()) then
+            self:UnStick()
+        end
     end
 end
 
