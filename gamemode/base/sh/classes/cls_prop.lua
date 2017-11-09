@@ -333,7 +333,7 @@ function CLASS:CanSpawn(ply)
 end
 
 function CLASS:OnSpawn(ply)
-    if (GAMEMODE:InPreRound() and ply:GetInfoNum('lps_auto_unstuck', 0) == 1) then
+    if (GAMEMODE:InPreRound() and ply:GetInfoNum('lps_kliner_mode', 0) == 1) then
         ply:Disguise()
     end
 end

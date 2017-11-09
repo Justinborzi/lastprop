@@ -196,7 +196,7 @@ function meta:Disguise(ent)
             self:GetPhysicsObject():SetVelocity(vector_origin) -- prevents bugs
         end
 
-        if (self:GetInfoNum('lps_klinermode', 0) == 1 and self:IsStuck()) then
+        if (self:GetInfoNum('lps_auto_unstuck', 0) == 1 and self:IsStuck()) then
             self:UnStick()
         end
     end

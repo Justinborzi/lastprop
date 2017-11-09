@@ -167,7 +167,7 @@ function PANEL:DrawFrame()
             name = 'Prop Settings',
             settings = {
                 {
-                    convar = 'lps_klinermode',
+                    convar = 'lps_kliner_mode',
                     type = 'bool',
                     name = 'Kliner Mode',
                 },

@@ -31,7 +31,7 @@ CreateClientConVar('lps_glow', '1', true, true)             -- Glow/Halos
 CreateClientConVar('lps_minigame', 'Snake', true, true)     -- Minigame Settings
 CreateClientConVar('lps_hunter_default', 'weapon_smg1', true, true) -- Set default hunter SWEP
 CreateClientConVar('lps_prop_default', 'weapon_lastman', true, true) --Set default prop SWEP (lastman)
-CreateClientConVar('lps_klinermode', '0', true, true)       --Spawn as T-Pose Kliner
+CreateClientConVar('lps_kliner_mode', '0', true, true)      --Spawn as T-Pose Kliner
 CreateClientConVar('lps_lastman', '1', true, true)          --Enable/Disable last man for player
 CreateClientConVar('lps_auto_unstuck', '0', true, true)     --Enable/Disable auto unstuck
 
@@ -79,7 +79,7 @@ function GM:ResetConvars()
         minigame = 'Snake',
         hunter_default = 'weapon_smg1',
         prop_default = 'weapon_lastman',
-        klinermode = 0,
+        kliner_mode = 0,
         lastman = 1,
         auto_unstuck = 1,
 
