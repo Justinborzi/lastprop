@@ -150,7 +150,7 @@ function GM:OnRoundLastMan(ply)
     if (ply:Team() == TEAM.PROPS) then
         util.AllSpectate(ply)
         self:SetRoundTime(self:GetConfig('lastman_round_time') or 60)
-        util.Notify(nil, string.format('%s is the last props standing!', ply:Nick()))
+        util.Notify(nil, string.format('%s is the last prop standing!', ply:Nick()))
     end
 end
 
